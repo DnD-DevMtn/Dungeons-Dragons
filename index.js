@@ -24,7 +24,7 @@ passport.use(new FacebookStrategy({
   clientID : config.facebook.clientID,
   clientSecret : config.facebook.secret,
   callbackURL : config.facebook.cbUrl,
-  profileFields : ["id", "name", "gender", "link", "email", "location", "cover", "friends", "friendlists", "picture"]
+  profileFields : ["id", "name"]
 }, function(token, refreshToken, profile, done){
   return done(null, profile);
 }));
