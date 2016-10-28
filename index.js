@@ -40,7 +40,7 @@ function loggedIn(req, res, next){
 
 app.get("/auth/facebook", passport.authenticate("facebook"));
 app.get("/auth/facebook/callback", passport.authenticate("facebook", {
-  successRedirect : "/#",
+  successRedirect : "/#/redirect",
   failureRedirect : "/"
 }));
 
