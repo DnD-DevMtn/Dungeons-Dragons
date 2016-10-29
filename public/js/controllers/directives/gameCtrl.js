@@ -1,46 +1,47 @@
-import pixi from "pixi.js";
-export default function() {
+import "pixi.js";
+
+export default function () {
     // You can use either `new PIXI.WebGLRenderer`, `new PIXI.CanvasRenderer`, or `PIXI.autoDetectRenderer`
   // which will try to choose the best renderer for the environment you are in.
-  var renderer = new PIXI.WebGLRenderer(window.innerWidth, window.innerHeight);
+    const renderer = new PIXI.WebGLRenderer(window.innerWidth, window.innerHeight);
 
   // The renderer will create a canvas element for you that you can then insert into the DOM.
-  var game = document.getElementById('game');
-  game.appendChild(renderer.view);
+    const game = document.getElementById("game");
+    game.appendChild(renderer.view);
 
   // You need to create a root container that will hold the scene you want to draw.
-  var stage = new PIXI.Container();
+    const stage = new PIXI.Container();
 
   // Declare a global variable for our sprite so that the animate function can access it.
-  var bunny = null;
+    let bunny = null;
 
   // load the texture we need
-  PIXI.loader.add('bunny', 'bunny.png').load(function (loader, resources) {
+    PIXI.loader.add("bunny", "bunny.png").load((loader, resources) => {
       // This creates a texture from a 'bunny.png' image.
-      bunny = new PIXI.Sprite(resources.bunny.texture);
+        bunny = new PIXI.Sprite(resources.bunny.texture);
 
       // Setup the position and scale of the bunny
-      bunny.position.x = 400;
-      bunny.position.y = 300;
+        bunny.position.x = 400;
+        bunny.position.y = 300;
 
-      bunny.scale.x = 2;
-      bunny.scale.y = 2;
+        bunny.scale.x = 2;
+        bunny.scale.y = 2;
 
       // Add the bunny to the scene we are building.
-      stage.addChild(bunny);
+        stage.addChild(bunny);
 
       // kick off the animation loop (defined below)
-      animate();
-  });
+        animate();
+    });
 
-  function animate() {
+    function animate() {
       // start the timer for the next animation loop
-      requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
 
       // each frame we spin the bunny around a bit
-      bunny.rotation += 0.01;
+        bunny.rotation += 0.01;
 
       // this is the main render call that makes pixi draw your container and its children.
-      renderer.render(stage);
-  }
+        renderer.render(stage);
+    }
 }

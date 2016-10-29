@@ -1,9 +1,9 @@
-function mainService($http, $q){
-  this.getFBUser = function(){
-    return $http.get("/api/facebook").then(function(response){
-      return response.data;
-    })
-  }
+function mainService($http) {
+    this.getFBUser = () => {
+        return $http.get("/api/facebook").then((response) => {
+            return response.data;
+        });
+    };
 }
 
 module.exports = mainService;

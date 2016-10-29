@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently 'webpack -w -d' 'nodemon index' "
+    "start": "concurrently 'webpack -w -d' 'nodemon index' ",
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,11 @@
     "babel-loader": "^6.2.7",
     "babel-preset-es2015": "^6.18.0",
     "css-loader": "^0.25.0",
+    "eslint": "^3.9.0",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1",
     "html-loader": "^0.4.4",
     "imports-loader": "^0.6.5",
     "node-sass": "^3.10.1",
