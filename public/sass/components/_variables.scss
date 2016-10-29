@@ -1,22 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Contrail+One');
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:700');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
-/* ==========================================================================
-   Materialize variables
-   ========================================================================== */
 /**
  * Table of Contents:
  *
  *  1. Colors
- *  3. Buttons
- *  9. Fonts
- *  11. Global
- *  12. Grid
- *  13. Navigation Bar
- *  14. Side Navigation
- *  20. Typography
- *  21. Footer
+ *  2. Buttons
+ *  3. Fonts
+ *  4. Global
+ *  5. Grid
+ *  6. Navigation Bar
+ *  7. Side Navigation
+ *  8. Typography
+ *  9. Footer
  */
 
 
@@ -33,7 +26,7 @@ $error-color: purple !default;
 $link-color: grey !default;
 
 
-/* 3. Buttons
+/* 2. Buttons
    ========================================================================== */
 
 // Shared styles
@@ -47,12 +40,12 @@ $button-color: purple !default;
 $button-background: pink !default;
 
 
-/* 9. Fonts
+/* 3. Fonts
    ========================================================================== */
-$heading-font: "Josefin Sans";
-$body-font: "Open Sans";
+$heading-font: "Arial";
+$body-font: "Arial";
 
-/* 11. Global
+/* 4. Global
    ========================================================================== */
 
 // Media Query Ranges
@@ -70,7 +63,7 @@ $medium-and-down: "only screen and (max-width : #{$medium-screen})" !default;
 $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width : #{$medium-screen})" !default;
 
 
-/* 12. Grid
+/* 5. Grid
    ========================================================================== */
 
 $num-cols: 12 !default;
@@ -79,7 +72,7 @@ $element-top-margin: $gutter-width/3 !default;
 $element-bottom-margin: ($gutter-width*2)/3 !default;
 
 
-/* 13. Navigation Bar
+/* 6. Navigation Bar
    ========================================================================== */
 
 $navbar-height: 64px !default;
@@ -88,7 +81,7 @@ $navbar-font-size: 1rem !default;
 $navbar-font-color: #fff !default;
 $navbar-brand-font-size: 2.1rem !default;
 
-/* 14. Side Navigation
+/* 7. Side Navigation
    ========================================================================== */
 
 $sidenav-font-size: 14px !default;
@@ -99,7 +92,7 @@ $sidenav-item-height: 48px !default;
 
 
 
-/* 20. Typography
+/* 8. Typography
    ========================================================================== */
 
 $off-black: rgba(0, 0, 0, 0.87) !default;
@@ -112,7 +105,7 @@ $h5-fontsize: 1.64rem !default;
 $h6-fontsize: 1rem !default;
 
 
-/* 21. Footer
+/* 9. Footer
    ========================================================================== */
 
 $footer-bg-color: #FBD13D !default;
