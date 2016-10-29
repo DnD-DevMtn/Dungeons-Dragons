@@ -7,7 +7,7 @@ const Monster = new mongoose.Schema({
         , attacking: "String"
         , dead: "String"
     }
-    ,
+    , hp: {type: "Number", required: true}
     , cr: "Number"
     , alignment: {
         goodEvil: {type: "String", enum: ["good", "neutral", "evil"]}
@@ -23,8 +23,19 @@ const Monster = new mongoose.Schema({
     }
     , size: {type: "String", enum: ["tiny", "small", "medium", "large", "huge"]}
     , speed: {type: "Number", required: true}
-
-
+    , saves: {
+        fort: {type: "Number", required: true}
+        , ref: {type: "Number", required: true}
+        , will: {type: "Number", required: true}
+    }
+    , items: {
+        armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
+        , weapons: [type: mongoose.Schema.Types.ObjectId, ref: "Weapon"]
+        , other: [{type: mongoose.Schema.Types.ObjectId, ref: "Other"}]
+    }
+    , goldDrop: "Number"
+    , languages: [{type: "String"}]
+    , baseAttack: {type: "Number"}
 });
 
 module.exports = mongoose.model("Monster", Monster);
