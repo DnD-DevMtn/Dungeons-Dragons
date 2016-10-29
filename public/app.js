@@ -1,6 +1,9 @@
 import angular from "angular";
 import uiRouter from "angular-ui-router";
 
+// Styles
+import styles from "./sass/styles.scss";
+
 // HTML
 
 // Controllers
