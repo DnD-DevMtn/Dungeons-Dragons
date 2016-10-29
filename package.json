@@ -28,6 +28,7 @@
     "mongoose": "^4.6.5",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
+    "pixi.js": "^4.1.0",
     "webpack": "^1.13.3"
   },
   "devDependencies": {

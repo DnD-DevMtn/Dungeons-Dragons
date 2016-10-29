@@ -5,14 +5,15 @@ import uiRouter from "angular-ui-router";
 
 // Controllers
 
-import mainCtrl from "./js/controllers/mainCtrl.js"
-import redirectCtrl from "./js/controllers/redirectCtrl.js"
+import mainCtrl from "./js/controllers/mainCtrl.js";
+import redirectCtrl from "./js/controllers/redirectCtrl.js";
 
 // Services
 
-import mainService from "./js/services/mainService.js"
+import mainService from "./js/services/mainService.js";
 
 // Directives
+import game from "./js/directives/game.js";
 
 angular.module("DnD", [uiRouter])
   .config(function($stateProvider, $urlRouterProvider){
@@ -28,6 +29,11 @@ angular.module("DnD", [uiRouter])
         templateUrl : "./views/redirect.html",
         controller : redirectCtrl
       })
+      .state("game", {
+        url: "/game",
+        templateUrl: "./views/game/gameView.html"
+      })
   })
   .controller("mainCtrl", mainCtrl)
+  .directive("game", game)
   .service("mainService", mainService)
