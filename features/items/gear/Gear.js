@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Other = new mongoose.Schema({
+const Gear = new mongoose.Schema({
     name: {type: "String", required: true, unique: true}
     , weight: {type: "Number", required: true, min: 0, default: 0}
     , magic: {
@@ -12,4 +12,4 @@ const Other = new mongoose.Schema({
     , cost: {type: "Number", min: 0, default: 0}
 });
 
-module.exports = mongoose.model("Other", Other)
+module.exports = mongoose.model("Gear", Gear);

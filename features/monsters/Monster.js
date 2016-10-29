@@ -10,8 +10,8 @@ const Monster = new mongoose.Schema({
     , hp: {type: "Number", required: true}
     , cr: "Number"
     , alignment: {
-        goodEvil: {type: "String", enum: ["good", "neutral", "evil"]}
-        , lawChaos: {type: "String", enum: ["lawful", "neutral", "chaotic"]}
+        goodEvil: {type: "String", enum: ["good", "neutral", "evil"], trim: true}
+        , lawChaos: {type: "String", enum: ["lawful", "neutral", "chaotic"], trim: true}
     }
     , baseStats: {
         str: {type: "Number", required: true}
@@ -21,7 +21,7 @@ const Monster = new mongoose.Schema({
         , wis: {type: "Number", required: true}
         , cha: {type: "Number", required: true}
     }
-    , size: {type: "String", enum: ["tiny", "small", "medium", "large", "huge"]}
+    , size: {type: "String", enum: ["tiny", "small", "medium", "large", "huge"], trim: true}
     , speed: {type: "Number", required: true}
     , saves: {
         fort: {type: "Number", required: true}
@@ -31,11 +31,14 @@ const Monster = new mongoose.Schema({
     , items: {
         armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
         , weapons: [type: mongoose.Schema.Types.ObjectId, ref: "Weapon"]
-        , other: [{type: mongoose.Schema.Types.ObjectId, ref: "Other"}]
+        , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Other"}]
     }
     , goldDrop: "Number"
     , languages: [{type: "String"}]
     , baseAttack: {type: "Number"}
+    , spells: [{type: mongoose.Schema.Types.ObjectId, ref: "Spell"}]
+    , skills: [{type: String, trim: true}]
+    , feats: [{type: String, trim: true}]
 });
 
 module.exports = mongoose.model("Monster", Monster);
