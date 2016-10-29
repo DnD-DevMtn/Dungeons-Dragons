@@ -5,12 +5,12 @@ const Weapon = new mongoose.Schema({
     , proficiency: {type: "String", required: true, enum: ["Simple", "Martial", "Exotic"]}
     , weaponType: {type: "String", required: true, enum: ["Unarmed", "Light", "One-Handed", "Two-Handed", "Ranged", "Ammunition"]}
     , damage: {
-        m: {
+        medium: {
             damageType: {type: "String", enum: ["slashing", "piercing", "bludgeon"]}
             , diceType: {type: "Number", required: true, enum: [2, 3, 4, 6, 8, 10, 12, 20]}
             , numOfDice: {type: "Number", required: true, min: 1}
         }
-        , s: {
+        , small: {
             damageType: {type: "String", enum: ["slashing", "piercing", "bludgeon"]}
             , diceType: {type: "Number", required: true, enum: [2, 3, 4, 6, 8, 10, 12, 20]}
             , numOfDice: {type: "Number", required: true, min: 1}

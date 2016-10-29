@@ -49,6 +49,7 @@ const Character = new mongoose.Schema({
     }
     , spells: [{type: mongoose.Schema.Types.ObjectId, ref: "Spell"}]
     , domain: [{type: String}]
+    , diety: {type: String}
     , languages: [{type: String, trim: true}]
     , specialAbilities: [{type: String, trim: true}]
     , money: {
