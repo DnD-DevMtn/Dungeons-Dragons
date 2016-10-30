@@ -7,6 +7,7 @@ const User = new mongoose.Schema({
     , lastName: {type: String, required: true, trim: true}
     , email: {type: String, required: true, trim: true, unique: true}
     , facebookId: {type: String, required: true, trim: true, unique: true}
+    , profilePic: {type: String}
     , characters: [Character]
     , dmCampaigns: [{
         campaignName: {type: String, trim: true, unique: true}
