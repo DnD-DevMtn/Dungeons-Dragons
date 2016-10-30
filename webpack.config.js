@@ -12,10 +12,10 @@ module.exports = {
 				, loader: "babel"
 			}
 			, {
-				test: /\.css$/
-				, exclude: /node_modules/
-				, loader: "style!css"
-			}
+          test: /\.scss$/
+          , exclude: /node_modules/
+          , loader: "style!css!sass"
+      }
 			, {
 				test: /\.html$/
 				, loader: "html"

@@ -1,33 +1,42 @@
 import angular from "angular";
 import uiRouter from "angular-ui-router";
 
+// Styles
+import "./sass/styles.scss";
+
 // HTML
 
 // Controllers
 
-import mainCtrl from "./js/controllers/mainCtrl.js"
-import redirectCtrl from "./js/controllers/redirectCtrl.js"
+import mainCtrl from "./js/controllers/mainCtrl";
+import redirectCtrl from "./js/controllers/redirectCtrl";
 
 // Services
 
-import mainService from "./js/services/mainService.js"
+import mainService from "./js/services/mainService";
 
 // Directives
+import game from "./js/directives/game";
 
 angular.module("DnD", [uiRouter])
-  .config(function($stateProvider, $urlRouterProvider){
-    $urlRouterProvider.otherwise("/")
+  .config(($stateProvider, $urlRouterProvider) => {
+      $urlRouterProvider.otherwise("/");
 
-    $stateProvider
+      $stateProvider
       .state("home", {
-        url : "/",
-        templateUrl : "./views/login.html"
+          url: "/",
+          templateUrl: "./views/login.html",
       })
       .state("redirect", {
-        url : "/redirect",
-        templateUrl : "./views/redirect.html",
-        controller : redirectCtrl
+          url: "/redirect",
+          templateUrl: "./views/redirect.html",
+          controller: redirectCtrl,
       })
+      .state("game", {
+          url: "/game",
+          templateUrl: "./views/game/gameView.html",
+      });
   })
   .controller("mainCtrl", mainCtrl)
-  .service("mainService", mainService)
+  .directive("game", game)
+  .service("mainService", mainService);
