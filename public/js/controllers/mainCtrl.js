@@ -1,4 +1,4 @@
-function mainCtrl($scope, mainService) {
+function mainCtrl($scope, mainService, sockets) {
     $scope.test = "testing ayayyayayayaya";
 }
 

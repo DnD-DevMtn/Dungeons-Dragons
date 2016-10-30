@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently 'webpack -w -d' 'nodemon index' "
+    "start": "concurrently 'webpack -w -d' 'nodemon index'"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,13 @@
     "cors": "^2.8.1",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
+    "http": "0.0.0",
     "mongodb": "^2.2.11",
     "mongoose": "^4.6.5",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "pixi.js": "^4.1.0",
+    "socket.io": "^1.5.1",
     "webpack": "^1.13.3"
   },
   "devDependencies": {
