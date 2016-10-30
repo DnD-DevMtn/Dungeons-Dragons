@@ -1,0 +1,17 @@
+h1, h2, h3, h4, h5, h6 {
+  font-family:$heading-font;
+  color:$font-color;
+}
+
+h1 {
+  font-size:3.5rem;
+  margin:2rem 0;
+}
+h3 {
+  margin:1.5rem;
+  font-size:2rem;
+}
+
+.btn {
+  font-family:$body-font;
+}
