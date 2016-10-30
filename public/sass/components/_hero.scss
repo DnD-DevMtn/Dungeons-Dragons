@@ -1,0 +1,42 @@
+#hero {
+  position:relative;
+  background-color:$primary-color;
+  height:100vh;
+  width:100vw;
+  display:flex;
+  text-align:center;
+  align-items:center;
+  justify-content:center;
+  .logo {
+    position:absolute;
+    display:flex;
+    top:3rem;
+    left:3rem;
+    height:auto;
+    width:auto;
+    border:1px solid $font-color;
+    align-items:center;
+    img {
+      height:5rem;
+      width:5rem;
+      border:1px solid $font-color;
+    }
+    h1 {
+      font-size:1.5rem;
+      margin:0 1rem;
+    }
+  }
+  .hero-content {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    .tagline {
+      width:100%;
+    }
+    h3.description {
+      width:100%;
+      font-family:$body-font;
+    }
+  }
+}
