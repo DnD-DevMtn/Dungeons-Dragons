@@ -3,9 +3,11 @@ const Campaign = require("./Campaign");
 module.exports = {
 
     getCampaigns(req, res){
-        Campaign.find({}, (err, campaigns) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(campaigns);
-        });
+        Campaign.find()
+            .populate("Armor Weapon Gear")
+            .exec((err, campaigns) => {
+                return (err) ? res.status(500).json(err) : res.status(200).json(campaigns);
+            });
     }
 
     , postCampaign(req, res){
@@ -15,9 +17,11 @@ module.exports = {
     }
 
     , getCampaignById(req, res){
-        Campaign.findById(req.params.id, (err, campaign) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(campaign);
-        });
+        Campaign.findById(req.params.id)
+            .populate("Armor Weapon Gear")
+            .exec((err, campaign) => {
+                return (err) ? res.status(500).json(err) : res.status(200).json(campaign);
+            });
     }
 
 };

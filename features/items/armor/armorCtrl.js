@@ -4,7 +4,7 @@ module.exports = {
 
     getArmor(req, res){
         Armor.find({}, (err, armor) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(armor);
+            return (err) ? res.status(500).json(err) : res.status(200).json(armor);
         });
     }
 
@@ -16,7 +16,7 @@ module.exports = {
 
     , getArmorById(req, res){
         Armor.findById(req.params.id, (err, armor) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(armor);
+            return (err) ? res.status(500).json(err) : res.status(200).json(armor);
         });
     }
 

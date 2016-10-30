@@ -3,9 +3,11 @@ const User = require("./User");
 module.exports = {
 
     getUsers(req, res){
-        User.find({}, (err, users) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(users);
-        });
+        User.find()
+            .populate("Armor Weapon Gear Spell")
+            .exec((err, users) => {
+                return (err) ? res.status(500).json(err) : res.status(200).json(users);
+            });
     }
 
     , postUser(req, res){
@@ -15,9 +17,11 @@ module.exports = {
     }
 
     , getUserById(req, res){
-        User.findById(req.params.id, (err, user) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(user);
-        });
+        User.findById(req.params.id)
+            .populate("Armor Weapon Gear Spell")
+            .exec((err, user) => {
+                return (err) ? res.status(500).json(err) : res.status(200).json(user);
+            });
     }
 
 };

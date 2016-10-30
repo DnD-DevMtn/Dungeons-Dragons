@@ -4,7 +4,7 @@ module.exports = {
 
     getGear(req, res){
         Gear.find({}, (err, gear) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(gear);
+            return (err) ? res.status(500).json(err) : res.status(200).json(gear);
         });
     }
 
@@ -16,7 +16,7 @@ module.exports = {
 
     , getGearById(req, res){
         Gear.findById(req.params.id, (err, gear) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(gear);
+            return (err) ? res.status(500).json(err) : res.status(200).json(gear);
         });
     }
 

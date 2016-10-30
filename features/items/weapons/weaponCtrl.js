@@ -4,7 +4,7 @@ module.exports = {
 
     getWeapons(req, res){
         Weapon.find({}, (err, weapons) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(weapons);
+            return (err) ? res.status(500).json(err) : res.status(200).json(weapons);
         });
     }
 
@@ -16,7 +16,7 @@ module.exports = {
 
     , getWeaponById(req, res){
         Weapon.findById(req.params.id, (err, weapon) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(weapon);
+            return (err) ? res.status(500).json(err) : res.status(200).json(weapon);
         });
     }
 
