@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Lancelot|Merriweather');
+
 /**
  * Table of Contents:
  *
@@ -16,14 +18,13 @@
 /* 1. Colors
    ========================================================================== */
 
-$primary-color: green;
-$primary-color-light: blue;
-$primary-color-dark: purple;
+$primary-color: #2D112A !default;
 
-$secondary-color: green !default;
-$success-color: blue !default;
-$error-color: purple !default;
-$link-color: grey !default;
+$secondary-color: #7D0028 !default;
+$secondary-color-bright: #BF003C;
+$secondary-color-dark: #4C0018;
+$font-color: #FFDCC8 !default;
+$link-color: #BF003C !default;
 
 
 /* 2. Buttons
@@ -35,15 +36,15 @@ $button-background-focus: cyan !default;
 $button-font-size: 1.3rem !default;
 $button-height: 36px !default;
 $button-padding: 0 2rem !default;
-$button-radius: 2px !default;
-$button-color: purple !default;
-$button-background: pink !default;
+$button-radius: 10px !default;
+$button-color: $font-color;
+$button-background: linear-gradient(to bottom, $secondary-color-dark, $secondary-color-bright) !default;
 
 
 /* 3. Fonts
    ========================================================================== */
-$heading-font: "Arial";
-$body-font: "Arial";
+$heading-font: "Lancelot";
+$body-font: "Meriweather";
 
 /* 4. Global
    ========================================================================== */

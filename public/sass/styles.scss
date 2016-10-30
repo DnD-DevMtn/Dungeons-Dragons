@@ -1,4 +1,21 @@
 @charset "UTF-8";
 
-// Variables;
+// Variables
 @import "components/variables";
+
+//Global
+@import "components/global";
+
+//Reset
+@import "components/reset";
+
+//Hero
+@import "components/hero";
+
+//Typography
+@import "components/typography";
+
+//Buttons
+@import "components/buttons";
+
+@import "components/init-prompt";

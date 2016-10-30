@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently 'webpack -w -d' 'nodemon index' ",
+    "start": "concurrently 'webpack -w -d' 'nodemon index' "
   },
   "repository": {
     "type": "git",
