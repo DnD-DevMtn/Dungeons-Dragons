@@ -12,6 +12,7 @@
  *  7. Side Navigation
  *  8. Typography
  *  9. Footer
+ * 10. Layout
  */
 
 
@@ -63,7 +64,8 @@ $small-and-down: "only screen and (max-width : #{$small-screen})" !default;
 $medium-and-down: "only screen and (max-width : #{$medium-screen})" !default;
 $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width : #{$medium-screen})" !default;
 
-
+$container-size-min: 90% !default;
+$container-size-max: 960px !default;
 /* 5. Grid
    ========================================================================== */
 

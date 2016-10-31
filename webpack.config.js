@@ -21,7 +21,7 @@ module.exports = {
 				, loader: "html"
 			}
 			, {
-          test: /\.(png)$/
+          test: /\.(png|jpg)$/
           , loader: require.resolve("file-loader")
       }
 		]

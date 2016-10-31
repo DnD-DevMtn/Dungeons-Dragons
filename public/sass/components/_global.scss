@@ -1,3 +1,9 @@
 body {
   background-color:$primary-color;
 }
+
+.container {
+  width:$container-size-min;
+  max-width:$container-size-max;
+  margin:0 auto;
+}
