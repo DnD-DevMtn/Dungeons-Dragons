@@ -3,7 +3,7 @@
   align-items:center;
   justify-content:center;
   section {
-    flex: 1 1 0;
+    position:relative;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -11,9 +11,29 @@
     height:100vh;
     flex-grow:1;
     transition:all 1s ease;
+    background-size:cover;
+    overflow:hidden;
+    img {
+      width:150%;
+      transition:all .5s ease;
+    }
+    .btn {
+      position: absolute;
+      margin: auto;
+      max-width: 150px;
+      text-align: center;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
     &:hover {
-      flex-grow:1.5;
-      transition:all 1s ease;
+      img {
+        width:100%;
+        transition:all .5s ease;
+      }
+    }
+    &.create-game {
     }
   }
 }
