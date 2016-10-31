@@ -10,6 +10,10 @@ const mongoUri = config.mongoUri.uri;
 const app = express();
 const port = 8888;
 
+//Sockets
+const server = require("http").createServer(app);
+const io     = require("socket.io").listen(server);
+
 app.use(express.static(`${__dirname}/public`));
 app.use(json({ limit: "50mb" }));
 // app.use(cors());
@@ -57,4 +61,17 @@ app.get("/api/facebook", loggedIn, (req, res, next) => {
     res.send(req.user);
 });
 
-app.listen(port, () => { console.log(`Listening on port ${port}`); });
+server.listen(port, () => { console.log(`Listening on port ${port}`); });
+
+
+const connections = [];
+
+io.on("connection", socket => {
+    connections.push(socket);
+    console.log(`New connection ${connections.length} socket(s) now connected on ${port}`);
+
+    socket.on("disconnect", data => {
+        connections.splice(connections.indexOf(data), 1);
+        console.log(`Disconnected, ${connections.length} socket(s) now connected on ${port}`)
+    });
+});

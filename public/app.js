@@ -6,6 +6,9 @@ import "./sass/styles.scss";
 
 // HTML
 
+//Sockets
+//import "socket.io";
+
 // Controllers
 
 import mainCtrl from "./js/controllers/mainCtrl";
@@ -15,6 +18,9 @@ import loginCtrl from "./js/controllers/loginCtrl";
 // Services
 
 import mainService from "./js/services/mainService";
+
+// Factories
+import sockets from "./js/services/sockets";
 
 // Directives
 import game from "./js/directives/game";
@@ -41,4 +47,5 @@ angular.module("DnD", [uiRouter])
   })
   .controller("mainCtrl", mainCtrl)
   .directive("game", game)
-  .service("mainService", mainService);
+  .service("mainService", mainService)
+  .factory("sockets", sockets);
