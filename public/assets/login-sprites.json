@@ -1,0 +1,39 @@
+{"frames": {
+
+"castle1.png":
+{
+	"frame": {"x":0,"y":0,"w":2033,"h":379},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2033,"h":379},
+	"sourceSize": {"w":2033,"h":379},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"church-castle.png":
+{
+	"frame": {"x":0,"y":379,"w":2048,"h":465},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2048,"h":465},
+	"sourceSize": {"w":2048,"h":465},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"town.png":
+{
+	"frame": {"x":0,"y":844,"w":2016,"h":269},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2016,"h":269},
+	"sourceSize": {"w":2016,"h":269},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "login-sprites.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":1113},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b6bbc952ca0ecb52ae27e40cb8a1b476:9d82d165ef4085b6625da063ed2b5715:bbb0d3ce92726ebb82c28e067c51242c$"
+}
+}
