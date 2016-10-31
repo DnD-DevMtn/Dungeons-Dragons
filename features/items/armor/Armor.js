@@ -8,8 +8,8 @@ const Armor = new mongoose.Schema({
     , checkPenalty: {type: "Number", required: true, min: 0, default: 0}
     , spellFail: {type: "Number", required: true, min: 0, default: 0}
     , speed: {
-        m: {type: "Number"}
-        , s: {type: "Number"}
+        medium: {type: "Number"}
+        , small: {type: "Number"}
     }
     , weight: {type: "Number", required: true, min: 0, default: 0}
     , magic: {
