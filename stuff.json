@@ -1,0 +1,256 @@
+MONSTER TEMPLATE
+{
+	"name": ""
+	, "weight": {
+		"normal": ""
+		, "attacking": ""
+		, "dead": ""
+	}
+	, "hp": 0
+	, "cr": 0
+	, "alignment": {
+		"goodEvil": ""
+		, "lawChaos": ""
+	}
+	, "baseStats": {
+		"str": 0
+		, "dex": 0
+		, "con": 0
+		, "int": 0
+		, "wis": 0
+		, "cha": 0
+	}
+	, "size": ""
+	, "speed": 0
+	, "saves": {
+		"fort": 0
+		, "ref": 0
+		, "will": 0
+	}
+	, "items": {
+		"armor": ["id"]
+		, "weapon": ["id"]
+		, "gear": ["id"]
+	}
+	, "goldDrop": 0
+	, "languages": [""]
+	, "baseAttack": 0
+	, "spells": ["id"]
+	, "skills": [""]
+	, "feats": [""]
+	, "description": ""
+}
+
+
+
+WEAPON TEMPLATE
+{
+    "name": ""
+    , "proficiency": ""
+    , "weaponType": ""
+    , "damage": {
+        "medium": {
+            "damageType": ""
+            , "diceType": 0
+            , "numOfDice": 0
+        }
+        , "small": {
+            "damageType": ""
+            , "diceType": 0
+            , "numOfDice": 0
+        }
+    }
+    , "crit": {
+        "critRange": 0
+        , "damageMultiplier": 0
+    }
+    , "range": 0
+    , "weight": 0
+    , "magic": {
+        "stat": ""
+        , "bonus": 0
+        , "magicDamage": {
+			
+            "damageType": ""
+            , "bonusDamage": 0
+            , "bonusDice": 0
+            , "bonusNumOfDice": ""
+        }
+    }
+    , "description": ""
+    , "cost": 0
+
+}
+
+
+
+ARMOR TEMPLATE
+{
+    "name": ""
+    , "bonus": 0
+    , "type": ""
+    , "maxDex": 0
+    , "checkPenalty": 0
+    , "spellFail": 0
+    , "speed": {
+        "medium": 0
+        , "small": 0
+    }
+    , "weight": 0
+    , "magic": {
+        "stat": ""
+        , "bonus": 0
+    }
+    , "description": ""
+    , "cost": 0
+}
+
+
+
+GEAR TEMPLATE
+{
+    "name": ""
+    , "weight": 0
+    , "magic": {
+        "buffStat": ""
+        , "bonus": 0
+        , "extraBonus": ""
+    }
+    , "description": ""
+    , "cost": 0
+}
+
+
+
+SPELL TEMPLATE
+{
+    "name": ""
+    , "spellType": ""
+    , "charClass": [""]
+    , "school": ""
+    , "castTime": 0
+    , "components": [""]
+    , "range": ""
+    , "target": ""
+    , "duration": {
+        "unit": ""
+        , "perLevel": 0
+        , "num": 0
+    }
+    , "saveThrow": {
+        "saveType": ""
+        , "dc": 0
+    }
+    , "damage": {
+        "damageType": 0
+        , "diceType": 0
+        , "dicePerLevel": 0
+    }
+    , "aoe": {
+        "aoeRange": 0
+        , "aoeShape": ""
+    }
+    , "buffBonus": {
+        "buffStat": ""
+        , "bonus": 0
+        , "extraBonus": ""
+    }
+    , "deBuff": {
+        "debuffStat": ""
+        , "effect": 0
+        , "extraEffect": ""
+    }
+    , "addCondition": {
+        "condition": ""
+        , "target": ""
+    }
+    , "description": ""
+}
+
+
+
+RACE TEMPLATE
+{
+    "name": ""
+    , "traitBonus": {
+        "plus": [{
+            "statName": ""
+            , "plusAmt": 0
+        }]
+        , "minus": [{
+            "statName": ""
+            , "minusAmt": 0
+        }]
+        , "desc": ""
+    }
+    , "pictures": {
+        "male": [""]
+        , "female": [""]
+    }
+    , "size": ""
+    , "baseAge": 0
+    , "height": {
+        "male":{
+            "baseHeight": {
+                "feet": 0
+                , "inches": 0
+            }
+            , "heightMod": {
+                "diceType": ""
+                , "diceNum": 0
+            }
+        }
+        , "female":{
+            "baseHeight": {
+                "feet": 0
+                , "inches": 0
+            }
+            , "heightMod": {
+                "diceType": ""
+                , "diceNum": 0
+            }
+        }
+    }
+    , "weight": {
+        "male":{
+            "baseWeight": 0
+            , "weightMod": {
+                "diceType": ""
+                , "diceNum": 0
+            }
+        }
+        , "female":{
+            "baseWeight": 0
+            , "weightMod": {
+                "diceType": ""
+                , "diceNum": 0
+            }
+        }
+    }
+    , "raceType": ""
+    , "baseSpeed": ""
+    , "languages": [""]
+    , "racialTraits": [{
+        "traitType": ""
+        , "traitName": ""
+        , "targetStats": [""]
+        , "bonusNum": 0
+        , "desc": ""
+    }]
+    , "favoredClasses": ["id0"]
+    , "description": ""
+}
+
+
+
+CLASS TEMPLATE
+
+
+
+
+CAMPAIGN TEMPLATE
+
+
+
+
+USER TEMPLATE
