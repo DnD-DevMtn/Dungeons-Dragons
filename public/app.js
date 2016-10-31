@@ -10,6 +10,7 @@ import "./sass/styles.scss";
 
 import mainCtrl from "./js/controllers/mainCtrl";
 import redirectCtrl from "./js/controllers/redirectCtrl";
+import loginCtrl from "./js/controllers/loginCtrl";
 
 // Services
 
@@ -26,6 +27,7 @@ angular.module("DnD", [uiRouter])
       .state("home", {
           url: "/",
           templateUrl: "./views/login.html",
+          controller: loginCtrl,
       })
       .state("redirect", {
           url: "/redirect",
