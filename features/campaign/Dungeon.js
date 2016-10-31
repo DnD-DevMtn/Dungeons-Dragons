@@ -17,34 +17,34 @@ const Dungeon = new mongoose.Schema({
         }
     }]
     , items: {
-        armor: [
+        armor: [{
             armorType: {type: mongoose.Schema.Types.ObjectId, ref: "Armor"}
             , postion: {
                 row: {type: Number, required: true}
                 , column: {type: Number, required: true}
             }
-        ]
-        , weapons: [
+        }]
+        , weapons: [{
             weaponType: {type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}
             , postion: {
                 row: {type: Number, required: true}
                 , column: {type: Number, required: true}
             }
-        ]
-        , gear: [
+        }]
+        , gear: [{
             gearType: {type: mongoose.Schema.Types.ObjectId, ref: "Gear"}
             , postion: {
                 row: {type: Number, required: true}
                 , column: {type: Number, required: true}
             }
-        ]
+        }]
     }
     , traps: [{
         trap: {type: String, trim: true}
-        , trigger: {[
+        , trigger: [{
             row: {type: Number, required: true}
             , column: {type: Number, required: true}
-        ]}
+        }]
         , targetSquares: [{
             row: {type: Number, required: true}
             , column: {type: Number, required: true}

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Dungeon  = require("Dungeon");
+const Dungeon  = require("./Dungeon");
 
 const Campaign = new mongoose.Schema({
     dm: {type: String}

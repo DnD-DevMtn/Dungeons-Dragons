@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const Character = new mongoose.Schema({
     name: {type: String, required: true, trim: true}
     , race: {type: String, required: true, trim: true}
-    , charClass: [
+    , charClass: [{
         classType: {type: String, required: true, trim: true}
         , classLvl: {type: Number, required: true}
-    ]
-    descprition: {
+    }]
+    , descprition: {
         sex: {type: String, enum: ["male", "female"]}
         , height: {type: Number, required: true}
         , weight: {type: Number, required: true}
@@ -44,7 +44,7 @@ const Character = new mongoose.Schema({
     }]
     , items: {
         armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
-        , weapons: [type: mongoose.Schema.Types.ObjectId, ref: "Weapon"]
+        , weapons: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]
         , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Other"}]
     }
     , spells: [{type: mongoose.Schema.Types.ObjectId, ref: "Spell"}]
