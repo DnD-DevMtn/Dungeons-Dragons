@@ -43,6 +43,10 @@ angular.module("DnD", [uiRouter])
       .state("game", {
           url: "/game",
           templateUrl: "./views/game/gameView.html",
+      })
+      .state("init-prompt", {
+          url:"/init-prompt",
+          templateUrl: "./views/init/createJoinDash.html",
       });
   })
   .controller("mainCtrl", mainCtrl)
