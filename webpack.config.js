@@ -24,6 +24,10 @@ module.exports = {
           test: /\.(png)$/
           , loader: require.resolve("file-loader")
       }
+			, {
+          test: /\.(jpg)/
+          , loader: require.resolve("file-loader")
+      }
 		]
 	}
 	, resolve: {
