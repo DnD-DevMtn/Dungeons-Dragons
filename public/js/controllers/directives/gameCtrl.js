@@ -3,7 +3,7 @@ import "pixi.js";
 export default function () {
     // You can use either `new PIXI.WebGLRenderer`, `new PIXI.CanvasRenderer`, or `PIXI.autoDetectRenderer`
   // which will try to choose the best renderer for the environment you are in.
-    const renderer = new PIXI.WebGLRenderer(window.innerWidth, window.innerHeight);
+    const renderer = new PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
 
   // The renderer will create a canvas element for you that you can then insert into the DOM.
     const game = document.getElementById("game");
