@@ -17,7 +17,7 @@ const io     = require("socket.io").listen(server);
 app.use(express.static(`${__dirname}/public`));
 app.use(json({ limit: "50mb" }));
 // app.use(cors());
-// require("./masterRoutes.js")(app);
+require("./masterRoutes.js")(app);
 mongoose.connect(mongoUri);
 mongoose.connection.once("open", () => { console.log("connected to dnd db"); });
 app.use(session({ secret: config.mySecrets.secret }));

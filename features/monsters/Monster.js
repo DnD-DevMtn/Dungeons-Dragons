@@ -30,7 +30,7 @@ const Monster = new mongoose.Schema({
     }
     , items: {
         armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
-        , weapons: [type: mongoose.Schema.Types.ObjectId, ref: "Weapon"]
+        , weapons: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]
         , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Other"}]
     }
     , goldDrop: "Number"
@@ -39,6 +39,7 @@ const Monster = new mongoose.Schema({
     , spells: [{type: mongoose.Schema.Types.ObjectId, ref: "Spell"}]
     , skills: [{type: String, trim: true}]
     , feats: [{type: String, trim: true}]
+    , description: {type: String, required: true, trim: true}
 });
 
 module.exports = mongoose.model("Monster", Monster);
