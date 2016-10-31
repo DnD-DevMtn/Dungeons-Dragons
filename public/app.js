@@ -2,9 +2,12 @@ import angular from "angular";
 import uiRouter from "angular-ui-router";
 
 // Styles
+
 import "./sass/styles.scss";
 
 // HTML
+
+import "./views/init/characterBuilder.html";
 
 //Sockets
 //import "socket.io";
@@ -14,6 +17,7 @@ import "./sass/styles.scss";
 import mainCtrl from "./js/controllers/mainCtrl";
 import redirectCtrl from "./js/controllers/redirectCtrl";
 import loginCtrl from "./js/controllers/loginCtrl";
+import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
 
 // Services
 
@@ -43,7 +47,12 @@ angular.module("DnD", [uiRouter])
       .state("game", {
           url: "/game",
           templateUrl: "./views/game/gameView.html",
-      });
+      })
+      .state("characterBuilder", {
+          url: "/init/character-builder",
+          templateUrl: "./views/init/characterBuilder.html",
+          controller : characterBuildingCtrl
+      })
   })
   .controller("mainCtrl", mainCtrl)
   .directive("game", game)
