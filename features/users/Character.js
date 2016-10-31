@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const Character = new mongoose.Schema({
     name: {type: String, required: true, trim: true}
-    , race: {type: String, required: true, trim: true}
+    , race: {type: mongoose.Schema.Types.ObjectId, ref: "Race", required: true}
     , charClass: [{
-        classType: {type: String, required: true, trim: true}
+        classType: {type: mongoose.Schema.Types.ObjectId, ref: "CharClass", required: true}
         , classLvl: {type: Number, required: true}
     }]
     , descprition: {
@@ -51,7 +51,10 @@ const Character = new mongoose.Schema({
     , domain: [{type: String}]
     , diety: {type: String}
     , languages: [{type: String, trim: true}]
-    , specialAbilities: [{type: String, trim: true}]
+    , specialAbilities: [{
+        specAbilName: {type: String, trim: true}
+        , specAbilLvl: {type: Number}
+    }]
     , money: {
         copper: {type: Number}
         , silver: {type: Number}
