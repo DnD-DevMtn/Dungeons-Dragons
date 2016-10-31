@@ -20,6 +20,10 @@ module.exports = {
 				test: /\.html$/
 				, loader: "html"
 			}
+			, {
+          test: /\.(png)$/
+          , loader: require.resolve("file-loader")
+      }
 		]
 	}
 	, resolve: {
