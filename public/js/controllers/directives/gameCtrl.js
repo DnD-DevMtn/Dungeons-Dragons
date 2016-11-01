@@ -6,7 +6,7 @@ export default function () {
     const renderer = new PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
 
   // The renderer will create a canvas element for you that you can then insert into the DOM.
-    const game = document.getElementById("game");
+    const game = document.getElementById("pixi-game-engine");
     game.appendChild(renderer.view);
 
   // You need to create a root container that will hold the scene you want to draw.
