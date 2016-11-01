@@ -4,7 +4,7 @@ module.exports = {
 
     getMonsters(req, res){
         Monster.find()
-            .populate("Armor Weapon Gear Spell")
+            .populate("armor weapon gear spells")
             .exec((err, monsters) => {
                 return (err) ? res.status(500).json(err) : res.status(200).json(monsters);
             });
@@ -18,7 +18,7 @@ module.exports = {
 
     , getMonsterById(req, res){
         Monster.findById(req.params.id)
-            .populate("Armor Weapon Gear Spell")
+            .populate("armor weapon gear spells")
             .exec((err, monster) => {
                 return (err) ? res.status(500).json(err) : res.status(200).json(monsters);
             });
