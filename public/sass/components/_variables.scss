@@ -12,6 +12,7 @@
  *  7. Side Navigation
  *  8. Typography
  *  9. Footer
+ * 10. Layout
  */
 
 
@@ -23,6 +24,8 @@ $primary-color: #2D112A !default;
 $secondary-color: #7D0028 !default;
 $secondary-color-bright: #BF003C;
 $secondary-color-dark: #4C0018;
+
+$accent-color: #FFDCC8 !default;
 $font-color: #FFDCC8 !default;
 $link-color: #BF003C !default;
 
@@ -63,7 +66,8 @@ $small-and-down: "only screen and (max-width : #{$small-screen})" !default;
 $medium-and-down: "only screen and (max-width : #{$medium-screen})" !default;
 $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width : #{$medium-screen})" !default;
 
-
+$container-size-min: 90% !default;
+$container-size-max: 960px !default;
 /* 5. Grid
    ========================================================================== */
 
