@@ -12,6 +12,10 @@ module.exports = {
 				, loader: "babel"
 			}
 			, {
+			 test: /\.(jpe?g|png)$/i
+			 , loader: "file-loader"
+      }
+			, {
           test: /\.scss$/
           , exclude: /node_modules/
           , loader: "style!css!sass"
@@ -20,10 +24,6 @@ module.exports = {
 				test: /\.html$/
 				, loader: "html"
 			}
-			, {
-          test: /\.(png|jpg)$/
-          , loader: require.resolve("file-loader")
-      }
 		]
 	}
 	, resolve: {

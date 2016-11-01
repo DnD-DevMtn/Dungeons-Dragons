@@ -2,4 +2,27 @@ table {
   width:100%;
 }
 
-td.
+.join-head {
+  text-transform:uppercase;
+}
+
+td {
+  border-bottom:1px solid rgba($accent-color, 1);
+  padding:1.5rem;
+
+  &.campaign {
+    width:30%;
+  }
+
+  &.host {
+    width:30%;
+  }
+
+  &.spots {
+    width:10%;
+  }
+
+  &.join {
+    width:30%;
+  }
+}
