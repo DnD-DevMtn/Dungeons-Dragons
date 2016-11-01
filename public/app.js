@@ -7,8 +7,6 @@ import "./sass/styles.scss";
 
 // HTML
 
-import "./views/init/characterBuilder.html";
-
 //Sockets
 //import "socket.io";
 
@@ -60,7 +58,11 @@ angular.module("DnD", [uiRouter])
       .state("join", {
           url: "/join",
           templateUrl: "./views/init/join.html"
-      });
+      })
+      .state("lobby", {
+          url: "/lobby",
+          templateUrl: "./views/init/lobby.html"
+      })
   })
   .controller("mainCtrl", mainCtrl)
   .directive("game", game)

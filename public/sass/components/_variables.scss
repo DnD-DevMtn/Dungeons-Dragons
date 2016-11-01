@@ -68,6 +68,8 @@ $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width 
 
 $container-size-min: 90% !default;
 $container-size-max: 960px !default;
+
+$margin-size:2rem !default;
 /* 5. Grid
    ========================================================================== */
 
@@ -108,6 +110,8 @@ $h3-fontsize: 2.92rem !default;
 $h4-fontsize: 2.28rem !default;
 $h5-fontsize: 1.64rem !default;
 $h6-fontsize: 1rem !default;
+
+$body-fontsize-m:1.64rem !default;
 
 
 /* 9. Footer
