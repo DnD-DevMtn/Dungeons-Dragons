@@ -4,7 +4,7 @@ module.exports = {
 
     getUsers(req, res){
         User.find()
-            .populate("Armor Weapon Gear Spell")
+            .populate("armor weapons gear spells")
             .exec((err, users) => {
                 return (err) ? res.status(500).json(err) : res.status(200).json(users);
             });
@@ -18,7 +18,7 @@ module.exports = {
 
     , getUserById(req, res){
         User.findById(req.params.id)
-            .populate("Armor Weapon Gear Spell")
+            .populate("armor weapons gear spells")
             .exec((err, user) => {
                 return (err) ? res.status(500).json(err) : res.status(200).json(user);
             });

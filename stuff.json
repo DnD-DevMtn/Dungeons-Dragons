@@ -1,7 +1,7 @@
 MONSTER TEMPLATE
 {
 	"name": ""
-	, "weight": {
+	, "sprite": {
 		"normal": ""
 		, "attacking": ""
 		, "dead": ""
@@ -70,7 +70,7 @@ WEAPON TEMPLATE
         "stat": ""
         , "bonus": 0
         , "magicDamage": {
-			
+
             "damageType": ""
             , "bonusDamage": 0
             , "bonusDice": 0
@@ -81,7 +81,10 @@ WEAPON TEMPLATE
     , "cost": 0
 
 }
-
+ARMOR
+5817d47ce3647f3b20b5737b
+WEAPON
+5817d7626b784f1c14e36f5e
 
 
 ARMOR TEMPLATE
@@ -244,12 +247,49 @@ RACE TEMPLATE
 
 
 CLASS TEMPLATE
-
-
-
-
-CAMPAIGN TEMPLATE
-
+{
+    "name": ""
+    , "hitDie": {
+        "diceType": 0
+        , "diceNum": 0
+    }
+    , "startingWealth": {
+        "diceType": 0
+        , "diceNum": 0
+        , "modifier":0
+    }
+    , "classSkills": [""]
+    , "ranksPerLvl": 0
+    , "classLvl": [{
+        "level": 0
+        , "baseAttack": 0
+        , "fort": 0
+        , "ref": 0
+        , "will": 0
+        , "specials": [{
+            "name": ""
+            , "lvl": 0
+        }]
+        , "spellsPerDay": [{
+            "cantrip": 0
+            , "one": 0
+            , "two": 0
+            , "three": 0
+            , "four": 0
+            , "five": 0
+            , "six": 0
+            , "seven": 0
+            , "eight": 0
+            , "nine": 0
+        }]
+    }]
+    , "description": {
+        "general": ""
+        , "role": ""
+        , "alignmentDesc": ""
+        , "specialDesc": [""]
+    }
+}
 
 
 
