@@ -28,15 +28,13 @@ const Monster = new mongoose.Schema({
         , ref: {type: "Number", required: true}
         , will: {type: "Number", required: true}
     }
-    , items: {
-        armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
-        , weapons: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]
-        , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Other"}]
-    }
+    , armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
+    , weapon: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]
+    , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Gear"}]
+    , spells: [{type: mongoose.Schema.Types.ObjectId, ref: "Spell"}]
     , goldDrop: "Number"
     , languages: [{type: "String"}]
     , baseAttack: {type: "Number"}
-    , spells: [{type: mongoose.Schema.Types.ObjectId, ref: "Spell"}]
     , skills: [{type: String, trim: true}]
     , feats: [{type: String, trim: true}]
     , description: {type: String, required: true, trim: true}
