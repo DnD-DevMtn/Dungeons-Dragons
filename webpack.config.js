@@ -34,4 +34,7 @@ module.exports = {
 		, filename: "bundle.js"
 	}
 	, target: 'node'
+	, plugins : [
+			new Webpack.ProvidePlugin({$ : "jquery", jQuery : "jquery"})
+		]
 };
