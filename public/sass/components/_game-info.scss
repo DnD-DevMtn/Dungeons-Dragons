@@ -1,0 +1,49 @@
+#game-info {
+  position:absolute;
+  top:0;
+  right:0;
+  .utility-bar {
+    position:relative;
+    margin-right:1rem;
+    margin-top:3rem;
+    float:right;
+    .utility-icons {
+      position:relative;
+      z-index:1;
+      li {
+        margin-bottom:1rem;
+        display:block;
+        svg {
+          fill:$accent-color;
+          height:50px;
+          width:auto;
+          transition:all .25s ease;
+          &:hover {
+            fill:$secondary-color-bright;
+            transition:all .25s ease;
+          }
+          &.active {
+            fill:$secondary-color-bright;
+            transition:all .25s ease;
+          }
+        }
+      }
+    }
+  }
+  .utility-panels {
+    li {
+      position:absolute;
+      top:0;
+      right:-320px;
+      height:500px;
+      width:300px;
+      background-color:white;
+      box-shadow:$z-depth-standard;
+      transition: all .25s ease;
+      &.active {
+        right:-1rem;
+        transition: all .25s ease;
+      }
+    }
+  }
+}

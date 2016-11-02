@@ -27,6 +27,7 @@ import sockets from "./js/services/sockets";
 // Directives
 import game from "./js/directives/game";
 import videoChat from "./js/directives/videoChat";
+import gameInfo from "./js/directives/gameInfo";
 
 angular.module("DnD", [uiRouter])
   .config(($stateProvider, $urlRouterProvider) => {
@@ -68,5 +69,6 @@ angular.module("DnD", [uiRouter])
   .controller("mainCtrl", mainCtrl)
   .directive("game", game)
   .directive("gameChat", videoChat)
+  .directive("gameInfo", gameInfo)
   .service("mainService", mainService)
   .factory("sockets", sockets);
