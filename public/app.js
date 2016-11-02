@@ -20,6 +20,7 @@ import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
 // Services
 import mainService from "./js/services/mainService";
 import gameService from "./js/services/gameService";
+import characterService from "./js/services/characterService";
 
 // Factories
 import sockets from "./js/services/sockets";
@@ -70,4 +71,5 @@ angular.module("DnD", [uiRouter])
   .directive("gameChat", videoChat)
   .service("mainService", mainService)
   .service("gameService", gameService)
+  .service("characterService", characterService)
   .factory("sockets", sockets);

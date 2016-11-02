@@ -5,6 +5,8 @@ const passport = require("passport");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const config = require("./config.js");
 const mongoose = require("mongoose");
+const $ = require('jquery');
+const jquery = require('jquery');
 
 const mongoUri = config.mongoUri.uri;
 const app = express();
