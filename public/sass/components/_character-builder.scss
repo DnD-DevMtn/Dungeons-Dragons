@@ -3,11 +3,17 @@ div.cb-wrapper {
   width: 90vw;
   height: 100vh;
   margin: 0 auto;
+  overflow: hidden;
+  position: relative;
 }
 
-div.cb-wrapper div.character-builder {
-  display: table-cell;
+div.character-builder-race, div.character-builder-class {
   vertical-align: middle;
+  position: absolute;
+  height: 600px;
+  margin: auto;
+  top: 0;
+  bottom: 0;
 }
 
 div.cb-wrapper div.portrait {
@@ -89,4 +95,19 @@ div.cb-wrapper div.portrait h3 {
   left: 0;
   margin: 0;
   padding: 7px 0;
+}
+
+button.cb-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 18px;
+}
+
+div.panel-show {
+  right: 0;
+}
+
+div.panel-hide {
+  right: -9999px;
 }

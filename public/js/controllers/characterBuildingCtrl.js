@@ -186,7 +186,8 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     }
 
     $scope.finalRace = () => {
-      
+      characterService.finalRace($scope.pickedGender, $scope.selectedRaceTitle);
+      $()
     }
 }
 
