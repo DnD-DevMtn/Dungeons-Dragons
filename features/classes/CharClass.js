@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const CharClass = new mongoose.Schema({
     name: {type: String, required: true, unique: true, trim: true}
+    , pictures: {
+        male: {type: String, trim: true}
+        , female: {type: String, trim: true}
+    }
     , hitDie: {
         diceType: {type: Number, required: true, enum: [2, 3, 4, 6, 8, 10, 12, 20]}
         , diceNum: {type: Number, required: true}
@@ -14,17 +18,20 @@ const CharClass = new mongoose.Schema({
     , classSkills: [{type: String, trim: true}]
     , ranksPerLvl: {type: Number, required: true}
     , classLvl: [{
-        level: {type: Number, required: true}
-        , baseAttack: {type: Number}
+        _id: false
+        , level: {type: Number, required: true}
+        , baseAttack: [{type: Number}]
         , fort: {type: Number}
         , ref: {type: Number}
         , will: {type: Number}
         , specials: [{
-            name: {type: String}
+            _id: false
+            , name: {type: String}
             , lvl: {type: Number}
         }]
         , spellsPerDay: [{
-            cantrip: {type: Number}
+            _id: false
+            , cantrip: {type: Number}
             , one: {type: Number}
             , two: {type: Number}
             , three: {type: Number}
@@ -40,7 +47,11 @@ const CharClass = new mongoose.Schema({
         general: {type: String, required: true, trim: true}
         , role: {type: String, required: true, trim: true}
         , alignmentDesc: {type: String, required: true, trim: true}
-        , specialDesc: [{type: String, required: true, trim: true}]
+        , specials: [{
+            _id: false
+            , specName: {type: String, required: true, trim: true}
+            , specDesc: {type: String, required: true, trim: true}
+        }]
     }
 });
 

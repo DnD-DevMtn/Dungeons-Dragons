@@ -70,7 +70,7 @@ WEAPON TEMPLATE
         "stat": ""
         , "bonus": 0
         , "magicDamage": {
-			
+
             "damageType": ""
             , "bonusDamage": 0
             , "bonusDice": 0
@@ -244,7 +244,56 @@ RACE TEMPLATE
 
 
 CLASS TEMPLATE
-
+{
+    "name": ""
+	, "pictures": {
+        "male": ""
+        , "female": ""
+    }
+    , "hitDie": {
+        "diceType": 0
+        , "diceNum": 0
+    }
+    , "startingWealth": {
+        "diceType": 0
+        , "diceNum": 0
+        , "modifier":0
+    }
+    , "classSkills": [""]
+    , "ranksPerLvl": 0
+    , "classLvl": [{
+        "level": 0
+        , "baseAttack": []
+        , "fort": 0
+        , "ref": 0
+        , "will": 0
+        , "specials": [{
+            "name": ""
+            , "lvl": 0
+        }]
+        , "spellsPerDay": [{
+            "cantrip": 0
+            , "one": 0
+            , "two": 0
+            , "three": 0
+            , "four": 0
+            , "five": 0
+            , "six": 0
+            , "seven": 0
+            , "eight": 0
+            , "nine": 0
+        }]
+    }]
+    , "description": {
+        "general": ""
+        , "role": ""
+        , "alignmentDesc": ""
+		, "specials": [{
+            "specName": ""
+            , "specDesc": ""
+        }]
+    }
+}
 
 
 
@@ -254,3 +303,952 @@ CAMPAIGN TEMPLATE
 
 
 USER TEMPLATE
+
+
+
+
+
+
+
+
+{
+    "name": "Dwarf"
+    , "traitBonus": {
+        "plus": [{
+            "statName": "con"
+            , "plusAmt": 2
+        	} , {
+            "statName": "wis"
+            , "plusAmt": 2
+        	}
+        ]
+        , "minus": [{
+            "statName": "cha"
+            , "minusAmt": 2
+        }]
+        , "desc": "Dwarves are both tough and wise, but also a bit gruff. They gain +2 Constitution, +2 Wisdom, and –2 Charisma."
+    }
+    , "pictures": {
+        "male": ["male-dwarf.jpg"]
+        , "female": ["female-dwarf.jpg"]
+    }
+    , "size": "medium"
+    , "baseAge": 40
+    , "height": {
+        "male":{
+            "baseHeight": {
+                "feet": 3
+                , "inches": 9
+            }
+            , "heightMod": {
+                "diceType": 4
+                , "diceNum": 2
+            }
+        }
+        , "female":{
+            "baseHeight": {
+                "feet": 3
+                , "inches": 7
+            }
+            , "heightMod": {
+                "diceType": 4
+                , "diceNum": 2
+            }
+        }
+    }
+    , "weight": {
+        "male":{
+            "baseWeight": 150
+            , "weightMod": {
+                "diceType": 4
+                , "diceNum": 2
+                , "multiplier": 7
+            }
+        }
+        , "female":{
+            "baseWeight": 120
+            , "weightMod": {
+                "diceType": 4
+                , "diceNum": 2
+                , "multiplier": 7
+            }
+        }
+    }
+    , "raceType": "humanoid"
+    , "baseSpeed": 20
+    , "languages": ["Common", "Dwarvish"]
+    , "racialTraits": [{
+        "traitType": "defensive"
+        , "traitName": "Defensive Training"
+        , "targetStats": ["ac"]
+        , "bonusNum": 4
+        , "desc": "Dwarves gain a +4 dodge bonus to AC against monsters of the giant subtype."
+	 } , {
+        "traitType": "defensive"
+        , "traitName": "Hardy"
+        , "targetStats": ["fort", "ref", "will"]
+        , "bonusNum": 2
+        , "desc": "Dwarves gain a +2 racial bonus on saving throws against poison, spells, and spell-like abilities."
+	 } , {
+        "traitType": "skill"
+        , "traitName": "Greed"
+        , "targetStats": ["appraise"]
+        , "bonusNum": 2
+        , "desc": "Dwarves gain a +2 racial bonus on Appraise checks made to determine the price of non-magical goods that contain precious metals or gemstones."
+	 } , {
+        "traitType": "skill"
+        , "traitName": "Stonecunning"
+        , "targetStats": ["perception"]
+        , "bonusNum": 2
+        , "desc": "Dwarves gain a +2 bonus on Perception checks to notice unusual stonework, such as traps and hidden doors located in stone walls or floors. They receive a check to notice such features whenever they pass within 10 feet of them, whether or not they are actively looking."
+	 } , {
+        "traitType": "condition"
+        , "traitName": "Darkvision"
+        , "targetStats": ["vision"]
+        , "bonusNum": 60
+        , "desc": "Dwarves can see perfectly in the dark up to 60 feet."
+	 } , {
+        "traitType": "offense"
+        , "traitName": "Hatred"
+        , "targetStats": ["orc", "goblinoid"]
+        , "bonusNum": 1
+        , "desc": "Dwarves gain a +1 racial bonus on attack rolls against humanoid creatures of the orc and goblinoid subtypes because of their special training against these hated foes."
+	 } , {
+        "traitType": "offense"
+        , "traitName": "Weapon Familiarity"
+        , "targetStats": ["Battle Axe", "Heavy Pick", "Warhammer", "Dwarven"]
+        , "bonusNum": 0
+        , "desc": "Dwarves are proficient with battleaxes, heavy picks, and warhammers, and treat any weapon with the word “dwarven” in its name as a martial weapon."
+	 }
+    ]
+    , "favoredClasses": ["id0"]
+    , "description": {
+        "general": "Dwarves are a stoic but stern race, ensconced in cities carved from the hearts of mountains and fiercely determined to repel the depredations of savage races like orcs and goblins. More than any other race, dwarves have acquired a reputation as dour and humorless artisans of the earth. It could be said that their history shapes the dark disposition of many dwarves, for they reside in high mountains and dangerous realms below the earth, constantly at war with giants, goblins, and other such horrors.
+
+Dwarves are lovers of history and tradition, and their long lifespan leads to far less in the way of generational shifts in attitudes, styles, fashions, and trends than shorter-lived races exhibit. If a thing is not broken, they do not fix it or change it; and if it is broken, they fix it rather than replace it. Thrifty as a rule, dwarves are loath to discard anything unless it is truly ruined and unable to be fixed. At the same time, dwarves' meticulous, near-obsessive attention to detail and durability in their craftsmanship makes that a rare occurrence, as the things they make are built to last. As a result, buildings, artwork, tools, housewares, garments, weapons, and virtually everything else made by dwarves still sees regular use at an age when such items would be relegated to museum pieces, dusty antique shelves, or junkyard fodder by other races. Taken together, these traits create the impression that dwarves are a race frozen in time.
+
+Nothing could be further from the truth, however, as dwarves are both thoughtful and imaginative, willing to experiment, if always keen to refine and perfect a new technique or product before moving on to the next one. Dwarves have achieved feats of metallurgy, stonework, and engineering that have consistently outpaced the technological advances of other races, though some non-dwarven races have used magic to supplement and perfect their own creations to achieve the same ends through mystical rather than mundane means. They are also a race typified by stubborn courage and dedication to seeing tasks through to completion, whatever the risks. These traits have led dwarves to explore and settle in extreme environments that would cause other races to quail and retreat. From the darkest depths of the underworld to the highest mountain peaks, from rusting iron citadels along desolate rocky coasts to squat jungle ziggurats, dwarves have established their enclaves and redoubts, holding them against all comers or perishing to the last and leaving only their enduring monuments to stand as their legacy. While it is said that dwarves are not venturesome or inventive, it would be more accurate to say that they maintain a focus on and dedication to each task they undertake and every change they adopt, vetting such changes thoroughly before adopting them wholeheartedly. When faced with new circumstances and new needs, they react by applying tried and true tools and techniques systematically, using existing methods whenever possible rather than trying to invent novel solutions for every situation. If necessity requires, however, they throw themselves with equal vigor into developing the next perfect procedure for demolishing the obstacles that get in their way. Once their desired goal is obtained, they focus on consolidating each new piece of territory or conceptual advance. Dwarves thus rarely overextend themselves, but they also may miss opportunities to seize the initiative and maximize the advantages they create."
+        , "physicalDescription": "Dwarves are a short and stocky race, and stand about a foot shorter than most humans, with wide, compact bodies that account for their burly appearance. Male and female dwarves pride themselves on the long length of their hair, and men often decorate their beards with a variety of clasps and intricate braids. Clean-shavenness on a male dwarf is a sure sign of madness, or worse—no one familiar with their race trusts a beardless dwarven man."
+        , "society": "The great distances between dwarves' mountain citadels account for many of the cultural differences that exist within their society. Despite these schisms, dwarves throughout the world are characterized by their love of stonework, their passion for stone- and metal-based craftsmanship and architecture, and their fierce hatred of giants, orcs, and goblinoids. In some remote enclaves, such as those areas where these races are uncommon or unheard of, dwarves' fixation on security and safety combined with their rather pugnacious nature leads them to find enemies or at least rivals wherever they settle. While they are not precisely militaristic, they learned long ago that those without axes can be hewn apart by them, and thus dwarves everywhere are schooled to be ready to enforce their rights and claims by force of arms. When their patience with diplomacy is exhausted, dwarves do not hesitate to adopt what they call “aggressive negotiations.”"
+        , "relations": "Dwarves and orcs have long dwelt in proximity to one another, and share a history of violence as old as both races. Dwarves generally distrust and shun half-orcs. They find elves, gnomes, and halflings to be too frail, flighty, or “pretty” to be worthy of proper respect. It is with humans that dwarves share the strongest link, for humans' industrious nature and hearty appetites come closest to matching those of the dwarven ideal."
+        , "alignment": "Dwarves are driven by honor and tradition. While they are often stereotyped as standoffish, they have a strong sense of friendship and justice, and those who win their trust understand that while they work hard, they play even harder—especially when good ale is involved. Most dwarves are lawful good."
+        , "adventures": "Although dwarven adventurers are rare compared to humans, they can be found in most regions of the world. Dwarves often leave the confines of their redoubts to seek glory for their clans, to find wealth with which to enrich the fortress-homes of their birth, or to reclaim fallen dwarven citadels from racial enemies. Dwarven warfare is often characterized by tunnel fighting and melee combat, and as such most dwarves tend toward classes such as fighters and barbarians."
+    }
+}
+
+
+
+ROGUE
+{
+    "name": "Rogue"
+    , "hitDie": {
+        "diceType": 8
+        , "diceNum": 1
+    }
+    , "startingWealth": {
+        "diceType": 6
+        , "diceNum": 4
+        , "modifier": 10
+    }
+    , "classSkills": ["Acrobatics", "Appraise", "Bluff", "Climb", "Craft", "Diplomacy", "Disable Device", "Disguise", "Escape Artist", "Intimidate", "Knowledge Dungeoneering", "Knowledge Local", "Linguistics", "Perception", "Perform", "Profession", "Sense Motive", "Sleight of Hand", "Stealth", "Swim", "Use Magic Device"]
+    , "ranksPerLvl": 8
+    , "classLvl": [{
+        "level": 1
+        , "baseAttack": [0]
+        , "fort": 0
+        , "ref": 2
+        , "will": 0
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 1
+        }, {
+            "name": "Trapfinding"
+            , "lvl": 0
+        }
+        ]
+    }, {
+        "level": 2
+        , "baseAttack": [1]
+        , "fort": 0
+        , "ref": 3
+        , "will": 0
+        , "specials": [{
+            "name": "Evasion"
+            , "lvl": 0
+        }, {
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }
+        ]
+    }, {
+        "level": 3
+        , "baseAttack": [2]
+        , "fort": 1
+        , "ref": 3
+        , "will": 1
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 2
+        }, {
+            "name": "Trap Sense"
+            , "lvl": 1
+        }
+        ]
+    }, {
+        "level": 4
+        , "baseAttack": [3]
+        , "fort": 1
+        , "ref": 4
+        , "will": 1
+        , "specials": [{
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }, {
+            "name": "Uncanny Dodge"
+            , "lvl": 0
+        }
+        ]
+    }, {
+        "level": 5
+        , "baseAttack": [3]
+        , "fort": 1
+        , "ref": 4
+        , "will": 1
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 3
+        }]
+    }, {
+        "level": 6
+        , "baseAttack": [4]
+        , "fort": 2
+        , "ref": 5
+        , "will": 2
+        , "specials": [{
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }, {
+            "name": "Trap Sense"
+            , "lvl": 2
+        }
+        ]
+    }, {
+        "level": 7
+        , "baseAttack": [5]
+        , "fort": 2
+        , "ref": 5
+        , "will": 2
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 4
+        }]
+    }, {
+        "level": 8
+        , "baseAttack": [6, 1]
+        , "fort": 2
+        , "ref": 6
+        , "will": 2
+        , "specials": [{
+            "name": "Improved Uncanny Dodge"
+            , "lvl": 0
+        }, {
+            "name": "Rouge Talent"
+            , "lvl": 0
+        }
+        ]
+    }, {
+        "level": 9
+        , "baseAttack": [6, 1]
+        , "fort": 3
+        , "ref": 6
+        , "will": 3
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 5
+        }, {
+            "name": "Trap Sense"
+            , "lvl": 3
+        }
+        ]
+    }, {
+        "level": 10
+        , "baseAttack": [7, 2]
+        , "fort": 3
+        , "ref": 7
+        , "will": 3
+        , "specials": [{
+            "name": "Advanced Talents"
+            , "lvl": 0
+        }, {
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }
+        ]
+    }, {
+        "level": 11
+        , "baseAttack": [8, 3]
+        , "fort": 3
+        , "ref": 7
+        , "will": 3
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 6
+        }]
+    }, {
+        "level": 12
+        , "baseAttack": [9, 4]
+        , "fort": 4
+        , "ref": 8
+        , "will": 4
+        , "specials": [{
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }, {
+            "name": "Trap Sense"
+            , "lvl": 4
+        }
+        ]
+    }, {
+        "level": 13
+        , "baseAttack": [9, 4]
+        , "fort": 4
+        , "ref": 8
+        , "will": 4
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 7
+        }]
+    }, {
+        "level": 14
+        , "baseAttack": [10, 5]
+        , "fort": 4
+        , "ref": 9
+        , "will": 4
+        , "specials": [{
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }
+        ]
+    }, {
+        "level": 15
+        , "baseAttack": [11, 6, 1]
+        , "fort": 5
+        , "ref": 9
+        , "will": 5
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 8
+        },{
+            "name": "Trap Sense"
+            , "lvl": 5
+        }
+        ]
+    }, {
+        "level": 16
+        , "baseAttack": [12, 7, 2]
+        , "fort": 5
+        , "ref": 10
+        , "will": 5
+        , "specials": [{
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }]
+    }, {
+        "level": 17
+        , "baseAttack": [12, 7, 2]
+        , "fort": 5
+        , "ref": 10
+        , "will": 5
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 9
+        }]
+    }, {
+        "level": 18
+        , "baseAttack": [13, 8, 3]
+        , "fort": 6
+        , "ref": 11
+        , "will": 6
+        , "specials": [{
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }, {
+            "name": "Trap Sense"
+            , "lvl": 6
+        }
+        ]
+    }, {
+        "level": 19
+        , "baseAttack": [14, 9, 4]
+        , "fort": 6
+        , "ref": 11
+        , "will": 6
+        , "specials": [{
+            "name": "Sneak Attack"
+            , "lvl": 10
+        }]
+    }, {
+        "level": 20
+        , "baseAttack": [15, 10, 5]
+        , "fort": 6
+        , "ref": 12
+        , "will": 6
+        , "specials": [{
+            "name": "Master Strike"
+            , "lvl": 0
+        }, {
+            "name": "Rogue Talent"
+            , "lvl": 0
+        }
+        ]
+    }
+    ]
+    , "description": {
+        "general": "Life is an endless adventure for those who live by their wits. Ever just one step ahead of danger, rogues bank on their cunning, skill, and charm to bend fate to their favor. Never knowing what to expect, they prepare for everything, becoming masters of a wide variety of skills, training themselves to be adept manipulators, agile acrobats, shadowy stalkers, or masters of any of dozens of other professions or talents. Thieves and gamblers, fast talkers and diplomats, bandits and bounty hunters, and explorers and investigators all might be considered rogues, as well as countless other professions that rely upon wits, prowess, or luck. Although many rogues favor cities and the innumerable opportunities of civilization, some embrace lives on the road, journeying far, meeting exotic people, and facing fantastic danger in pursuit of equally fantastic riches. In the end, any who desire to shape their fates and live life on their own terms might come to be called rogues."
+        , "role": "Rogues excel at moving about unseen and catching foes unaware, and tend to avoid head-to-head combat. Their varied skills and abilities allow them to be highly versatile, with great variations in expertise existing between different rogues. Most, however, excel in overcoming hindrances of all types, from unlocking doors and disarming traps to outwitting magical hazards and conning dull-witted opponents."
+        , "alignmentDesc": "Any"
+        , "specials": [{
+            "specName": "Weapon and Armor Proficiency"
+            , "specDesc": "Rogues are proficient with all simple weapons, plus the hand crossbow, rapier, sap, shortbow, and short sword. They are proficient with light armor, but not with shields."
+        }, {
+        	"specName": "Sneak Attack"
+        	, "specDesc": "If a rogue can catch an opponent when he is unable to defend himself effectively from her attack, she can strike a vital spot for extra damage. The rogue's attack deals extra damage anytime her target would be denied a Dexterity bonus to AC (whether the target actually has a Dexterity bonus or not), or when the rogue flanks her target. This extra damage is 1d6 at 1st level, and increases by 1d6 every two rogue levels thereafter. Should the rogue score a critical hit with a sneak attack, this extra damage is not multiplied. Ranged attacks can count as sneak attacks only if the target is within 30 feet."
+        }, {
+        	"specName": "Trapfinding"
+        	, "specDesc": "A rogue adds 1/2 her level to Perception skill checks made to locate traps and to Disable Device skill checks (minimum +1). A rogue can use Disable Device to disarm magic traps."
+        }, {
+        	"specName": "Armor Training"
+        	, "specDesc": "Starting at 3rd level, a fighter learns to be more maneuverable while wearing armor. Whenever he is wearing armor, he reduces the armor check penalty by 1 (to a minimum of 0) and increases the maximum Dexterity bonus allowed by his armor by 1. Every four levels thereafter (7th, 11th, and 15th), these bonuses increase by +1 each time, to a maximum –4 reduction of the armor check penalty and a +4 increase of the maximum Dexterity bonus allowed. In addition, a fighter can also move at his normal speed while wearing medium armor. At 7th level, a fighter can move at his normal speed while wearing heavy armor."
+        }, {
+        	"specName": "Evasion"
+        	, "specDesc": "At 2nd level and higher, a rogue can avoid even magical and unusual attacks with great agility. If she makes a successful Reflex saving throw against an attack that normally deals half damage on a successful save, she instead takes no damage. Evasion can be used only if the rogue is wearing light armor or no armor. A helpless rogue does not gain the benefit of evasion."
+        }, {
+        	"specName": "Rogue Talents"
+        	, "specDesc": "As a rogue gains experience, she learns a number of talents that aid her and confound her foes. Starting at 2nd level, a rogue gains one rogue talent. She gains an additional rogue talent for every 2 levels of rogue attained after 2nd level. A rogue cannot select an individual talent more than once."
+        }, {
+        	"specName": "Trap Sense"
+        	, "specDesc": "At 3rd level, a rogue gains an intuitive sense that alerts her to danger from traps, giving her a +1 bonus on Reflex saves made to avoid traps and a +1 dodge bonus to AC against attacks made by traps. These bonuses rise to +2 when the rogue reaches 6th level, to +3 when she reaches 9th level, to +4 when she reaches 12th level, to +5 at 15th, and to +6 at 18th level. Trap sense bonuses gained from multiple classes stack."
+        }, {
+        	"specName": "Uncanny Dodge"
+        	, "specDesc": "Starting at 4th level, a rogue can react to danger before her senses would normally allow her to do so. She cannot be caught flat-footed, nor does she lose her Dex bonus to AC if the attacker is invisible. She still loses her Dexterity bonus to AC if immobilized. A rogue with this ability can still lose her Dexterity bonus to AC if an opponent successfully uses the feint action against her"
+        }, {
+        	"specName": "Advanced Talents"
+        	, "specDesc": "At 10th level, and every two levels thereafter, a rogue can choose one of the following advanced talents in place of a rogue talent."
+        }, {
+        	"specName": "Improved Uncanny Dodge"
+        	, "specDesc": "A rogue of 8th level or higher can no longer be flanked. This defense denies another rogue the ability to sneak attack the character by flanking her, unless the attacker has at least four more rogue levels than the target does. If a character already has uncanny dodge from another class, the levels from the classes that grant uncanny dodge stack to determine the minimum rogue level required to flank the character."
+        }, {
+        	"specName": "Master Strike"
+        	, "specDesc": "Upon reaching 20th level, a rogue becomes incredibly deadly when dealing sneak attack damage. Each time the rogue deals sneak attack damage, she can choose one of the following three effects: The target can be put to sleep for 1d4 hours, paralyzed for 2d6 rounds, or slain"
+        }
+        ]
+    }
+}
+
+FIGHTER
+{
+    "name" : "Fighter",
+	"pictures": {
+        "male": "male-fighter.jpg"
+        , "female": "female-fighter.jpg"
+    },
+    "ranksPerLvl" : 2,
+    "description" : {
+        "general" : "Some take up arms for glory, wealth, or revenge. Others do battle to prove themselves, to protect others, or because they know nothing else. Still others learn the ways of weaponcraft to hone their bodies in battle and prove their mettle in the forge of war. Lords of the battlefield, fighters are a disparate lot, training with many weapons or just one, perfecting the uses of armor, learning the fighting techniques of exotic masters, and studying the art of combat, all to shape themselves into living weapons. Far more than mere thugs, these skilled warriors reveal the true deadliness of their weapons, turning hunks of metal into arms capable of taming kingdoms, slaughtering monsters, and rousing the hearts of armies. Soldiers, knights, hunters, and artists of war, fighters are unparalleled champions, and woe to those who dare stand against them.",
+        "role" : "Fighters excel at combat—defeating their enemies, controlling the flow of battle, and surviving such sorties themselves. While their specific weapons and methods grant them a wide variety of tactics, few can match fighters for sheer battle prowess.",
+        "alignmentDesc" : "Any",
+        "specials" : [
+            {
+                "specName" : "Weapon and Armor Proficiency",
+                "specDesc" : "A fighter is proficient with all simple and martial weapons and with all armor (heavy, light, and medium) and shields (including tower shields)."
+
+            },
+            {
+                "specName" : "Bonus Feats",
+                "specDesc" : "At 1st level, and at every even level thereafter, a fighter gains a bonus feat in addition to those gained from normal advancement (meaning that the fighter gains a feat at every level). These bonus feats must be selected from those listed as Combat Feats, sometimes also called “fighter bonus feats.” Upon reaching 4th level, and every four levels thereafter (8th, 12th, and so on), a fighter can choose to learn a new bonus feat in place of a bonus feat he has already learned. In effect, the fighter loses the bonus feat in exchange for the new one. The old feat cannot be one that was used as a prerequisite for another feat, prestige class, or other ability. A fighter can only change one feat at any given level and must choose whether or not to swap the feat at the time he gains a new bonus feat for the level."
+
+            },
+            {
+                "specName" : "Bravery",
+                "specDesc" : "Starting at 2nd level, a fighter gains a +1 bonus on Will saves against fear. This bonus increases by +1 for every four levels beyond 2nd."
+
+            },
+            {
+                "specName" : "Armor Training",
+                "specDesc" : "Starting at 3rd level, a fighter learns to be more maneuverable while wearing armor. Whenever he is wearing armor, he reduces the armor check penalty by 1 (to a minimum of 0) and increases the maximum Dexterity bonus allowed by his armor by 1. Every four levels thereafter (7th, 11th, and 15th), these bonuses increase by +1 each time, to a maximum –4 reduction of the armor check penalty and a +4 increase of the maximum Dexterity bonus allowed. In addition, a fighter can also move at his normal speed while wearing medium armor. At 7th level, a fighter can move at his normal speed while wearing heavy armor."
+
+            },
+            {
+                "specName" : "Weapon Training",
+                "specDesc" : "Starting at 5th level, a fighter can select one group of weapons, as noted below. Whenever he attacks with a weapon from this group, he gains a +1 bonus on attack and damage rolls. Every four levels thereafter (9th*, 13th, and 17th), a fighter becomes further trained in another group of weapons. He gains a +1 bonus on attack and damage rolls when using a weapon from this group. In addition, the bonuses granted by previous weapon groups increase by +1 each. For example, when a fighter reaches 9th level, he receives a +1 bonus on attack and damage rolls with one weapon group and a +2 bonus on attack and damage rolls with the weapon group selected at 5th level. Bonuses granted from overlapping groups do not stack. Take the highest bonus granted for a weapon if it resides in two or more groups."
+
+            },
+            {
+                "specName" : "Armor Mastery",
+                "specDesc" : "At 19th level, a fighter gains Damage Reduction 5/— whenever he is wearing armor or using a shield."
+
+            },
+            {
+                "specName" : "Weapon Mastery",
+                "specDesc" : "At 20th level, a fighter chooses one weapon, such as the longsword, greataxe, or longbow. Any attacks made with that weapon automatically confirm all critical threats and have their damage multiplier increased by 1 (×2 becomes ×3, for example). In addition, he cannot be disarmed while wielding a weapon of this type"
+
+            }
+        ]
+    },
+    "classLvl" : [
+        {
+            "level" : 1,
+            "fort" : 2,
+            "ref" : 0,
+            "will" : 0,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                },
+                {
+                    "name" : "Weapon and Armor Proficiency",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                1
+            ]
+        },
+        {
+            "level" : 2,
+            "fort" : 3,
+            "ref" : 0,
+            "will" : 0,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                },
+                {
+                    "name" : "Barvery",
+                    "lvl" : 1
+                }
+            ],
+            "baseAttack" : [
+                2
+            ]
+        },
+        {
+            "level" : 3,
+            "fort" : 3,
+            "ref" : 1,
+            "will" : 1,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Armor Training",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                3
+            ]
+        },
+        {
+            "level" : 4,
+            "fort" : 4,
+            "ref" : 1,
+            "will" : 1,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                4
+            ]
+        },
+        {
+            "level" : 5,
+            "fort" : 4,
+            "ref" : 1,
+            "will" : 1,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Weapon Training",
+                    "lvl" : 0
+
+                }
+            ],
+            "baseAttack" : [
+                5
+            ]
+        },
+        {
+            "level" : 6,
+            "fort" : 5,
+            "ref" : 2,
+            "will" : 2,
+
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                },
+                {
+                    "name" : "Bravery",
+                    "lvl" : 2
+                }
+            ],
+            "baseAttack" : [
+                6,
+                1
+            ]
+        },
+        {
+            "level" : 7,
+            "fort" : 5,
+            "ref" : 2,
+            "will" : 2,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Armor Training",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                7,
+                2
+            ]
+        },
+        {
+            "level" : 8,
+            "fort" : 6,
+            "ref" : 2,
+            "will" : 2,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                8,
+                3
+            ]
+        },
+        {
+            "level" : 9,
+            "fort" : 6,
+            "ref" : 3,
+            "will" : 3,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Weapon Training",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                9,
+                4
+            ]
+        },
+        {
+            "level" : 10,
+            "fort" : 7,
+            "ref" : 3,
+            "will" : 3,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                },
+                {
+                    "name" : "Bravery",
+                    "lvl" : 3
+                }
+            ],
+            "baseAttack" : [
+                10,
+                5
+            ]
+        },
+        {
+            "level" : 11,
+            "fort" : 7,
+            "ref" : 3,
+            "will" : 3,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Armor Training",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                11,
+                6,
+                1
+            ]
+        },
+        {
+            "level" : 12,
+            "fort" : 8,
+            "ref" : 4,
+            "will" : 4,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                12,
+                7,
+                2
+            ]
+        },
+        {
+            "level" : 13,
+            "fort" : 8,
+            "ref" : 4,
+            "will" : 4,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Weapon Training",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                13,
+                8,
+                3
+            ]
+        },
+        {
+            "level" : 14,
+            "fort" : 9,
+            "ref" : 4,
+            "will" : 4,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                },
+                {
+                    "name" : "Bravery",
+                    "lvl" : 4
+                }
+            ],
+            "baseAttack" : [
+                14,
+                9,
+                4
+            ]
+        },
+        {
+            "level" : 15,
+            "fort" : 9,
+            "ref" : 5,
+            "will" : 5,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Armor Training",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                15,
+                10,
+                5
+            ]
+        },
+        {
+            "level" : 16,
+            "fort" : 10,
+            "ref" : 5,
+            "will" : 5,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                16,
+                11,
+                6,
+                1
+            ]
+        },
+        {
+            "level" : 17,
+            "fort" : 10,
+            "ref" : 5,
+            "will" : 5,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Weapon Training",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                17,
+                12,
+                7,
+                2
+            ]
+        },
+        {
+            "level" : 18,
+            "fort" : 11,
+            "ref" : 6,
+            "will" : 6,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                },
+                {
+                    "name" : "Bravery",
+                    "lvl" : 5
+                }
+            ],
+            "baseAttack" : [
+                18,
+                13,
+                8,
+                3
+            ]
+        },
+        {
+            "level" : 19,
+            "fort" : 11,
+            "ref" : 6,
+            "will" : 6,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Armor Mastery",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                19,
+                14,
+                9,
+                4
+            ]
+        },
+        {
+            "level" : 20,
+            "fort" : 12,
+            "ref" : 6,
+            "will" : 6,
+            "spellsPerDay" : [],
+            "specials" : [
+                {
+                    "name" : "Bonus Feat",
+                    "lvl" : 0
+                },
+                {
+                    "name" : "Weapon Mastery",
+                    "lvl" : 0
+                }
+            ],
+            "baseAttack" : [
+                20,
+                15,
+                10,
+                5
+            ]
+        }
+    ],
+    "classSkills" : [
+        "Climb",
+        "Craft",
+        "Handle Animal",
+        "Intimidate",
+        "Knowledge Dungeoneering",
+        "Knowledge Engineering",
+        "Profession",
+        "Ride",
+        "Survival",
+        "Swim"
+    ],
+    "startingWealth" : {
+        "diceType" : 6,
+        "diceNum" : 5,
+        "modifier" : 10
+    },
+    "hitDie" : {
+        "diceType" : 10,
+        "diceNum" : 1
+    }
+}
+
+
+Sorcerer
+{
+    "name": "Sorcerer"
+	, "pictures": {
+        "male": "male-sorcerer.jpg"
+        , "female": "female-sorcerer.jpg"
+    }
+    , "hitDie": {
+        "diceType": 0
+        , "diceNum": 0
+    }
+    , "startingWealth": {
+        "diceType": 0
+        , "diceNum": 0
+        , "modifier":0
+    }
+    , "classSkills": [""]
+    , "ranksPerLvl": 0
+    , "classLvl": [{
+        "level": 0
+        , "baseAttack": []
+        , "fort": 0
+        , "ref": 0
+        , "will": 0
+        , "specials": [{
+            "name": ""
+            , "lvl": 0
+        }]
+        , "spellsPerDay": [{
+            "cantrip": 0
+            , "one": 0
+            , "two": 0
+            , "three": 0
+            , "four": 0
+            , "five": 0
+            , "six": 0
+            , "seven": 0
+            , "eight": 0
+            , "nine": 0
+        }]
+    }]
+    , "description": {
+        "general": "Beyond the veil of the mundane hide the secrets of absolute power. The works of beings beyond mortals, the legends of realms where gods and spirits tread, the lore of creations both wondrous and terrible—such mysteries call to those with the ambition and the intellect to rise above the common folk to grasp true might. Such is the path of the wizard. These shrewd magic-users seek, collect, and covet esoteric knowledge, drawing on cultic arts to work wonders beyond the abilities of mere mortals. While some might choose a particular field of magical study and become masters of such powers, others embrace versatility, reveling in the unbounded wonders of all magic. In either case, wizards prove a cunning and potent lot, capable of smiting their foes, empowering their allies, and shaping the world to their every desire."
+        , "role": "While universalist wizards might study to prepare themselves for any manner of danger, specialist wizards research schools of magic that make them exceptionally skilled within a specific focus. Yet no matter their specialty, all wizards are masters of the impossible and can aid their allies in overcoming any danger."
+        , "alignmentDesc": "Any"
+		, "specials": [{
+            "specName": ""
+            , "specDesc": ""
+        }]
+    }
+}
