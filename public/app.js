@@ -7,8 +7,6 @@ import "./sass/styles.scss";
 
 // HTML
 
-import "./views/init/characterBuilder.html";
-
 //Sockets
 //import "socket.io";
 
@@ -22,6 +20,7 @@ import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
 // Services
 
 import mainService from "./js/services/mainService";
+import characterService from "./js/services/characterService";
 
 // Factories
 import sockets from "./js/services/sockets";
@@ -65,4 +64,5 @@ angular.module("DnD", [uiRouter])
   .controller("mainCtrl", mainCtrl)
   .directive("game", game)
   .service("mainService", mainService)
+  .service("characterService", characterService)
   .factory("sockets", sockets);

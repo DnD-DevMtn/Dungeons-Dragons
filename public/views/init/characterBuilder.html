@@ -1,9 +1,37 @@
 <div class="cb-wrapper">
-  <h1>Choose your race..</h1>
-  <div class="portrait">
-    <img src="./images/male-human.jpg" />
-  </div>
-  <div class="options">
-
+  <div class="character-builder">
+    <div class="title">
+      <h1>Choose your race..</h1>
+    </div>
+    <div class="portrait">
+      <img ng-src="{{selectedRace}}" />
+      <h3>{{selectedRaceTitle}}</h3>
+    </div>
+    <div class="options">
+      <div class="genders">
+        <h4>Select your gender</h4>
+        <i ng-class="selectedMale" class="fa fa-mars gender" aria-hidden="true" ng-click="selectMales()"></i>
+        <i ng-class="selectedFemale" class="fa fa-venus gender" aria-hidden="true" ng-click="selectFemales()"></i>
+      </div>
+      <div class="races">
+        <h4>Select your race</h4>
+        <ul id="males" ng-show="showMales">
+          <li><img ng-click="selectHumanMale()" ng-class="humanMale" src="../../images/races/male-human.jpg" /></li>
+          <li><img ng-click="selectElfMale()" ng-class="elfMale" src="../../images/races/male-elf.jpg" /></li>
+          <li><img ng-click="selectDwarfMale()" ng-class="dwarfMale" src="../../images/races/male-dwarf.jpg" /></li>
+          <li><img ng-click="selectHalfOrcMale()" ng-class="halfOrcMale" src="../../images/races/male-half-orc.jpg" /></li>
+          <li><img ng-click="selectHalflingMale()" ng-class="halflingMale" src="../../images/races/male-halfling.jpg" /></li>
+          <li><img ng-click="selectGnomeMale()" ng-class="gnomeMale" src="../../images/races/male-gnome.jpg" /></li>
+        </ul>
+        <ul id="females" ng-show="showFemales">
+          <li><img ng-click="selectHumanFemale()" ng-class="humanFemale" src="../../images/races/female-human.jpg" /></li>
+          <li><img ng-click="selectElfFemale()" ng-class="elfFemale" src="../../images/races/female-elf.jpg" /></li>
+          <li><img ng-click="selectDwarfFemale()" ng-class="dwarfFemale" src="../../images/races/female-dwarf.jpg" /></li>
+          <li><img ng-click="selectHalfOrcFemale()" ng-class="halfOrcFemale" src="../../images/races/female-half-orc.jpg" /></li>
+          <li><img ng-click="selectHalflingFemale()" ng-class="halflingFemale" src="../../images/races/female-halfling.jpg" /></li>
+          <li><img ng-click="selectGnomeFemale()" ng-class="gnomeFemale" src="../../images/races/female-gnome.jpg" /></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
