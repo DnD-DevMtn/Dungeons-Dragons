@@ -1,0 +1,48 @@
+#lobby {
+  h3 {
+    margin-top:0;
+  }
+  .party {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    div {
+      flex:1 1 0;
+      height:200px;
+      border:1px solid blue;
+      text-align:center;
+      img {
+        width:100%;
+        max-width:200px;
+      }
+    }
+  }
+
+  .video-status-wrapper {
+    margin: $margin-size 0;
+    min-height:450px;
+  }
+
+  .video-chat {
+    width:65%;
+    float:left;
+  }
+  .party-status {
+    font-size:1.25em;
+    width:30%;
+    margin-left:5%;
+    float:left;
+    .party-member-status {
+      margin-bottom:$margin-size;
+      .ready {
+        color:#80AA97
+      }
+      .waiting {
+        color:$secondary-color-bright;
+      }
+    }
+    .btn {
+      margin-left:0;
+    }
+  }
+}
