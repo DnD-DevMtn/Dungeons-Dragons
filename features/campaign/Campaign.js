@@ -4,7 +4,8 @@ const Dungeon  = require("./Dungeon");
 const Campaign = new mongoose.Schema({
     dm: {type: String}
     , players: [{
-        username: {type: String, trim: true, unique: true}
+        _id: false
+        , username: {type: String, trim: true, unique: true}
         , character: {type: String, trim: true}
     }]
     , dungeons: [Dungeon]

@@ -3,10 +3,8 @@ const mongoose = require("mongoose");
 const Character = new mongoose.Schema({
     name: {type: String, required: true, trim: true}
     , race: {type: mongoose.Schema.Types.ObjectId, ref: "Race", required: true}
-    , charClass: [{
-        classType: {type: mongoose.Schema.Types.ObjectId, ref: "CharClass", required: true}
-        , classLvl: {type: Number, required: true}
-    }]
+    , classType: {type: mongoose.Schema.Types.ObjectId, ref: "CharClass", required: true}
+    , level: {type: Number, required: true}
     , descprition: {
         sex: {type: String, enum: ["male", "female"]}
         , height: {type: Number, required: true}
@@ -35,11 +33,13 @@ const Character = new mongoose.Schema({
         , will: {type: Number, required: true}
     }
     , skills: [{
-        skill: {type: String, trim: true}
+        _id: false
+        , skill: {type: String, trim: true}
         , rank: {type: Number, min: 0, default: 0}
     }]
     , feats: [{
-        feat: {type: String, trim: true}
+        _id: false
+        , feat: {type: String, trim: true}
         , target: {type: String, trim: true}
     }]
     , armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
@@ -50,7 +50,8 @@ const Character = new mongoose.Schema({
     , diety: {type: String}
     , languages: [{type: String, trim: true}]
     , specialAbilities: [{
-        specAbilName: {type: String, trim: true}
+        _id: false
+        , specAbilName: {type: String, trim: true}
         , specAbilLvl: {type: Number}
     }]
     , money: {
@@ -72,11 +73,13 @@ const Character = new mongoose.Schema({
         , tempFort: {type: Number}
         , tempWill: {type: Number}
         , tempSkill: [{
-            skillName: {type: String, trim: true}
+            _id: false
+            , skillName: {type: String, trim: true}
             , skillMod: {type: Number}
         }]
         , tempConditions: [{
-            condition: {type: String, trim: true}
+            _id: false
+            , condition: {type: String, trim: true}
         }]
     }
 });
