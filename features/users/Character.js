@@ -42,11 +42,9 @@ const Character = new mongoose.Schema({
         feat: {type: String, trim: true}
         , target: {type: String, trim: true}
     }]
-    , items: {
-        armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
-        , weapons: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]
-        , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Other"}]
-    }
+    , armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
+    , weapons: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]
+    , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Gear"}]
     , spells: [{type: mongoose.Schema.Types.ObjectId, ref: "Spell"}]
     , domain: [{type: String}]
     , diety: {type: String}

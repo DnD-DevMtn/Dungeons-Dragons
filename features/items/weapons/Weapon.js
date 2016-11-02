@@ -6,12 +6,12 @@ const Weapon = new mongoose.Schema({
     , weaponType: {type: "String", required: true, enum: ["Unarmed", "Light", "One-Handed", "Two-Handed", "Ranged", "Ammunition"]}
     , damage: {
         medium: {
-            damageType: {type: "String", enum: ["slashing", "piercing", "bludgeon"]}
+            damageType: {type: "String", enum: ["Slashing", "Piercing", "Bludgeon"]}
             , diceType: {type: "Number", required: true, enum: [2, 3, 4, 6, 8, 10, 12, 20]}
             , numOfDice: {type: "Number", required: true, min: 1}
         }
         , small: {
-            damageType: {type: "String", enum: ["slashing", "piercing", "bludgeon"]}
+            damageType: {type: "String", enum: ["Slashing", "Piercing", "Bludgeon"]}
             , diceType: {type: "Number", required: true, enum: [2, 3, 4, 6, 8, 10, 12, 20]}
             , numOfDice: {type: "Number", required: true, min: 1}
         }
@@ -23,12 +23,12 @@ const Weapon = new mongoose.Schema({
     , range: {type: "Number"}
     , weight: {type: "Number", required: true, min: 0, default: 0}
     , magic: {
-        stat: {type: "String", enum: ["str", "dex", "con", "int", "wis", "cha", "fort", "ref", "will"]}
+        stat: {type: "String"}
         , bonus: {type: "Number"}
         , magicDamage: {
             damageType: {type: "String"}
             , bonusDamage: {type: "Number"}
-            , bonusDice: {type: "Number", enum: [2, 3, 4, 6, 8, 10, 12, 20]}
+            , bonusDice: {type: "Number"}
             , bonusNumOfDice: {type: "String"}
         }
     }

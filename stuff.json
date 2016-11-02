@@ -1,7 +1,7 @@
 MONSTER TEMPLATE
 {
 	"name": ""
-	, "weight": {
+	, "sprite": {
 		"normal": ""
 		, "attacking": ""
 		, "dead": ""
@@ -81,7 +81,10 @@ WEAPON TEMPLATE
     , "cost": 0
 
 }
-
+ARMOR
+5817d47ce3647f3b20b5737b
+WEAPON
+5817d7626b784f1c14e36f5e
 
 
 ARMOR TEMPLATE
@@ -298,6 +301,7 @@ CLASS TEMPLATE
 
 
 CAMPAIGN TEMPLATE
+
 
 
 

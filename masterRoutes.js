@@ -8,7 +8,7 @@ const spellRoutes   = require("./features/spells/spellRoutes.js");
 const raceRoutes    = require("./features/races/raceRoutes.js");
 const classRoutes   = require("./features/classes/classRoutes.js");
 
-module.exports = function(app){
+module.exports = app => {
     userRoutes(app);
     gameRoutes(app);
     armorRoutes(app);

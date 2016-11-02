@@ -7,8 +7,6 @@ import "./sass/styles.scss";
 
 // HTML
 
-import "./views/init/characterBuilder.html";
-
 //Sockets
 //import "socket.io";
 
@@ -28,6 +26,7 @@ import sockets from "./js/services/sockets";
 
 // Directives
 import game from "./js/directives/game";
+import videoChat from "./js/directives/videoChat";
 
 angular.module("DnD", [uiRouter])
   .config(($stateProvider, $urlRouterProvider) => {
@@ -60,9 +59,14 @@ angular.module("DnD", [uiRouter])
       .state("join", {
           url: "/join",
           templateUrl: "./views/init/join.html"
-      });
+      })
+      .state("lobby", {
+          url: "/lobby",
+          templateUrl: "./views/init/lobby.html"
+      })
   })
   .controller("mainCtrl", mainCtrl)
   .directive("game", game)
+  .directive("gameChat", videoChat)
   .service("mainService", mainService)
   .factory("sockets", sockets);
