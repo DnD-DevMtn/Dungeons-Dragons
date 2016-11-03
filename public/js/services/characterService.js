@@ -5,7 +5,6 @@ function characterService($http) {
   this.finalRace = (gender, race) => {
     currentCharacter.gender = gender;
     currentCharacter.race = race;
-    console.log(currentCharacter);
   }
 
   this.finalClass = (name, characterClass, alignment, level) => {
@@ -13,7 +12,6 @@ function characterService($http) {
     currentCharacter.classType = characterClass;
     currentCharacter.alignment = alignment;
     currentCharacter.totalLvl = level;
-    console.log(currentCharacter);
   }
 }
 
