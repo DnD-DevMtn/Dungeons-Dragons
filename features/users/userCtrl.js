@@ -24,4 +24,37 @@ module.exports = {
             });
     }
 
+    , loggedIn(req, res, next) {
+        if (req.user) {
+            next();
+        } else {
+            res.redirect("/");
+        }
+    }
+
+    , userExists(req, res, next) {
+        if(req.user){
+            User.findOne({facebookId: req.user.id}, (err, user) => {
+                if(err){
+                    return res.status(500).json(err);
+                }
+                if(user){
+                    return res.status(201).json(user);
+                } else {
+                    new User({
+                        firstName: req.user._json.first_name
+                        , lastName: req.user._json.last_name
+                        , facebookId: req.user.id
+                        , characters: []
+                        , dmCampaigns: []
+                    }).save((err, user) => {
+                        return (err) ? res.status(500).json(err) : res.status(201).json(user);
+                    })
+                }
+            });
+        } else {
+            res.redirect("/");
+        }
+    }
+
 };

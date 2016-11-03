@@ -19,7 +19,6 @@ const io     = require("socket.io").listen(server);
 app.use(express.static(`${__dirname}/public`));
 app.use(json({ limit: "50mb" }));
 // app.use(cors());
-require("./masterRoutes.js")(app);
 mongoose.connect(mongoUri);
 mongoose.connection.once("open", () => { console.log("connected to dnd db"); });
 app.use(session({ secret: config.mySecrets.secret }));
@@ -30,49 +29,19 @@ passport.use(new FacebookStrategy({
     clientID: config.facebook.clientID,
     clientSecret: config.facebook.secret,
     callbackURL: config.facebook.cbUrl,
-    profileFields: ["id", "name"],
+    profileFields: ["id", "first_name", "last_name"],
 }, (token, refreshToken, profile, done) => {
     return done(null, profile);
 }
 ));
+require("./masterRoutes.js")(app);
 
-function loggedIn(req, res, next) {
-    if (req.user) {
-        next();
-    } else {
-        res.redirect("/");
-    }
-}
-
-function userExists(req, res, next){
-    // TODO
-    // checks if user is in the db and if not posts them
-    next();
-}
-
-
-app.get("/auth/facebook", passport.authenticate("facebook"));
-app.get("/auth/facebook/callback", passport.authenticate("facebook", {
-    successRedirect: "/#/redirect",
-    failureRedirect: "/",
-}));
-
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
-
-app.get("/api/facebook", loggedIn, userExists, (req, res, next) => {
-    res.send(req.user);
-});
 
 server.listen(port, () => { console.log(`Listening on port ${port}`); });
 
 
 const connections = [];
+const campaigns = {};
 
 io.on("connection", socket => {
     connections.push(socket);
