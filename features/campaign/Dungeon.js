@@ -3,14 +3,16 @@ const mongoose = require("mongoose");
 const Dungeon = new mongoose.Schema({
     name: {type: String, trim: true, required: true}
     , monsters: [{
-        monster: {type: mongoose.Schema.Types.ObjectId, ref: "Monster"}
+        _id: false
+        , monster: {type: mongoose.Schema.Types.ObjectId, ref: "Monster"}
         , postion: {
             row: {type: Number, required: true}
             , column: {type: Number, required: true}
         }
     }]
     , environment: [{
-        thing: {type: String, trim: true}
+        _id: false
+        , thing: {type: String, trim: true}
         , postion: {
             row: {type: Number, required: true}
             , column: {type: Number, required: true}
@@ -18,21 +20,24 @@ const Dungeon = new mongoose.Schema({
     }]
     , items: {
         armor: [{
-            armorType: {type: mongoose.Schema.Types.ObjectId, ref: "Armor"}
+            _id: false
+            , armorType: {type: mongoose.Schema.Types.ObjectId, ref: "Armor"}
             , postion: {
                 row: {type: Number, required: true}
                 , column: {type: Number, required: true}
             }
         }]
         , weapons: [{
-            weaponType: {type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}
+            _id: false
+            , weaponType: {type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}
             , postion: {
                 row: {type: Number, required: true}
                 , column: {type: Number, required: true}
             }
         }]
         , gear: [{
-            gearType: {type: mongoose.Schema.Types.ObjectId, ref: "Gear"}
+            _id: false
+            , gearType: {type: mongoose.Schema.Types.ObjectId, ref: "Gear"}
             , postion: {
                 row: {type: Number, required: true}
                 , column: {type: Number, required: true}
@@ -40,13 +45,16 @@ const Dungeon = new mongoose.Schema({
         }]
     }
     , traps: [{
-        trap: {type: String, trim: true}
+        _id: false
+        , trap: {type: String, trim: true}
         , trigger: [{
-            row: {type: Number, required: true}
+            _id: false
+            , row: {type: Number, required: true}
             , column: {type: Number, required: true}
         }]
         , targetSquares: [{
-            row: {type: Number, required: true}
+            _id: false
+            , row: {type: Number, required: true}
             , column: {type: Number, required: true}
         }]
     }]

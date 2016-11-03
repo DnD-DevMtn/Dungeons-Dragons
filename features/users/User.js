@@ -10,7 +10,8 @@ const User = new mongoose.Schema({
     , profilePic: {type: String}
     , characters: [Character]
     , dmCampaigns: [{
-        campaignName: {type: String, trim: true, unique: true}
+        _id: false
+        , campaignName: {type: String, trim: true, unique: true}
         , partySize: {type: Number, min: 0, default: 0}
         , numOfDungeons: {type: Number, min: 0, default: 0}
     }]
