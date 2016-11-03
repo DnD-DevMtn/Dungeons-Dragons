@@ -30,6 +30,7 @@ import game from "./js/directives/game";
 import videoChat from "./js/directives/videoChat";
 import gameInfo from "./js/directives/gameInfo";
 import charInfo from "./js/directives/characterInfo";
+import inventory from "./js/directives/inventory"
 
 angular.module("DnD", [uiRouter])
   .config(($stateProvider, $urlRouterProvider) => {
@@ -73,6 +74,7 @@ angular.module("DnD", [uiRouter])
   .directive("gameChat", videoChat)
   .directive("gameInfo", gameInfo)
   .directive("charInfo", charInfo)
+  .directive("inventory", inventory)
   .service("mainService", mainService)
   .service("gameService", gameService)
   .service("characterService", characterService)

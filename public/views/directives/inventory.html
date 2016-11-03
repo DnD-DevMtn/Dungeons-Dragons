@@ -1,0 +1,51 @@
+<section id="inventory">
+  <header>
+    <h4>Inventory</h4>
+    <h5>Gold : </h5>
+    <h5 ng-if="UT.page === 1">Weapons</h5>
+    <h5 ng-if="UT.page === 2">Armor</h5>
+    <h5 ng-if="UT.page === 3">Gear</h5>
+  </header>
+  <div class="items">
+    <div ng-if="UT.page === 1">
+      <ul class="weapons flex-wrapper">
+        <li class="flex-content">Battle axe</li>
+        <li class="flex-content">Morning star</li>
+        <li class="flex-content">Sword</li>
+        <li class="flex-content">Pencil</li>
+      </ul>
+    </div>
+    <div ng-if="UT.page === 2">
+      <ul class="armor flex-wrapper">
+        <li class="flex-content">Shield</li>
+        <li class="flex-content">Chainmail</li>
+        <li class="flex-content">Leather</li>
+        <li class="flex-content">Chicken suit</li>
+      </ul>
+    </div>
+    <div ng-if="UT.page === 3">
+      <ul class="gear flex-wrapper">
+        <li class="flex-content">Potion</li>
+        <li class="flex-content">Gloves</li>
+        <li class="flex-content">Sandwich</li>
+        <li class="flex-content">Arrows</li>
+      </ul>
+    </div>
+    <div class="gold">
+    </div>
+    <div class="inventory-nav game-info-nav">
+      <i
+        class="fa fa-angle-double-left inv-nav-left"
+        ng-class="{'available' : UT.leftAvailable}"
+        ng-click="UT.leftAvailable ? UT.switchPage(inv.pages, 'left') : null"
+        aria-hidden="true">
+      </i>
+      <i
+        class="fa fa-angle-double-right inv-nav-right"
+        ng-class="{'available' : UT.rightAvailable}"
+        ng-click="UT.rightAvailable ? UT.switchPage(inv.pages, 'right') : null"
+        aria-hidden="true">
+      </i>
+    </div>
+  </div>
+</section>
