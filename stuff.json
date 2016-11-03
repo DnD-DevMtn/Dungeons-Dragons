@@ -164,45 +164,6 @@ RACE TEMPLATE
         , "female": [""]
     }
     , "size": ""
-    , "baseAge": 0
-    , "height": {
-        "male":{
-            "baseHeight": {
-                "feet": 0
-                , "inches": 0
-            }
-            , "heightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-        , "female":{
-            "baseHeight": {
-                "feet": 0
-                , "inches": 0
-            }
-            , "heightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-    }
-    , "weight": {
-        "male":{
-            "baseWeight": 0
-            , "weightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-        , "female":{
-            "baseWeight": 0
-            , "weightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-    }
     , "raceType": ""
     , "baseSpeed": ""
     , "languages": [""]
