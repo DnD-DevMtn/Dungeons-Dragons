@@ -68,22 +68,22 @@
       </div>
     </div>
   </div>
-  <div class="character-builder-class panel-hide">
-    <div class="options">
+  <div class="character-builder-stats panel-hide">
       <div class="name">
-        <h4>Character Name:</h4>
-        <input ng-model="characterName" type="text" placeholder="Name...">
+        <h4>Base Stats</h4>
+        <h4>Point Bank: {{baseStatsPoints}}</h4>
+        <div class="stats">
+
+          <ul>
+            <li><span class="stat">{{baseStr}}</span> <span class="controls"><button ng-click="addToStr()" class="add">+</button><button ng-click="minusFromStr()" class="minus">-</button></span>Strength</li>
+            <li><span class="stat">{{baseDex}}</span> <span class="controls"><button ng-click="addToDex()" class="add">+</button><button ng-click="minusFromDex()" class="minus">-</button></span> Dexterity</li>
+            <li><span class="stat">{{baseCon}}</span> <span class="controls"><button ng-click="addToCon()" class="add">+</button><button ng-click="minusFromCon()" class="minus">-</button></span> Constitution</li>
+            <li><span class="stat">{{baseInt}}</span> <span class="controls"><button ng-click="addToInt()" class="add">+</button><button ng-click="minusFromInt()" class="minus">-</button></span> Intelligence</li>
+            <li><span class="stat">{{baseWis}}</span> <span class="controls"><button ng-click="addToWis()" class="add">+</button><button ng-click="minusFromWis()" class="minus">-</button></span> Wisdom</li>
+            <li><span class="stat">{{baseCha}}</span> <span class="controls"><button ng-click="addToCha()" class="add">+</button><button ng-click="minusFromCha()" class="minus">-</button></span> Charisma</li>
+          </ul>
+        </div>
       </div>
-      <div class="races">
-        <h4>Select your class</h4>
-        <ul>
-          <li><img ng-click="selectClass('Fighter')" ng-class="fighter" src="../../images/classes/fighter-emblem.jpg" /><span>Fighter</span></li>
-          <li><img ng-click="selectClass('Cleric')" ng-class="cleric" src="../../images/classes/cleric-emblem.jpg" /><span>Cleric</span></li>
-          <li><img ng-click="selectClass('Rogue')" ng-class="rogue" src="../../images/classes/rogue-emblem.jpg" /><span>Rogue</span></li>
-          <li><img ng-click="selectClass('Sorcerer')" ng-class="sorcerer" src="../../images/classes/sorcerer-emblem.jpg" /><span>Sorcerer</span></li>
-        </ul>
-      </div>
-    </div>
   </div>
 </div>
 <button ng-click="goBack()" ng-disabled="prevActive" class="btn cb-prev">Previous</button>

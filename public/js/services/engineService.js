@@ -1,7 +1,7 @@
 export default function engineService(sockets){
 
     const Dungeon = {
-        name: "this is a dungeon";
+        name: "this is a dungeon"
         , height: 10
         , width: 10
         , monsters: [{
@@ -26,7 +26,7 @@ export default function engineService(sockets){
 
         }]
     }
-
+    
     const Game = {
         board: []
         , players: []
@@ -66,7 +66,7 @@ export default function engineService(sockets){
         loadPlayers();
         loadItems();
 
-        
+
     }
 
 }

@@ -33,6 +33,13 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     $scope.selectedLevel = 1;
     $scope.levelOne = "active";
     $scope.levelTwo, $scope.levelThree, $scope.levelFour, $scope.levelFive, $scope.levelSix, $scope.levelSeven, $scope.levelEight, $scope.levelNine, $scope.levelTen;
+    $scope.baseStatsPoints = 10;
+    $scope.baseStr = 0;
+    $scope.baseDex = 0;
+    $scope.baseCon = 0;
+    $scope.baseInt = 0;
+    $scope.baseWis = 0;
+    $scope.baseCha = 0;
 
     $scope.selectFemales = () => {
       $scope.selectedRace = "../../images/races/female-human.jpg";
@@ -257,6 +264,90 @@ function characterBuilderCtrl($scope, characterService, sockets) {
       } else if(level === 10){
         $scope.selectedLevel = 10;
         $scope.levelTen = "active";
+      }
+    }
+
+    $scope.addToStr = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseStr ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromStr = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseStr > 0){
+        $scope.baseStr --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToDex = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseDex ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromDex = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseDex > 0){
+        $scope.baseDex --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToCon = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseCon ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromCon = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseCon > 0){
+        $scope.baseCon --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToInt = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseInt ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromInt = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseInt > 0){
+        $scope.baseInt --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToWis = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseWis ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromWis = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseWis > 0){
+        $scope.baseWis --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToCha = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseCha ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromCha = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseCha > 0){
+        $scope.baseCha --;
+        $scope.baseStatsPoints ++;
       }
     }
 

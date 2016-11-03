@@ -7,7 +7,7 @@ div.cb-wrapper {
   position: relative;
 }
 
-div.character-builder-race, div.character-builder-class {
+div.character-builder-race, div.character-builder-class, div.character-builder-stats {
   vertical-align: middle;
   position: absolute;
   height: 600px;
@@ -174,4 +174,46 @@ div.cb-wrapper div.level ul li {
 
 div.cb-wrapper div.level ul li.active {
   background-color: $link-color;
+}
+
+div.cb-wrapper div.character-builder-stats {
+  width: 500px;
+}
+
+div.cb-wrapper div.character-builder-stats div.stats ul li {
+  display: inline-block;
+  padding: 10px;
+  border: 2px solid #BF003C;
+  border-radius: 4px;
+  width: 120px;
+  text-align: center;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+div.cb-wrapper div.character-builder-stats div.stats ul li span.stat {
+  font-size: 50px;
+  display: block;
+  text-align: center;
+  color: $link-color;
+}
+
+div.cb-wrapper div.character-builder-stats div.stats ul li span.controls {
+  font-size: 40px;
+  display: block;
+  text-align: center;
+  color: $link-color;
+}
+
+div.cb-wrapper div.character-builder-stats div.stats ul li span.controls button {
+  font-size: 30px;
+  text-align: center;
+  color: #fff;
+  padding: 2px;
+  border: none;
+  background: none;
+}
+
+div.cb-wrapper div.character-builder-stats div.stats ul li span.controls span.add {
+  margin-right: 5px;
 }
