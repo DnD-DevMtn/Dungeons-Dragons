@@ -4,7 +4,7 @@
     <h5>Level: 4</h5>
   </header>
   <div class="page-wrapper">
-    <div ng-if="UT.page1" class="page1">
+    <div ng-if="UT.page === 1" class="page1">
       <div class="extended-info">
         <div class="left">
           <div>
@@ -34,25 +34,28 @@
         </div>
       </div>
     </div>
-    <div ng-if="!UT.page1" class="page2">
+    <div ng-if="UT.page === 2" class="page2">
       <p>Languages : </p>
-      <ul class="languages">
+      <ul class="languages flex-wrapper">
         <!-- ng repeat goes here -->
-        <li class="language">Zulu</li>
-        <li class="language">Swahili</li>
-        <li class="language">Orc</li>
-        <li class="language">Common</li>
+        <li class="language flex-content">Zulu</li>
+        <li class="language flex-content">Swahili</li>
+        <li class="language flex-content">Orc</li>
+        <li class="language flex-content">Common</li>
       </ul>
     </div>
   </div>
-  <div class="char-info-nav">
+  <div class="char-info-nav game-info-nav">
     <i
       class="fa fa-angle-double-left char-info-nav-left"
-      ng-click="UT.switchPage(UT.page1)"
-      aria-hidden="true"></i>
+      ng-class="{'available' : UT.leftAvailable}"
+      ng-click="UT.leftAvailable ? UT.switchPage(charInfo.pages, 'left') : null"
+      aria-hidden="true">
+    </i>
     <i
-      class="fa fa-angle-double-right char-info-nav-right available"
-      ng-click="UT.switchPage(UT.page1)"
+      class="fa fa-angle-double-right char-info-nav-right"
+      ng-class="{'available' : UT.rightAvailable}"
+      ng-click="UT.rightAvailable ? UT.switchPage(charInfo.pages, 'right') : null"
       aria-hidden="true">
     </i>
   </div>
