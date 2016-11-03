@@ -44,6 +44,12 @@ function loggedIn(req, res, next) {
     }
 }
 
+function userExists(req, res, next){
+    // TODO
+    // checks if user is in the db and if not posts them
+    next();
+}
+
 
 app.get("/auth/facebook", passport.authenticate("facebook"));
 app.get("/auth/facebook/callback", passport.authenticate("facebook", {
@@ -59,7 +65,7 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-app.get("/api/facebook", loggedIn, (req, res, next) => {
+app.get("/api/facebook", loggedIn, userExists, (req, res, next) => {
     res.send(req.user);
 });
 
