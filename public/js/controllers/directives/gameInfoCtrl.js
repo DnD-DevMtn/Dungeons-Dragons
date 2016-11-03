@@ -67,16 +67,11 @@ export default function($scope, $document) {
     })
 
     UT.switchPage = (pages, direction) => {
-      console.log('page start', UT.page);
-      console.log('pages', pages);
-      console.log(direction);
       if(direction === "right") {
         if(UT.page < pages) {
           UT.page++;
           UT.leftAvailable = true;
-          console.log('page after function', UT.page);
           if(UT.page === pages) {
-            console.log('this fired');
             UT.rightAvailable = false;
           }
         }
@@ -88,9 +83,6 @@ export default function($scope, $document) {
           UT.leftAvailable = false;
         }
       }
-      console.log(UT.leftAvailable);
-      console.log(UT.rightAvailable);
-      console.log(UT.page);
     }
 
     function resetPanel() {
