@@ -66,7 +66,7 @@ export default function engineService(sockets){
         loadPlayers();
         loadItems();
 
-        defineExploreOrder();
+        
     }
 
 }

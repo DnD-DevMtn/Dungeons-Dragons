@@ -69,8 +69,8 @@ const Dungeon = new mongoose.Schema({
         }]
     }]
     , startingLocation: [{
-        _id: false;
-        x: Number
+        _id: false
+        , x: Number
         , y: Number
     }]
 });
