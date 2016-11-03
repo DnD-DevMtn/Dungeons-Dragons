@@ -1,5 +1,8 @@
 #game {
     position:relative;
+    #pixi-game-engine {
+      z-index:-2;
+    }
     iframe {
       position:absolute;
       top:0;
