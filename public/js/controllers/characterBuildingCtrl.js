@@ -1,5 +1,6 @@
 function characterBuilderCtrl($scope, characterService, sockets) {
     $scope.test = "testing ayayyayayayaya";
+    let activeSection = "race";
     $scope.selectedRaceTitle = "Human";
     $scope.showMales = true;
     $scope.showFemales = false;
@@ -20,6 +21,25 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     $scope.selectedRace = "../../images/races/male-human.jpg";
     $scope.pickedGender = "male";
     $scope.pickedRace = "Human";
+    $scope.prevActive = true;
+    $scope.alignments = ["Lawfully Good", "Lawfully Neutral", "Lawfully Evil", "Neutral Good", "True Neutral", "Neutral Evil", "Chaotic Good", "Chaotic Neutral", "Chaotic Evil"];
+    $scope.selectedClass = "";
+    $scope.fighter = "";
+    $scope.cleric = "";
+    $scope.rogue = "";
+    $scope.sorcerer = "";
+    $scope.characterName;
+    $scope.characterAlignment = "Lawfully Good"
+    $scope.selectedLevel = 1;
+    $scope.levelOne = "active";
+    $scope.levelTwo, $scope.levelThree, $scope.levelFour, $scope.levelFive, $scope.levelSix, $scope.levelSeven, $scope.levelEight, $scope.levelNine, $scope.levelTen;
+    $scope.baseStatsPoints = 10;
+    $scope.baseStr = 0;
+    $scope.baseDex = 0;
+    $scope.baseCon = 0;
+    $scope.baseInt = 0;
+    $scope.baseWis = 0;
+    $scope.baseCha = 0;
 
     $scope.selectFemales = () => {
       $scope.selectedRace = "../../images/races/female-human.jpg";
@@ -185,9 +205,185 @@ function characterBuilderCtrl($scope, characterService, sockets) {
       $scope.selectedRaceTitle = "Gnome";
     }
 
-    $scope.finalRace = () => {
-      characterService.finalRace($scope.pickedGender, $scope.selectedRaceTitle);
-      $()
+    $scope.selectClass = characterClass => {
+      $scope.selectedClass = characterClass;
+      $scope.fighter = "";
+      $scope.cleric = "";
+      $scope.rogue = "";
+      $scope.sorcerer = "";
+      if(characterClass === "Fighter"){
+        $scope.fighter = "active";
+      } else if(characterClass === "Cleric"){
+        $scope.cleric = "active";
+      } else if(characterClass === "Rogue"){
+        $scope.rogue = "active";
+      } else if(characterClass === "Sorcerer"){
+        $scope.sorcerer = "active";
+      }
+    };
+
+    $scope.selectLevel = level => {
+      $scope.selectedLevel = level;
+      $scope.levelOne = "";
+      $scope.levelTwo = "";
+      $scope.levelThree = "";
+      $scope.levelFour = "";
+      $scope.levelFive = "";
+      $scope.levelSix = "";
+      $scope.levelSeven = "";
+      $scope.levelEight = "";
+      $scope.levelNine = "";
+      $scope.levelTen = "";
+      if(level === 1) {
+        $scope.selectedLevel = 1;
+        $scope.levelOne = "active";
+      } else if(level === 2){
+        $scope.selectedLevel = 2;
+        $scope.levelTwo = "active";
+      } else if(level === 3){
+        $scope.selectedLevel = 3;
+        $scope.levelThree = "active";
+      } else if(level === 4){
+        $scope.selectedLevel = 4;
+        $scope.levelFour = "active";
+      } else if(level === 5){
+        $scope.selectedLevel = 5;
+        $scope.levelFive = "active";
+      } else if(level === 6){
+        $scope.selectedLevel = 6;
+        $scope.levelSix = "active";
+      } else if(level === 7){
+        $scope.selectedLevel = 7;
+        $scope.levelSeven = "active";
+      } else if(level === 8){
+        $scope.selectedLevel = 8;
+        $scope.levelEight = "active";
+      } else if(level === 9){
+        $scope.selectedLevel = 9;
+        $scope.levelNine = "active";
+      } else if(level === 10){
+        $scope.selectedLevel = 10;
+        $scope.levelTen = "active";
+      }
+    }
+
+    $scope.addToStr = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseStr ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromStr = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseStr > 0){
+        $scope.baseStr --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToDex = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseDex ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromDex = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseDex > 0){
+        $scope.baseDex --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToCon = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseCon ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromCon = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseCon > 0){
+        $scope.baseCon --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToInt = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseInt ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromInt = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseInt > 0){
+        $scope.baseInt --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToWis = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseWis ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromWis = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseWis > 0){
+        $scope.baseWis --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.addToCha = () => {
+      if($scope.baseStatsPoints > 0){
+        $scope.baseCha ++;
+        $scope.baseStatsPoints --;
+      }
+    }
+
+    $scope.minusFromCha = () => {
+      if($scope.baseStatsPoints < 10 && $scope.baseCha > 0){
+        $scope.baseCha --;
+        $scope.baseStatsPoints ++;
+      }
+    }
+
+    $scope.next = () => {
+      if(activeSection === "race"){
+        characterService.finalRace($scope.pickedGender, $scope.selectedRaceTitle);
+        $('div.character-builder-race').animate({left : '-=2000'}, 500);
+        $('div.character-builder-class').animate({right : '+=2000'}, 500);
+        activeSection = "class";
+        $scope.prevActive = false;
+      } else if(activeSection === "class"){
+        if(!$scope.characterName) {
+          alert("Please enter a character name");
+        } else if(!$scope.selectedClass){
+          alert("Please select a class");
+        } else {
+          characterService.finalClass($scope.characterName, $scope.selectedClass, $scope.characterAlignment, $scope.selectedLevel);
+          $('div.character-builder-class').animate({left : '-=2000'}, 500);
+          $('div.character-builder-stats').animate({right : '+=2000'}, 500);
+          activeSection = "stats";
+        }
+      }
+    }
+
+    $scope.goBack = () => {
+      if(activeSection === "race"){
+        $scope.prevActive = true;
+      } else if(activeSection === "class"){
+        $('div.character-builder-race').animate({left : '+=2000'}, 500);
+        $('div.character-builder-class').animate({right : '-=2000'}, 500);
+        activeSection = "race";
+      } else if(activeSection === "stats"){
+        $('div.character-builder-class').animate({left : '+=2000'}, 500);
+        $('div.character-builder-stats').animate({right : '-=2000'}, 500);
+        activeSection = "class";
+      }
     }
 }
 

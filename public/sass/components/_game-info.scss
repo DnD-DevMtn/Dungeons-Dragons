@@ -10,11 +10,11 @@
       position:relative;
       z-index:1;
       li {
-        margin-bottom:1rem;
+        margin-bottom:1.5rem;
         display:block;
         svg {
           fill:$accent-color;
-          height:50px;
+          height:35px;
           width:auto;
           transition:all .25s ease;
           &:hover {
@@ -45,8 +45,39 @@
         margin:3rem 1rem 1rem 1rem;
       }
       &.active {
-        right:calc(66px + 1rem);
+        right:calc(50px + 1rem);
         transition: all .25s ease;
+      }
+      .flex-wrapper {
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:space-between;
+        .flex-content {
+          padding:1rem .5rem;
+          border-bottom:1px solid rgba($accent-color, .6);
+          width:47%;
+        }
+      }
+      .game-info-nav {
+        position:absolute;
+        margin:auto;
+        left:0;
+        right:0;
+        bottom:2rem;
+        text-align:center;
+        font-size:1.5rem;
+        i {
+          margin:0 1rem;
+          transition: all .25s ease;
+          color:rgba($font-color, .3);
+          &.available {
+            color:rgba($font-color, 1);
+            &:hover {
+              transition: all .25s ease;
+              color:$secondary-color-bright;
+            }
+          }
+        }
       }
     }
     #character-info {
@@ -82,34 +113,33 @@
         p {
           margin-bottom:1rem;
         }
-        .languages {
-          .language {
-            padding:1rem .5rem;
-            border-bottom:1px solid rgba($accent-color, .6);
-            width:50%;
+      }
+    }
+    #inventory {
+      .items {
+        display:flex;
+        flex-wrap:wrap;
+        .item {
+          width:33.33%;
+          padding:1rem .5rem;
+          height:100px;
+          border:1px solid blue;
+          img {
+            width:100%;
+            height:100%;
+            border:1px solid red;
           }
         }
       }
-      .char-info-nav {
-        position:absolute;
-        margin:auto;
-        left:0;
-        right:0;
-        bottom:2rem;
+    }
+    #party {
+      h5 {
+        margin-bottom:0;
         text-align:center;
-        font-size:1.5rem;
-        i {
-          margin:0 1rem;
-          transition: all .25s ease;
-          color:rgba($font-color, .3);
-          &.available {
-            color:rgba($font-color, 1);
-            &:hover {
-              transition: all .25s ease;
-              color:$secondary-color-bright;
-            }
-          }
-        }
+        font-size:1.1rem;
+      }
+      .member-stats {
+        font-size:.8rem;
       }
     }
   }
