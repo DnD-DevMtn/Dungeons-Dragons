@@ -12,7 +12,7 @@ module.exports = {
 				, loader: "babel"
 			}
 			, {
-			 test: /\.(jpe?g|png)$/i
+			 test: /\.(jpe?g|png|svg)$/i
 			 , loader: "file-loader"
       }
 			, {
