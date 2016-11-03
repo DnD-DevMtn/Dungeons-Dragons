@@ -1,8 +1,5 @@
 <div class="cb-wrapper">
   <div class="character-builder-race">
-    <div class="title">
-      <h1>Choose your race..</h1>
-    </div>
     <div class="portrait">
       <img ng-src="{{selectedRace}}" />
       <h3>{{selectedRaceTitle}}</h3>
@@ -34,40 +31,60 @@
       </div>
     </div>
   </div>
-  <div class="character-builder-class">
-    <div class="title">
-      <h1>Choose your race..</h1>
-    </div>
-    <div class="portrait">
-      <img ng-src="{{selectedRace}}" />
-      <h3>{{selectedRaceTitle}}</h3>
-    </div>
+  <div class="character-builder-class panel-hide">
     <div class="options">
-      <div class="genders">
-        <h4>Select your gender</h4>
-        <i ng-class="selectedMale" class="fa fa-mars gender" aria-hidden="true" ng-click="selectMales()"></i>
-        <i ng-class="selectedFemale" class="fa fa-venus gender" aria-hidden="true" ng-click="selectFemales()"></i>
+      <div class="name">
+        <h4>Character Name:</h4>
+        <input ng-model="characterName" type="text" placeholder="Name...">
       </div>
       <div class="races">
-        <h4>Select your race</h4>
-        <ul id="males" ng-show="showMales">
-          <li><img ng-click="selectHumanMale()" ng-class="humanMale" src="../../images/races/male-human.jpg" /></li>
-          <li><img ng-click="selectElfMale()" ng-class="elfMale" src="../../images/races/male-elf.jpg" /></li>
-          <li><img ng-click="selectDwarfMale()" ng-class="dwarfMale" src="../../images/races/male-dwarf.jpg" /></li>
-          <li><img ng-click="selectHalfOrcMale()" ng-class="halfOrcMale" src="../../images/races/male-half-orc.jpg" /></li>
-          <li><img ng-click="selectHalflingMale()" ng-class="halflingMale" src="../../images/races/male-halfling.jpg" /></li>
-          <li><img ng-click="selectGnomeMale()" ng-class="gnomeMale" src="../../images/races/male-gnome.jpg" /></li>
+        <h4>Select your class</h4>
+        <ul>
+          <li><img ng-click="selectClass('Fighter')" ng-class="fighter" src="../../images/classes/fighter-emblem.jpg" /><span>Fighter</span></li>
+          <li><img ng-click="selectClass('Cleric')" ng-class="cleric" src="../../images/classes/cleric-emblem.jpg" /><span>Cleric</span></li>
+          <li><img ng-click="selectClass('Rogue')" ng-class="rogue" src="../../images/classes/rogue-emblem.jpg" /><span>Rogue</span></li>
+          <li><img ng-click="selectClass('Sorcerer')" ng-class="sorcerer" src="../../images/classes/sorcerer-emblem.jpg" /><span>Sorcerer</span></li>
         </ul>
-        <ul id="females" ng-show="showFemales">
-          <li><img ng-click="selectHumanFemale()" ng-class="humanFemale" src="../../images/races/female-human.jpg" /></li>
-          <li><img ng-click="selectElfFemale()" ng-class="elfFemale" src="../../images/races/female-elf.jpg" /></li>
-          <li><img ng-click="selectDwarfFemale()" ng-class="dwarfFemale" src="../../images/races/female-dwarf.jpg" /></li>
-          <li><img ng-click="selectHalfOrcFemale()" ng-class="halfOrcFemale" src="../../images/races/female-half-orc.jpg" /></li>
-          <li><img ng-click="selectHalflingFemale()" ng-class="halflingFemale" src="../../images/races/female-halfling.jpg" /></li>
-          <li><img ng-click="selectGnomeFemale()" ng-class="gnomeFemale" src="../../images/races/female-gnome.jpg" /></li>
+      </div>
+      <div class="races">
+        <h4>Select your alignment</h4>
+        <select ng-init="characterAlignment = alignments[0]" ng-model="characterAlignment" ng-options="option for option in alignments">
+        </select>
+      </div>
+      <div class="level">
+        <h4>Select your level</h4>
+        <ul>
+          <li ng-click="selectLevel(1)" ng-class="levelOne">1</li>
+          <li ng-click="selectLevel(2)" ng-class="levelTwo">2</li>
+          <li ng-click="selectLevel(3)" ng-class="levelThree">3</li>
+          <li ng-click="selectLevel(4)" ng-class="levelFour">4</li>
+          <li ng-click="selectLevel(5)" ng-class="levelFive">5</li>
+          <li ng-click="selectLevel(6)" ng-class="levelSix">6</li>
+          <li ng-click="selectLevel(7)" ng-class="levelSeven">7</li>
+          <li ng-click="selectLevel(8)" ng-class="levelEight">8</li>
+          <li ng-click="selectLevel(9)" ng-class="levelNine">9</li>
+          <li ng-click="selectLevel(10)" ng-class="levelTen">10</li>
         </ul>
       </div>
     </div>
+  </div>
+  <div class="character-builder-stats panel-hide">
+      <div class="name">
+        <h4>Base Stats</h4>
+        <h4>Point Bank: {{baseStatsPoints}}</h4>
+        <div class="stats">
+
+          <ul>
+            <li><span class="stat">{{baseStr}}</span> <span class="controls"><button ng-click="addToStr()" class="add">+</button><button ng-click="minusFromStr()" class="minus">-</button></span>Strength</li>
+            <li><span class="stat">{{baseDex}}</span> <span class="controls"><button ng-click="addToDex()" class="add">+</button><button ng-click="minusFromDex()" class="minus">-</button></span> Dexterity</li>
+            <li><span class="stat">{{baseCon}}</span> <span class="controls"><button ng-click="addToCon()" class="add">+</button><button ng-click="minusFromCon()" class="minus">-</button></span> Constitution</li>
+            <li><span class="stat">{{baseInt}}</span> <span class="controls"><button ng-click="addToInt()" class="add">+</button><button ng-click="minusFromInt()" class="minus">-</button></span> Intelligence</li>
+            <li><span class="stat">{{baseWis}}</span> <span class="controls"><button ng-click="addToWis()" class="add">+</button><button ng-click="minusFromWis()" class="minus">-</button></span> Wisdom</li>
+            <li><span class="stat">{{baseCha}}</span> <span class="controls"><button ng-click="addToCha()" class="add">+</button><button ng-click="minusFromCha()" class="minus">-</button></span> Charisma</li>
+          </ul>
+        </div>
+      </div>
   </div>
 </div>
-<button class="btn cb-btn">Next</button>
+<button ng-click="goBack()" ng-disabled="prevActive" class="btn cb-prev">Previous</button>
+<button ng-click="next()" class="btn cb-next">Next</button>

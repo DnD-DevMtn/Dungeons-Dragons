@@ -26,7 +26,7 @@ export default function engineService(sockets){
 
         }]
     }
-
+    
     const Game = {
         board: []
         , players: []
