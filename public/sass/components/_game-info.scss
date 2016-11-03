@@ -4,8 +4,7 @@
   right:0;
   .utility-bar {
     position:relative;
-    margin-right:1rem;
-    margin-top:3rem;
+    padding:3rem 1rem 0 0;
     float:right;
     .utility-icons {
       position:relative;
@@ -31,18 +30,86 @@
     }
   }
   .utility-panels {
-    li {
+    .panel {
+      background-color:$primary-color;
       position:absolute;
       top:0;
       right:-320px;
-      height:500px;
+      height:100vh;
       width:300px;
-      background-color:white;
+      padding:0 1rem;
       box-shadow:$z-depth-standard;
       transition: all .25s ease;
+      header {
+        text-align:center;
+        margin:3rem 1rem 1rem 1rem;
+      }
       &.active {
-        right:-1rem;
+        right:calc(66px + 1rem);
         transition: all .25s ease;
+      }
+    }
+    #character-info {
+      overflow:hidden;
+      .page-wrapper {
+        position:relative;
+      }
+      .page1, .page2 {
+        min-height:250px;
+      }
+      .page1 {
+        .extended-info {
+          display:flex;
+          justify-content:space-between;
+          .right, .left {
+            height:100%;
+            width:47%;
+            div {
+              margin:0 0 49px 0;
+            }
+            span {
+              display:block;
+              width:100%;
+              padding:1rem .5rem;
+              border-bottom: 1px solid rgba($accent-color, .6);
+            }
+          }
+        }
+      }
+      .page2 {
+        width:100%;
+        padding:1rem .5rem;
+        p {
+          margin-bottom:1rem;
+        }
+        .languages {
+          .language {
+            padding:1rem .5rem;
+            border-bottom:1px solid rgba($accent-color, .6);
+            width:50%;
+          }
+        }
+      }
+      .char-info-nav {
+        position:absolute;
+        margin:auto;
+        left:0;
+        right:0;
+        bottom:2rem;
+        text-align:center;
+        font-size:1.5rem;
+        i {
+          margin:0 1rem;
+          transition: all .25s ease;
+          color:rgba($font-color, .3);
+          &.available {
+            color:rgba($font-color, 1);
+            &:hover {
+              transition: all .25s ease;
+              color:$secondary-color-bright;
+            }
+          }
+        }
       }
     }
   }

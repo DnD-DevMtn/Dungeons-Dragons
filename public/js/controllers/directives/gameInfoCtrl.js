@@ -1,8 +1,8 @@
-export default function($scope) {
+export default function($scope, $document) {
     const UT = this;
-    UT.hi = "hi";
 
-    const utilityBar = angular.element(document.querySelector('.utility-bar'));
+    //initialize to first page;
+    UT.page1 = true;
 
     //Icons
     const charIcon = angular.element(document.querySelector('.char-icon svg'));
@@ -17,29 +17,60 @@ export default function($scope) {
     const spellsPanel = angular.element(document.querySelector('.spells-panel'));
 
     charIcon.on('click', () => {
-      angular.element(document.querySelectorAll('.active')).removeClass('active');
-      console.log(angular.element(document.querySelectorAll('.active')).removeClass('active'));
-      charPanel.addClass('active');
-      charIcon.addClass('active');
+      if(charIcon.hasClass('active')) {
+        charPanel.removeClass('active');
+        charIcon.removeClass('active');
+      } else {
+        angular.element(document.querySelectorAll('.active')).removeClass('active');
+        charPanel.addClass('active');
+        charIcon.addClass('active');
+      }
     })
 
     inventoryIcon.on('click', () => {
-      angular.element(document.querySelectorAll('.active')).removeClass('active');
-      inventoryPanel.addClass('active');
-      inventoryIcon.addClass('active');
+        if(inventoryIcon.hasClass('active')) {
+          inventoryPanel.removeClass('active');
+          inventoryIcon.removeClass('active');
+        } else {
+          angular.element(document.querySelectorAll('.active')).removeClass('active');
+          inventoryPanel.addClass('active');
+          inventoryIcon.addClass('active');
+        }
     })
 
     partyIcon.on('click', () => {
-      angular.element(document.querySelectorAll('.active')).removeClass('active');
-      partyPanel.addClass('active');
-      partyIcon.addClass('active');
+        if(partyIcon.hasClass('active')) {
+          partyPanel.removeClass('active');
+          partyIcon.removeClass('active');
+        } else {
+          angular.element(document.querySelectorAll('.active')).removeClass('active');
+          partyPanel.addClass('active');
+          partyIcon.addClass('active');
+        }
     })
 
     spellsIcon.on('click', () => {
-      angular.element(document.querySelectorAll('.active')).removeClass('active');
-      spellsPanel.addClass('active');
-      spellsIcon.addClass('active');
+        if(spellsIcon.hasClass('active')) {
+          spellsPanel.removeClass('active');
+          spellsIcon.removeClass('active');
+        } else {
+          angular.element(document.querySelectorAll('.active')).removeClass('active');
+          spellsPanel.addClass('active');
+          spellsIcon.addClass('active');
+        }
     })
 
-    console.log(utilityBar);
+    UT.switchPage = (page1) => {
+      const leftArrow = angular.element(document.querySelector('.char-info-nav-left'));
+      const rightArrow = angular.element(document.querySelector('.char-info-nav-right'));
+      if(page1) {
+        UT.page1 = false;
+        rightArrow.removeClass('available');
+        leftArrow.addClass('available');
+      } else {
+        UT.page1 = true;
+        leftArrow.removeClass('available');
+        rightArrow.addClass('available');
+      }
+    }
 }
