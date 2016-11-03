@@ -1,0 +1,59 @@
+<section id="character-info">
+  <header class="base-info">
+    <h4>Snuffles the Magic Bard</h4>
+    <h5>Level: 4</h5>
+  </header>
+  <div class="page-wrapper">
+    <div ng-if="UT.page1" class="page1">
+      <div class="extended-info">
+        <div class="left">
+          <div>
+            <span>XP : </span>
+          </div>
+          <div class="stats">
+            <!-- angular variables go here -->
+            <span>Str : </span>
+            <span>Dex : </span>
+            <span>Con : </span>
+            <span>Int : </span>
+            <span>Wis : </span>
+            <span>Cha : </span>
+          </div>
+        </div>
+        <div class="right">
+          <div>
+            <span>HP : </span>
+            <span>AC : </span>
+            <span>Initiative : </span>
+          </div>
+          <div>
+            <span>Fort : </span>
+            <span>Ref : </span>
+            <span>Will : </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="!UT.page1" class="page2">
+      <p>Languages : </p>
+      <ul class="languages">
+        <!-- ng repeat goes here -->
+        <li class="language">Zulu</li>
+        <li class="language">Swahili</li>
+        <li class="language">Orc</li>
+        <li class="language">Common</li>
+      </ul>
+    </div>
+  </div>
+  <div class="char-info-nav">
+    <i
+      class="fa fa-angle-double-left char-info-nav-left"
+      ng-click="UT.switchPage(UT.page1)"
+      aria-hidden="true"></i>
+    <i
+      class="fa fa-angle-double-right char-info-nav-right available"
+      ng-click="UT.switchPage(UT.page1)"
+      aria-hidden="true">
+    </i>
+  </div>
+</div>

@@ -7,7 +7,7 @@ const Spell = new mongoose.Schema({
     , school: {type: "String", required: true}
     , castTime: {type: "Number"}
     , components: [{type: "String"}]
-    , range: {type: "String"}
+    , range: {type: Number}
     , target: {type: "String"}
     , duration: {
         unit: {type: "String"}
@@ -15,11 +15,11 @@ const Spell = new mongoose.Schema({
         , num: {type: "Number"}
     }
     , saveThrow: {
-        saveType: {type: "String", enum: ["fort", "ref", "will"]}
+        saveType: {type: "String", enum: ["fort", "ref", "will", "none"]}
         , dc: {type: "Number"}
     }
     , damage: {
-        damageType: {type: "Number", enum: ["cold", "elec", "fire", "acid"]}
+        damageType: {type: String, enum: ["cold", "elec", "fire", "acid"]}
         , diceType: {type: "Number", enum: [2, 3, 4, 6, 8, 10, 12, 20]}
         , dicePerLevel: {type: "Number"}
     }

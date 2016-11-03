@@ -21,6 +21,7 @@ import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
 import mainService from "./js/services/mainService";
 import gameService from "./js/services/gameService";
 import characterService from "./js/services/characterService";
+import engineService from "./js/services/engineService";
 
 // Factories
 import sockets from "./js/services/sockets";
@@ -28,6 +29,8 @@ import sockets from "./js/services/sockets";
 // Directives
 import game from "./js/directives/game";
 import videoChat from "./js/directives/videoChat";
+import gameInfo from "./js/directives/gameInfo";
+import charInfo from "./js/directives/characterInfo";
 
 angular.module("DnD", [uiRouter])
   .config(($stateProvider, $urlRouterProvider) => {
@@ -69,7 +72,10 @@ angular.module("DnD", [uiRouter])
   .controller("mainCtrl", mainCtrl)
   .directive("game", game)
   .directive("gameChat", videoChat)
+  .directive("gameInfo", gameInfo)
+  .directive("charInfo", charInfo)
   .service("mainService", mainService)
   .service("gameService", gameService)
   .service("characterService", characterService)
+  .service("engineService", engineService)
   .factory("sockets", sockets);

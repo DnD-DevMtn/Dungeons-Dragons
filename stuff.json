@@ -1,44 +1,17 @@
 MONSTER TEMPLATE
 {
-	"name": ""
-	, "sprite": {
-		"normal": ""
-		, "attacking": ""
-		, "dead": ""
-	}
-	, "hp": 0
-	, "cr": 0
-	, "alignment": {
-		"goodEvil": ""
-		, "lawChaos": ""
-	}
-	, "baseStats": {
-		"str": 0
-		, "dex": 0
-		, "con": 0
-		, "int": 0
-		, "wis": 0
-		, "cha": 0
-	}
-	, "size": ""
-	, "speed": 0
-	, "saves": {
-		"fort": 0
-		, "ref": 0
-		, "will": 0
-	}
-	, "items": {
-		"armor": ["id"]
-		, "weapon": ["id"]
-		, "gear": ["id"]
-	}
-	, "goldDrop": 0
-	, "languages": [""]
-	, "baseAttack": 0
-	, "spells": ["id"]
-	, "skills": [""]
-	, "feats": [""]
-	, "description": ""
+    "name": ""
+    , "picture": ""
+    , "hp": 0
+    , "cr": 0
+    , "size": ""
+    , "speed": 0
+    , "goldDrop": 0
+    , "melee": 0
+    , "ranged": 0
+    , "ac": 0
+    , "xp": 0
+    , "description": ""
 }
 
 
@@ -191,45 +164,6 @@ RACE TEMPLATE
         , "female": [""]
     }
     , "size": ""
-    , "baseAge": 0
-    , "height": {
-        "male":{
-            "baseHeight": {
-                "feet": 0
-                , "inches": 0
-            }
-            , "heightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-        , "female":{
-            "baseHeight": {
-                "feet": 0
-                , "inches": 0
-            }
-            , "heightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-    }
-    , "weight": {
-        "male":{
-            "baseWeight": 0
-            , "weightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-        , "female":{
-            "baseWeight": 0
-            , "weightMod": {
-                "diceType": ""
-                , "diceNum": 0
-            }
-        }
-    }
     , "raceType": ""
     , "baseSpeed": ""
     , "languages": [""]
@@ -247,56 +181,7 @@ RACE TEMPLATE
 
 
 CLASS TEMPLATE
-{
-    "name": ""
-	, "pictures": {
-        "male": ""
-        , "female": ""
-    }
-    , "hitDie": {
-        "diceType": 0
-        , "diceNum": 0
-    }
-    , "startingWealth": {
-        "diceType": 0
-        , "diceNum": 0
-        , "modifier":0
-    }
-    , "classSkills": [""]
-    , "ranksPerLvl": 0
-    , "classLvl": [{
-        "level": 0
-        , "baseAttack": []
-        , "fort": 0
-        , "ref": 0
-        , "will": 0
-        , "specials": [{
-            "name": ""
-            , "lvl": 0
-        }]
-        , "spellsPerDay": [{
-            "cantrip": 0
-            , "one": 0
-            , "two": 0
-            , "three": 0
-            , "four": 0
-            , "five": 0
-            , "six": 0
-            , "seven": 0
-            , "eight": 0
-            , "nine": 0
-        }]
-    }]
-    , "description": {
-        "general": ""
-        , "role": ""
-        , "alignmentDesc": ""
-		, "specials": [{
-            "specName": ""
-            , "specDesc": ""
-        }]
-    }
-}
+
 
 
 
@@ -1256,3 +1141,40 @@ Sorcerer
         }]
     }
 }
+
+
+IDS
+DAGGER: 581a47ef959c9233f0f9eaac
+SHORT SPEAR: 581a51436a521229d8367724
+SPEAR: 581a54c43045432ae855bb55
+MORNINGSTAR: 581a5188d687e63348134c71
+LIGHT CROSSBOW: 581a56398cd166315090aab3
+HEAVY CROSSBOW: 581a55cf5722b907e0bfbc75
+MACE LIGHT: 581a50980175971610aba412
+MACE HEAVY: 581a50f6c97475280cf88209
+
+MARTIAL LIGHT
+
+HANDAXE: 581a56a6506c662c505a5a41
+GLADIUS: 581a56dbd069e42dbc4e161b
+SHORT SWORD: 5817d7626b784f1c14e36f5e
+
+MARTIAL ONE
+
+BATTLEAXE: 581a574dd02eba2d6c6c3a6f
+LONGSWORD: 581a58e977ce161c74bde0dc
+SCIMITAR: 581a5b366ffab52a4c5315b5
+WARHAMMER: 581a5c3e59b55f1760a7269d
+
+MARTIAL TWO
+
+GREATSWORD: 581a5e0aaba7c616582a7afe
+GREATAXE: 581a5e4ffddd552e2ca9f1f2
+GREATCLUB: 581a5e9c5d154330c88943ab
+FALCHION: 581a5f7073353433a0568547
+HALBERD: 581a5efdc9fe3e1f64fc82df
+
+RANGED
+
+SHORTBOW: 581a5fff89e4592710b834dd
+LONGBOW: 581a5fcc6b93e400a4735172
