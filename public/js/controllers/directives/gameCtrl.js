@@ -1,6 +1,6 @@
 import "pixi.js";
 
-export default function ( gameService ) {
+export default function ( gameService, engineService ) {
   var Container = PIXI.Container,
     autoDetectRenderer = PIXI.autoDetectRenderer,
     loader = PIXI.loader,

@@ -5,6 +5,10 @@ const Character = new mongoose.Schema({
     , race: {type: mongoose.Schema.Types.ObjectId, ref: "Race", required: true}
     , classType: {type: mongoose.Schema.Types.ObjectId, ref: "CharClass", required: true}
     , level: {type: Number, required: true}
+    , alignment: {
+        goodEvil: {type: String, required: true, enum: ["good", "neutral", "evil"]}
+        , lawChaos: {type: String, required: true, enum: ["lawful", "neutral", "chaotic"]}
+    }
     , descprition: {
         sex: {type: String, enum: ["male", "female"]}
         , height: {type: Number, required: true}
