@@ -56,17 +56,18 @@ const Dungeon = new mongoose.Schema({
     }
     , traps: [{
         _id: false
-        , trap: {type: String, trim: true}
-        , trigger: [{
-            _id: false
-            , x: Number
+        , trap: {
+            name: String
+            , damage: {
+                diceType: Number
+                , diceNum: Number
+            }
+            , triggered: Boolean
+        }
+        , location: {
+            x: Number
             , y: Number
-        }]
-        , targetSquares: [{
-            _id: false
-            , x: Number
-            , y: Number
-        }]
+        }
     }]
     , startingLocation: [{
         _id: false
