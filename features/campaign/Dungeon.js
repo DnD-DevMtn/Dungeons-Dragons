@@ -7,6 +7,7 @@ const Dungeon = new mongoose.Schema({
     , monsters: [{
         _id: false
         , monster: {type: mongoose.Schema.Types.ObjectId, ref: "Monster"}
+        , image: String
         , location: {
             x: Number
             , y: Number
@@ -15,6 +16,7 @@ const Dungeon = new mongoose.Schema({
     , environment: [{
         _id: false
         , thing: {type: String, trim: true}
+        , image: String
         , location: {
             x: Number
             , y: Number
@@ -23,6 +25,7 @@ const Dungeon = new mongoose.Schema({
     , background: [{
         _id: false
         , tile: {type: String}
+        , image: String
         , location: {
             x: Number
             , y: Number
