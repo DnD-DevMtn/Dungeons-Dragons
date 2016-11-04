@@ -35,9 +35,29 @@ export default function engineService(sockets){
         }]
     }
 
+    const trapExample = {
+        name: "Spikes"
+        , found:  false             // can only be disarmed if found
+        , findDC: 15                // how hard it is to find
+        , disarmDC: 20              // how hard it is to disarm
+        , triggered: false
+        , damage: {
+            diceType: 10
+            , numDice: 1
+            , mod: 2
+        }
+    }
+
+    const itemsExample = [{
+        item: {}
+        , found: false
+        , findDC: 15
+    }]
+
 
     const Game = {
         board: []
+        , user: {}
         , players: []
         , monsters: []
         , items: []
@@ -62,26 +82,26 @@ export default function engineService(sockets){
     // all source and target params are objects containing x and y coordinates ie. source = {x: 5, y: 7}
 
     // explore options
-    Game.actionOptions = (source) => {
+    Game.actionOptions = () => {
+        let source = Game.user.location;
 
-        //these actions are unviersal for explore and combat
-        let playerId = board[source.x][source.y].id;
+        // Drop item is a universal action for all states
+        Game.actions = ["dropItem"];
+        if(Game.board[source.x][source.y].items.stuff.length > 0 && Game.board[source.x][source.y].items.found){
+            Game.actions.push("pickUpItem");
+        }
 
-        Game.actions = ["draw", "sheath"];
+        // If the user has a weapon eqiupped then sheath is an action they can take, else they can equipped a weapon
+        if(Game.user.equipped.name){
+            Game.actions.push("sheath");
+        } else {
+            Game.actions.push("draw");
+        }
 
         // All actions that can take place in explore [draw, sheath, openDoor, closeDoor, perception, rogueLockpick, rogueTrapfind, rogueDisarmTrap]
 
         // checks the immediate squares around the player and returns available options.
-        let adjacent = [
-              [source.x - 1, source.y - 1]
-            , [source.x - 1, source.y    ]
-            , [source.x - 1, source.y + 1]
-            , [source.x    , source.y - 1]
-            , [source.x    , source.y + 1]
-            , [source.x + 1, source.y - 1]
-            , [source.x + 1, source.y    ]
-            , [source.x + 1, source.y + 1]
-        ];
+        let adjacent = findAdjacent(source);
         let doorSqr = [                     // doors cannot be opened on the diagonal
               [source.x, source.y - 1]
             , [source.x, source.y + 1]
@@ -89,13 +109,16 @@ export default function engineService(sockets){
             , [source.x + 1, source.y]
         ];
 
-        if(gameState === "explore"){
+        if(Game.gameState === "explore"){
             Game.actions.push("perception");
             for(let i = 0; i < doorSqr.length; i++){
                 let x = doorSqr[i][0], y = doorSqr[i][1];
                 if(Game.board[x][y].door.id){
                     if(Game.board[x][y].door.open === false){
-                        Game.actions.push("openDoor");
+                        Game.actions.push("openDoor", "bash");
+                        if(Game.user.actor.class.name === "rogue" && Game.board[x][y].door.locked === true){
+                            Game.actions.push("lockpick");
+                        }
                     }
                     if(Game.board[x][y].door.open === true){
                         Game.actions.push("closeDoor");
@@ -103,7 +126,35 @@ export default function engineService(sockets){
                 }
             }
         }
+
+        if(Game.gameState === "combat"){
+            if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged"){
+                for(let i = 0; i < adjacent.length; i++){
+                    let x = adjacent[i][0], y = adjacent[i][1];
+                    if(Game.board[x][y].type === "monster"){
+                        Game.actions.push("melee");
+                        if(user.actor.class.name === "fighter"){
+                            Game.actions.push("fighterPowerAttack");
+                            if(checkCleave(source)){
+                                Game.actions.push("cleave");
+                            }
+                        }
+                        if(Game.user.actor.class.name === "rogue" && checkSneak(Game.board[x][y])){
+                            // TODO
+                            // Game.actions should actually store objects with names and targets
+                            Game.actions.push("sneakAttack");
+                        }
+                    }
+                }
+            }
+            if(Game.user.equipped.name && Game.user.equipped.weaponType === "Ranged"){
+                let rangedRadius(Math.floor(Game.user.equipped.range / 10));
+            }
+        }
     }
+    // end Game.actionOptions()
+
+
 
     Game.drawWeapon = (source) => {
         // available if the player does not have a weapon equipped.
@@ -120,6 +171,10 @@ export default function engineService(sockets){
         // door opens if not locked
     }
 
+    Game.bash = (source, target) => {
+        // break down a door if locked or stuck
+    }
+
     Game.closeDoor = (source, target) => {
         // available if a door is next to the user, ie. directly above, beneath, left or right
     }
@@ -127,6 +182,7 @@ export default function engineService(sockets){
     Game.perception = (source) => {
         // always available during explore
         // search for secrets, items or monsters in a 4 square radius
+        // modifier is based on wis scores
     }
 
     Game.rogueLockpick = (source, target) => {
@@ -143,6 +199,14 @@ export default function engineService(sockets){
 
     Game.move = (source, target) => {
 
+    }
+
+    Game.pickUpItem = (source) => {
+        // available if item on square is found through successful perception and character is on the square
+    }
+
+    Game.dropItem = (source) => {
+        // available in explore mode. Item that is dropped is marked as found.
     }
 
     // combat options
@@ -166,7 +230,33 @@ export default function engineService(sockets){
 
     }
 
+    Game.rogueSneakAttack = (source, target) => {
 
+    }
+
+    // checks if target square is available and returns a boolean
+    Game.move = (source, target) => {
+        if(!Game.board[target.x][target.y].free){
+            return false;
+        }
+        if(Game.board[source.x][source.y].id === Game.user.id){
+            Game.user.location.x = target.x;
+            Game.user.location.y = target.y;
+        } else {
+            updateActorPosition(source, target);
+        }
+
+        let type = Game.board[source.x][source.y].type;       // save the reference variables
+        let id   = Game.board[source.x][source.y].id;
+
+        Game.board[source.x][source.y].type = "";             // set source square props to empty
+        Game.board[source.x][source.y].id   = "";
+        Game.board[source.x][source.y].free = true;
+
+        Game.board[source.x][source.y].type = type;           // set target square props to actor
+        Game.board[source.x][source.y].id   = id;
+        Game.board[source.x][source.y].free = false;
+    }
 
     // GAME FUNCTIONS * * *
 
@@ -178,15 +268,18 @@ export default function engineService(sockets){
     this.initGame = function(dungeon, players, userCharacter){  // Players will already exist on the scope by the time the dungeon starts
                                                                 // so players array will not be tied to the Dungeon object.
         for(let k = 0; k < players.length; k++){
+            let rand = generateId();
             if(players[k]._id === userCharacter._id){
-                user.actor = userCharacter;
-                user.location = dungeon.startingLocation[k];
+                Game.user.actor = userCharacter;
+                Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
+                Game.user.id = rand;
+                Game.user.equipped = {};
             }
             Game.players.push({
                 actor: players[k]
                 , location: dungeon.startingLocation[k]
                 , equipped: {}
-                , id: generateId()
+                , id: rand
             });
         }
 
@@ -199,9 +292,9 @@ export default function engineService(sockets){
                     free: true
                     , trap: {}
                     , door: {}
-                    , items: []
-                    , type: ""
-                    , id: ""
+                    , items: { stuff: [] }
+                    , type: ""                  // Types are monster, player, or environment
+                    , id: ""                    // Unique ids point to the element in the array of one of the three types
                 }
                 Game.board[y].push(square);
             }
@@ -261,7 +354,7 @@ export default function engineService(sockets){
         for(let i = 0; i < Game.items.length; i++){
             let x = Game.items[i].location.x;
             let y = Game.items[i].location.y;
-            Game.board[x][y].items.push(Game.items[i].item);
+            Game.board[x][y].items.stuff.push(Game.items[i].item);
         }
     }
 
@@ -300,5 +393,71 @@ export default function engineService(sockets){
     }
 
     // MAIN INITS * * *
+
+
+
+    // * * * OTHER FUNCTIONS
+
+    // Checks if the rogue's sneak attack option is available
+    // A rogue can sneak attack when the monster he is attacking is touching two or more players, including the rogue himself
+    function checkSneak(target){
+        let count = 0;
+        let adjacent = findAdjacent(target);
+        for(let i = 0; i < adjacent.length; i++){
+            let x = adjacent[i][0], y = adjacent[i][1];
+            if(Game.board[x][y].type === "player"){
+                count++;
+            }
+        }
+        if(count > 1){
+            return true;
+        }
+        return false;
+    }
+
+    // A fighter can use cleave when he is surrounded by two or more monsters
+    function checkCleave(source){
+        let count = 0;
+        let adjacent = findAdjacent(source);
+        for(let i = 0; i < adjacent.length; i++){
+            let x = adjacent[i][0], y = adjacent[i][1];
+            if(Game.board[x][y].type === "monster"){
+                count++;
+            }
+        }
+        if(count > 1){
+            return true;
+        }
+        return false;
+    }
+
+    function findAdjacent(source){
+        return [
+              [source.x - 1, source.y - 1]
+            , [source.x - 1, source.y    ]
+            , [source.x - 1, source.y + 1]
+            , [source.x    , source.y - 1]
+            , [source.x    , source.y + 1]
+            , [source.x + 1, source.y - 1]
+            , [source.x + 1, source.y    ]
+            , [source.x + 1, source.y + 1]
+        ];
+    }
+
+    function updateActorPosition(source, target){
+        for(let i = 0; i < Game[source.type].length; i++){
+            if(Game[source.type][i].id === Game.board[source.x][source.y].id){
+                Game[source.type][i].location.x = target.x;
+                Game[source.type][i].location.y = target.y;
+            }
+        }
+    }
+
+    function rangedRadius(range){
+        //TODO
+    }
+
+
+    // OTHER FUNCTIONS * * *
 
 }
