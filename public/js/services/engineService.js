@@ -66,7 +66,7 @@ export default function engineService(sockets){
 
         //these actions are unviersal for explore and combat
         let playerId = board[source.x][source.y].id;
-        let
+
         Game.actions = ["draw", "sheath"];
 
         // All actions that can take place in explore [draw, sheath, openDoor, closeDoor, perception, rogueLockpick, rogueTrapfind, rogueDisarmTrap]
