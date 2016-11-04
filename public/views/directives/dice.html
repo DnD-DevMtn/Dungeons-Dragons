@@ -1,0 +1,87 @@
+<section id="dice">
+  <div class="dice-content">
+    <div class="dice-result">
+        <div ng-if="dice.die === 'd3'">
+          <h5>D3</h5>
+        </div>
+        <div ng-if="dice.die === 'd4'">
+          <h5>D4</h5>
+        </div>
+        <div ng-if="dice.die === 'd6'">
+          <h5>D6</h5>
+          <img src="./assets/d6.svg" alt="d6" />
+        </div>
+        <div ng-if="dice.die === 'd8'">
+          <h5>D8</h5>
+          <img src="./assets/d8.svg" alt="d8" />
+        </div>
+        <div ng-if="dice.die === 'd10'">
+          <h5>D4</h5>
+          <img src="./assets/d10.svg" alt="d10" />
+        </div>
+        <div ng-if="dice.die === 'd12'">
+          <h5>D4</h5>
+          <img src="./assets/d12.svg" alt="d12" />
+        </div>
+        <div ng-if="dice.die === 'd20'">
+          <h5>D4</h5>
+          <img src="./assets/d20.svg" alt="d20" />
+        </div>
+        <h3>{{dice.result}}</h3>
+    </div>
+    <span
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll20() : null">
+      roll
+    </span>
+    <span
+      ng-if="dice.die === 'd3'"
+      ng-class="{'ready' : dice.readyToRoll}"
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll3() : null">
+      roll
+    </span>
+    <span
+      ng-if="dice.die === 'd4'"
+      ng-class="{'ready' : dice.readyToRoll}"
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll4() : null">
+      roll
+    </span>
+    <span
+      ng-if="dice.die === 'd6'"
+      ng-class="{'ready' : dice.readyToRoll}"
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll6() : null">
+      roll
+    </span>
+    <span
+      ng-if="dice.die === 'd8'"
+      ng-class="{'ready' : dice.readyToRoll}"
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll8() : null">
+      roll
+    </span>
+    <span
+      ng-if="dice.die === 'd10'"
+      ng-class="{'ready' : dice.readyToRoll}"
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll10() : null">
+      roll
+    </span>
+    <span
+      ng-if="dice.die === 'd12'"
+      ng-class="{'ready' : dice.readyToRoll}"
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll12() : null">
+      roll
+    </span>
+    <span
+      ng-if="dice.die === 'd20'"
+      ng-class="{'ready' : dice.readyToRoll}"
+      class="btn roll"
+      ng-click="dice.readyToRoll ? dice.roll20() : null">
+      roll
+    </span>
+  </div>
+</section>
