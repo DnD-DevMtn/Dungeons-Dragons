@@ -16,11 +16,15 @@
         margin-bottom:1.5rem;
         display:block;
         &.combat-icon, &.explore-icon {
-          svg {
-            opacity:.5;
+          opacity:.5;
+          svg:hover {
+            fill:$accent-color;
           }
           &.available {
             opacity:1;
+            svg:hover {
+              fill:$secondary-color-bright;
+            }
           }
         }
         svg {
