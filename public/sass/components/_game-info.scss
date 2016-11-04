@@ -25,6 +25,10 @@
             svg:hover {
               fill:$secondary-color-bright;
             }
+            &.active {
+              fill:$secondary-color-bright;
+              transition:all .25s ease;
+            }
           }
         }
         svg {
@@ -49,7 +53,7 @@
       background-color:$primary-color;
       position:absolute;
       top:0;
-      right:-320px;
+      right:-400px;
       height:100vh;
       width:300px;
       padding:0 1rem;
@@ -156,6 +160,17 @@
       }
       .member-stats {
         font-size:.8rem;
+      }
+    }
+    #explore {
+      .explore-action {
+        height:100px;
+        text-align:center;
+        img {
+          width:90%;
+          height:90%;
+          border:1px solid blue;
+        }
       }
     }
   }

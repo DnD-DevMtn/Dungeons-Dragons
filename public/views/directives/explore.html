@@ -1,3 +1,40 @@
-<div>
-  This is the explore thingy. 
-</div>
+<section id="explore">
+  <header>
+    <h4>Explore</h4>
+  </header>
+  <ul class="explore-actions flex-wrapper">
+    <!-- perceive -->
+    <li class="flex-content explore-action">
+      <img src="" />
+    </li>
+    <!-- bash -->
+    <li ng-if="exp.doorInRange" class="flex-content explore-action">
+      <img src="" />
+    </li>
+    <!-- open/close door -->
+    <li ng-if="exp.doorInRange" class="flex-content explore-action">
+      <img src="" />
+    </li>
+    <!-- draw/sheath weapon -->
+    <li class="flex-content explore-action">
+      <!-- ng if weapon -->
+      <img src="" />
+      <!-- <img src="" /> -->
+      <span>Draw weapon</span>
+      <!-- <span>Sheath weapon</span> -->
+    </li>
+    <!-- rouge -->
+    <!-- lockpick -->
+    <li ng-if="charClass === 'rouge'" class="flex-content explore-action">
+      <img src="" />
+    </li>
+    <!-- search trap -->
+    <li ng-if="charClass === 'rouge'" class="flex-content explore-action">
+      <img src="" />
+    </li>
+    <!-- disarm -->
+    <li ng-if="charClass === 'rouge'" class="flex-content explore-action">
+      <img src="" />
+    </li>
+  </ul>
+</section>
