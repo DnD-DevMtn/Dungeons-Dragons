@@ -34,6 +34,8 @@ import charInfo from "./js/directives/characterInfo";
 import inventory from "./js/directives/inventory";
 import party from "./js/directives/party";
 import spells from "./js/directives/spells";
+import dice from "./js/directives/dice";
+
 
 angular.module("DnD", [uiRouter])
   .config(($stateProvider, $urlRouterProvider) => {
@@ -80,6 +82,7 @@ angular.module("DnD", [uiRouter])
   .directive("inventory", inventory)
   .directive("party", party)
   .directive("spells", spells)
+  .directive("dice", dice)
   .service("mainService", mainService)
   .service("gameService", gameService)
   .service("characterService", characterService)

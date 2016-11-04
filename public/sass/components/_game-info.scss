@@ -3,9 +3,12 @@
   top:0;
   right:0;
   .utility-bar {
+    height:100vh;
+    background-color:$primary-color;
     position:relative;
-    padding:3rem 1rem 0 0;
+    padding:3rem 1rem 0 1rem;
     float:right;
+    box-shadow:$z-depth-high;
     .utility-icons {
       position:relative;
       z-index:1;
@@ -38,7 +41,8 @@
       height:100vh;
       width:300px;
       padding:0 1rem;
-      box-shadow:$z-depth-standard;
+      box-shadow:$z-depth-high;
+      z-index:3;
       transition: all .25s ease;
       header {
         text-align:center;
