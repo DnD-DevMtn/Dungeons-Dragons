@@ -1,6 +1,8 @@
 export default function($scope, $document) {
     const UT = this;
 
+    UT.combatMode = true;
+
     //Icons
     const charIcon = angular.element(document.querySelector('.char-icon svg'));
     const inventoryIcon = angular.element(document.querySelector('.inventory-icon svg'));

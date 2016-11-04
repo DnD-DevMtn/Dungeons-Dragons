@@ -15,6 +15,14 @@
       li {
         margin-bottom:1.5rem;
         display:block;
+        &.combat-icon, &.explore-icon {
+          svg {
+            opacity:.5;
+          }
+          &.available {
+            opacity:1;
+          }
+        }
         svg {
           fill:$accent-color;
           height:35px;
