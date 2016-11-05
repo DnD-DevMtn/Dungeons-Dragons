@@ -51,4 +51,24 @@ io.on("connection", socket => {
         connections.splice(connections.indexOf(data), 1);
         console.log(`Disconnected, ${connections.length} socket(s) now connected on ${port}`)
     });
+
+    socket.on("bash", data => {
+        socket.to(data.room).broadcast.emit(data);
+    });
+
+    socket.on("openDoor", data => {
+        socket.to(data.room)broadcast.emit(data);
+    });
+
+    socket.on("closeDoor", data => {
+        socket.to(data.room)broadcast.emit(data);
+    });
+
+
+
+
+
+
+
+
 });
