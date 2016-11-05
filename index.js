@@ -57,11 +57,11 @@ io.on("connection", socket => {
     });
 
     socket.on("openDoor", data => {
-        socket.to(data.room)broadcast.emit(data);
+        socket.to(data.room).broadcast.emit(data);
     });
 
     socket.on("closeDoor", data => {
-        socket.to(data.room)broadcast.emit(data);
+        socket.to(data.room).broadcast.emit(data);
     });
 
 
