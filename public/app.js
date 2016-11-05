@@ -16,6 +16,7 @@ import mainCtrl from "./js/controllers/mainCtrl";
 import redirectCtrl from "./js/controllers/redirectCtrl";
 import loginCtrl from "./js/controllers/loginCtrl";
 import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
+import gameViewCtrl from "./js/controllers/gameViewCtrl";
 
 // Services
 import mainService from "./js/services/mainService";
@@ -53,9 +54,11 @@ angular.module("DnD", [uiRouter])
           templateUrl: "./views/redirect.html",
           controller: redirectCtrl,
       })
-      .state("game", {
+      .state("gameView", {
           url: "/game",
           templateUrl: "./views/game/gameView.html",
+          controllerAs: 'GV',
+          controller: gameViewCtrl
       })
       .state("characterBuilder", {
           url: "/init/character-builder",
