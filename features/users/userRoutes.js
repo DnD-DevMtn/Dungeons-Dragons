@@ -28,6 +28,6 @@ module.exports = app => {
         .post(userCtrl.postUser);
 
     app.route("/api/users/:id")
-        .get(userCtrl.getUserById);
-
+        .get(userCtrl.getUserById)
+        .put(userCtrl.addCharacterToUser);
 }

@@ -34,12 +34,14 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     $scope.levelOne = "active";
     $scope.levelTwo, $scope.levelThree, $scope.levelFour, $scope.levelFive, $scope.levelSix, $scope.levelSeven, $scope.levelEight, $scope.levelNine, $scope.levelTen;
     $scope.baseStatsPoints = 10;
-    $scope.baseStr = 0;
-    $scope.baseDex = 0;
-    $scope.baseCon = 0;
-    $scope.baseInt = 0;
-    $scope.baseWis = 0;
-    $scope.baseCha = 0;
+    $scope.baseStr = 10;
+    $scope.baseDex = 10;
+    $scope.baseCon = 10;
+    $scope.baseInt = 10;
+    $scope.baseWis = 10;
+    $scope.baseCha = 10;
+    $scope.showNext = true;
+    $scope.showFinish = false;
 
     $scope.selectFemales = () => {
       $scope.selectedRace = "../../images/races/female-human.jpg";
@@ -275,7 +277,7 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     }
 
     $scope.minusFromStr = () => {
-      if($scope.baseStatsPoints < 10 && $scope.baseStr > 0){
+      if($scope.baseStr > 0){
         $scope.baseStr --;
         $scope.baseStatsPoints ++;
       }
@@ -289,7 +291,7 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     }
 
     $scope.minusFromDex = () => {
-      if($scope.baseStatsPoints < 10 && $scope.baseDex > 0){
+      if($scope.baseDex > 0){
         $scope.baseDex --;
         $scope.baseStatsPoints ++;
       }
@@ -303,7 +305,7 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     }
 
     $scope.minusFromCon = () => {
-      if($scope.baseStatsPoints < 10 && $scope.baseCon > 0){
+      if($scope.baseCon > 0){
         $scope.baseCon --;
         $scope.baseStatsPoints ++;
       }
@@ -317,7 +319,7 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     }
 
     $scope.minusFromInt = () => {
-      if($scope.baseStatsPoints < 10 && $scope.baseInt > 0){
+      if($scope.baseInt > 0){
         $scope.baseInt --;
         $scope.baseStatsPoints ++;
       }
@@ -331,7 +333,7 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     }
 
     $scope.minusFromWis = () => {
-      if($scope.baseStatsPoints < 10 && $scope.baseWis > 0){
+      if($scope.baseWis > 0){
         $scope.baseWis --;
         $scope.baseStatsPoints ++;
       }
@@ -345,7 +347,7 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     }
 
     $scope.minusFromCha = () => {
-      if($scope.baseStatsPoints < 10 && $scope.baseCha > 0){
+      if($scope.baseCha > 0){
         $scope.baseCha --;
         $scope.baseStatsPoints ++;
       }
@@ -354,8 +356,8 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     $scope.next = () => {
       if(activeSection === "race"){
         characterService.finalRace($scope.pickedGender, $scope.selectedRaceTitle);
-        $('div.character-builder-race').animate({left : '-=2000'}, 500);
-        $('div.character-builder-class').animate({right : '+=2000'}, 500);
+        $('div.character-builder-race').animate({left : '-=4000'}, 500);
+        $('div.character-builder-class').animate({right : '+=4000'}, 500);
         activeSection = "class";
         $scope.prevActive = false;
       } else if(activeSection === "class"){
@@ -365,24 +367,40 @@ function characterBuilderCtrl($scope, characterService, sockets) {
           alert("Please select a class");
         } else {
           characterService.finalClass($scope.characterName, $scope.selectedClass, $scope.characterAlignment, $scope.selectedLevel);
-          $('div.character-builder-class').animate({left : '-=2000'}, 500);
-          $('div.character-builder-stats').animate({right : '+=2000'}, 500);
+          $('div.character-builder-class').animate({left : '-=4000'}, 500);
+          $('div.character-builder-stats').animate({right : '+=4000'}, 500);
           activeSection = "stats";
+          $scope.showNext = false;
+          $scope.showFinish = true;
         }
       }
+    }
+
+    $scope.finish = () => {
+      if(activeSection === "stats"){
+       if($scope.baseStatsPoints === 0){
+         characterService.finalStats($scope.baseStr, $scope.baseDex, $scope.baseCon, $scope.baseInt, $scope.baseWis, $scope.baseCha)
+       } else {
+         alert("You still have points left");
+       }
+     }
     }
 
     $scope.goBack = () => {
       if(activeSection === "race"){
         $scope.prevActive = true;
       } else if(activeSection === "class"){
-        $('div.character-builder-race').animate({left : '+=2000'}, 500);
-        $('div.character-builder-class').animate({right : '-=2000'}, 500);
+        $('div.character-builder-race').animate({left : '+=4000'}, 500);
+        $('div.character-builder-class').animate({right : '-=4000'}, 500);
         activeSection = "race";
+        $scope.showNext = true;
+        $scope.showFinish = false;
       } else if(activeSection === "stats"){
-        $('div.character-builder-class').animate({left : '+=2000'}, 500);
-        $('div.character-builder-stats').animate({right : '-=2000'}, 500);
+        $('div.character-builder-class').animate({left : '+=4000'}, 500);
+        $('div.character-builder-stats').animate({right : '-=4000'}, 500);
         activeSection = "class";
+        $scope.showNext = true;
+        $scope.showFinish = false;
       }
     }
 }

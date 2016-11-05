@@ -87,4 +87,5 @@
   </div>
 </div>
 <button ng-click="goBack()" ng-disabled="prevActive" class="btn cb-prev">Previous</button>
-<button ng-click="next()" class="btn cb-next">Next</button>
+<button ng-show="showNext" ng-click="next()" class="btn cb-next">Next</button>
+<button ng-show="showFinish" ng-click="finish()" class="btn cb-next">Finish</button>
