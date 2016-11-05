@@ -15,6 +15,22 @@
       li {
         margin-bottom:1.5rem;
         display:block;
+        &.combat-icon, &.explore-icon {
+          opacity:.5;
+          svg:hover {
+            fill:$accent-color;
+          }
+          &.available {
+            opacity:1;
+            svg:hover {
+              fill:$secondary-color-bright;
+            }
+            &.active {
+              fill:$secondary-color-bright;
+              transition:all .25s ease;
+            }
+          }
+        }
         svg {
           fill:$accent-color;
           height:35px;
@@ -37,7 +53,7 @@
       background-color:$primary-color;
       position:absolute;
       top:0;
-      right:-320px;
+      right:-400px;
       height:100vh;
       width:300px;
       padding:0 1rem;
@@ -127,12 +143,6 @@
           width:33.33%;
           padding:1rem .5rem;
           height:100px;
-          border:1px solid blue;
-          img {
-            width:100%;
-            height:100%;
-            border:1px solid red;
-          }
         }
       }
     }
@@ -144,6 +154,36 @@
       }
       .member-stats {
         font-size:.8rem;
+      }
+    }
+    #explore {
+      li.explore-action {
+        height:100px;
+        text-align:center;
+        border:none;
+        margin-bottom:1rem;
+        svg {
+          fill:$accent-color;
+          width:90%;
+          height:90%;
+          transition:all .5s ease;
+          margin-bottom:.5rem;
+          &:hover {
+            fill:$secondary-color-bright;
+            transition:all .5s ease;
+          }
+        }
+        &.door {
+          svg {
+            fill:transparent;
+            stroke:$accent-color;
+            stroke-width:10px;
+          }
+          &:hover {
+            fill:transparent;
+            stroke:$secondary-color-bright;
+          }
+        }
       }
     }
   }

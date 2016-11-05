@@ -1,17 +1,26 @@
-export default function($scope, $document) {
+export default function($scope) {
     const UT = this;
+
+    UT.combatMode = true;
+    UT.exploreMode = true;
 
     //Icons
     const charIcon = angular.element(document.querySelector('.char-icon svg'));
     const inventoryIcon = angular.element(document.querySelector('.inventory-icon svg'));
     const partyIcon = angular.element(document.querySelector('.party-icon svg'));
     const spellsIcon = angular.element(document.querySelector('.spells-icon svg'));
+    const exploreIcon = angular.element(document.querySelector('.explore-icon svg'));
+    const combatIcon = angular.element(document.querySelector('.combat-icon svg'));
 
     //Panels
     const charPanel = angular.element(document.querySelector('.char-panel'));
     const inventoryPanel = angular.element(document.querySelector('.inventory-panel'));
     const partyPanel = angular.element(document.querySelector('.party-panel'));
     const spellsPanel = angular.element(document.querySelector('.spells-panel'));
+    const explorePanel = angular.element(document.querySelector('.explore-panel'));
+    const combatPanel = angular.element(document.querySelector('.combat-panel'));
+
+
 
     //Initialize all panels to page one
     UT.page = 1;
@@ -65,6 +74,36 @@ export default function($scope, $document) {
         }
         UT.page = 1;
     })
+
+    UT.showExplore = () => {
+      UT.page = 1;
+      UT.rightAvailable = true;
+      UT.leftAvailable = false;
+      if(exploreIcon.hasClass('active')) {
+        explorePanel.removeClass('active');
+        exploreIcon.removeClass('active');
+      } else {
+        angular.element(document.querySelectorAll('.active')).removeClass('active');
+        explorePanel.addClass('active');
+        exploreIcon.addClass('active');
+      }
+      UT.page = 1;
+    }
+
+    UT.showCombat = () => {
+      UT.page = 1;
+      UT.rightAvailable = true;
+      UT.leftAvailable = false;
+      if(combatIcon.hasClass('active')) {
+        combatPanel.removeClass('active');
+        combatIcon.removeClass('active');
+      } else {
+        angular.element(document.querySelectorAll('.active')).removeClass('active');
+        combatPanel.addClass('active');
+        combatIcon.addClass('active');
+      }
+      UT.page = 1;
+    }
 
     UT.switchPage = (pages, direction) => {
       if(direction === "right") {
