@@ -5,7 +5,7 @@ const Campaign = new mongoose.Schema({
     dm: {type: String}
     , players: [{
         _id: false
-        , username: {type: String, trim: true, unique: true}
+        , facebookId: {type: String, trim: true, unique: true}
         , character: {type: String, trim: true}
     }]
     , dungeons: [Dungeon]
