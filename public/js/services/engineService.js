@@ -573,8 +573,16 @@ export default function engineService(sockets){
         }
     }
 
-    function rangedRadius(range){
+    function rangedRadius(source, range){
         // TODO
+        let x = source.x, y = source.y;
+        let ranged = [];
+        for(let i = (x - range); i < (x + range); i++){
+            for(let j = (y - range); j < (y + range); j++){
+                ranged.push([i, j]);
+            }
+        }
+        return ranged;
     }
 
     function checkUser(source){
