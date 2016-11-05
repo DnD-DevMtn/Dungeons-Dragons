@@ -4,6 +4,7 @@ const Character = new mongoose.Schema({
     name: {type: String, required: true, trim: true}
     , race: {type: mongoose.Schema.Types.ObjectId, ref: "Race", required: true}
     , classType: {type: mongoose.Schema.Types.ObjectId, ref: "CharClass", required: true}
+    , sprite: {type: String, required: true, trim: true}
     , level: {type: Number, required: true}
     , alignment: {
         goodEvil: {type: String, required: true, enum: ["good", "neutral", "evil"]}
@@ -36,16 +37,6 @@ const Character = new mongoose.Schema({
         , ref: {type: Number, required: true}
         , will: {type: Number, required: true}
     }
-    , skills: [{
-        _id: false
-        , skill: {type: String, trim: true}
-        , rank: {type: Number, min: 0, default: 0}
-    }]
-    , feats: [{
-        _id: false
-        , feat: {type: String, trim: true}
-        , target: {type: String, trim: true}
-    }]
     , armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
     , weapons: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]
     , gear: [{type: mongoose.Schema.Types.ObjectId, ref: "Gear"}]
