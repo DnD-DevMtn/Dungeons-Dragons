@@ -23,6 +23,7 @@ import mainService from "./js/services/mainService";
 import gameService from "./js/services/gameService";
 import characterService from "./js/services/characterService";
 import engineService from "./js/services/engineService";
+import dungeonService from "./js/services/dungeonService";
 
 // Factories
 import sockets from "./js/services/sockets";
@@ -93,4 +94,5 @@ angular.module("DnD", [uiRouter])
   .service("gameService", gameService)
   .service("characterService", characterService)
   .service("engineService", engineService)
+  .service("dungeonService", dungeonService)
   .factory("sockets", sockets);
