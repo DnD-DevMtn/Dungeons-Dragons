@@ -276,7 +276,7 @@
         </g>
         </svg>
       </li>
-      <li ng-class="{'available': UT.combatMode}" class="combat-icon">
+      <li ng-click="UT.exploreMode ? UT.showCombat() : null" ng-class="{'available': UT.combatMode}" class="combat-icon">
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         	 viewBox="0 0 463.084 463.084" style="enable-background:new 0 0 463.084 463.084;" xml:space="preserve">
         <path d="M438.663,427.806l-16.83-34.897l-9.958-71.797c-0.165-1.186-0.712-2.287-1.56-3.134L225.417,133.079l17.323-17.323
@@ -317,6 +317,7 @@
         <explore></explore>
       </li>
       <li class="panel combat-panel">
+        <combat></combat>
       </li>
     </ul>
   </ul>

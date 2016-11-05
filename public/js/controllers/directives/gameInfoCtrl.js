@@ -76,7 +76,9 @@ export default function($scope) {
     })
 
     UT.showExplore = () => {
-      resetPanel();
+      UT.page = 1;
+      UT.rightAvailable = true;
+      UT.leftAvailable = false;
       if(exploreIcon.hasClass('active')) {
         explorePanel.removeClass('active');
         exploreIcon.removeClass('active');
@@ -89,7 +91,9 @@ export default function($scope) {
     }
 
     UT.showCombat = () => {
-      resetPanel();
+      UT.page = 1;
+      UT.rightAvailable = true;
+      UT.leftAvailable = false;
       if(combatIcon.hasClass('active')) {
         combatPanel.removeClass('active');
         combatIcon.removeClass('active');
