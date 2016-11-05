@@ -2,25 +2,21 @@ const mongoose = require("mongoose");
 
 const Character = new mongoose.Schema({
     name: {type: String, required: true, trim: true}
-    , race: {type: mongoose.Schema.Types.ObjectId, ref: "Race", required: true}
-    , classType: {type: mongoose.Schema.Types.ObjectId, ref: "CharClass", required: true}
+    , race: {type: String, required: true}
+    , classType: {type: "String", required: true}
     , sprite: {type: String, required: true, trim: true}
     , level: {type: Number, required: true}
-    , alignment: {
-        goodEvil: {type: String, required: true, enum: ["good", "neutral", "evil"]}
-        , lawChaos: {type: String, required: true, enum: ["lawful", "neutral", "chaotic"]}
-    }
+    , alignment: {type : String, required : true, trim : true}
     , descprition: {
         sex: {type: String, enum: ["male", "female"]}
-        , height: {type: Number, required: true}
-        , weight: {type: Number, required: true}
-        , eyeColor: {type: String, trim: true, required: true}
-        , hairColor: {type: String, trim: true, required: true}
-        , hairStyle: {type: String, trim: true, required: true}
-        , age: {type: Number, required: true}
-        , skinColor: {type: String, trim: true, required: true}
+        , height: {type: Number}
+        , weight: {type: Number}
+        , eyeColor: {type: String, trim: true}
+        , hairColor: {type: String, trim: true}
+        , hairStyle: {type: String, trim: true}
+        , age: {type: Number}
+        , skinColor: {type: String, trim: true}
     }
-    , totalLvl: {type: Number, required: true}
     , baseStats: {
         str: {type: Number, required: true}
         , dex: {type: Number, required: true}
@@ -31,11 +27,11 @@ const Character = new mongoose.Schema({
     }
     , hp: {type: Number, required: true}
     , size: {type: String, enum: ["tiny", "small", "medium", "large", "huge"], trim: true}
-    , speed: {type: Number, required: true}
+    , speed: {type: Number}
     , saves: {
-        fort: {type: Number, required: true}
-        , ref: {type: Number, required: true}
-        , will: {type: Number, required: true}
+        fort: {type: Number}
+        , ref: {type: Number}
+        , will: {type: Number}
     }
     , armor: [{type: mongoose.Schema.Types.ObjectId, ref: "Armor"}]
     , weapons: [{type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}]

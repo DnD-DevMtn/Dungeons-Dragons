@@ -40,6 +40,8 @@ function characterBuilderCtrl($scope, characterService, sockets) {
     $scope.baseInt = 10;
     $scope.baseWis = 10;
     $scope.baseCha = 10;
+    $scope.showNext = true;
+    $scope.showFinish = false;
 
     $scope.selectFemales = () => {
       $scope.selectedRace = "../../images/races/female-human.jpg";
@@ -368,8 +370,20 @@ function characterBuilderCtrl($scope, characterService, sockets) {
           $('div.character-builder-class').animate({left : '-=4000'}, 500);
           $('div.character-builder-stats').animate({right : '+=4000'}, 500);
           activeSection = "stats";
+          $scope.showNext = false;
+          $scope.showFinish = true;
         }
       }
+    }
+
+    $scope.finish = () => {
+      if(activeSection === "stats"){
+       if($scope.baseStatsPoints === 0){
+         characterService.finalStats($scope.baseStr, $scope.baseDex, $scope.baseCon, $scope.baseInt, $scope.baseWis, $scope.baseCha)
+       } else {
+         alert("You still have points left");
+       }
+     }
     }
 
     $scope.goBack = () => {
@@ -379,10 +393,14 @@ function characterBuilderCtrl($scope, characterService, sockets) {
         $('div.character-builder-race').animate({left : '+=4000'}, 500);
         $('div.character-builder-class').animate({right : '-=4000'}, 500);
         activeSection = "race";
+        $scope.showNext = true;
+        $scope.showFinish = false;
       } else if(activeSection === "stats"){
         $('div.character-builder-class').animate({left : '+=4000'}, 500);
         $('div.character-builder-stats').animate({right : '-=4000'}, 500);
         activeSection = "class";
+        $scope.showNext = true;
+        $scope.showFinish = false;
       }
     }
 }

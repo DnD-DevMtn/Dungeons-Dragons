@@ -57,4 +57,15 @@ module.exports = {
         }
     }
 
+    , addCharacterToUser(req, res){
+      User.findByIdAndUpdate(req.params.id, {$push : {"characters" : req.body}}, (error, response) => {
+        if(error) {
+          console.log(error);
+          res.status(500).json(error);
+        } else {
+          return res.status(201).json(response);
+        }
+      })
+    }
+
 };
