@@ -7,6 +7,7 @@ const Dungeon = new mongoose.Schema({
     , monsters: [{
         _id: false
         , monster: {type: mongoose.Schema.Types.ObjectId, ref: "Monster"}
+        , image: String
         , location: {
             x: Number
             , y: Number
@@ -15,6 +16,7 @@ const Dungeon = new mongoose.Schema({
     , environment: [{
         _id: false
         , thing: {type: String, trim: true}
+        , image: String
         , location: {
             x: Number
             , y: Number
@@ -23,6 +25,7 @@ const Dungeon = new mongoose.Schema({
     , background: [{
         _id: false
         , tile: {type: String}
+        , image: String
         , location: {
             x: Number
             , y: Number
@@ -31,7 +34,9 @@ const Dungeon = new mongoose.Schema({
     , items: {
         armor: [{
             _id: false
-            , armorType: {type: mongoose.Schema.Types.ObjectId, ref: "Armor"}
+            , item: {type: mongoose.Schema.Types.ObjectId, ref: "Armor"}
+            , found: Boolean
+            , findDC: Number
             , location: {
                 x: Number
                 , y: Number
@@ -39,7 +44,9 @@ const Dungeon = new mongoose.Schema({
         }]
         , weapons: [{
             _id: false
-            , weaponType: {type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}
+            , item: {type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}
+            , found: Boolean
+            , findDC: Number
             , location: {
                 x: Number
                 , y: Number
@@ -47,7 +54,9 @@ const Dungeon = new mongoose.Schema({
         }]
         , gear: [{
             _id: false
-            , gearType: {type: mongoose.Schema.Types.ObjectId, ref: "Gear"}
+            , item: {type: mongoose.Schema.Types.ObjectId, ref: "Gear"}
+            , found: Boolean
+            , findDC: Number
             , location: {
                 x: Number
                 , y: Number
@@ -58,11 +67,15 @@ const Dungeon = new mongoose.Schema({
         _id: false
         , trap: {
             name: String
+            , findDC: Number
+            , disarmDC: Number
+            , found: Boolean
+            , triggered: Boolean
             , damage: {
                 diceType: Number
                 , diceNum: Number
+                , mod: Number
             }
-            , triggered: Boolean
         }
         , location: {
             x: Number
