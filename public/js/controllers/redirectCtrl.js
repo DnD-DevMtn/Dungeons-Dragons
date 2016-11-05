@@ -9,11 +9,11 @@ function redirectCtrl($scope, $http, mainService) {
       $scope.user.character = rouge;
     }
 
-    $scope.elmulateUser2 = () => {
+    $scope.emulateUser2 = () => {
       $scope.user.character = fighter;
     }
 
-    $scope.elmulateUser3 = () => {
+    $scope.emulateUser3 = () => {
       $scope.user.character = sorcerer;
     }
 }
