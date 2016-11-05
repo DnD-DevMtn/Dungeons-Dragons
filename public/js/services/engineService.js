@@ -379,13 +379,14 @@ export default function engineService(sockets){
                 Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
                 Game.user.id = rand;
                 Game.user.equipped = {};
+            } else {
+                Game.players.push({
+                    actor: players[k]                                    // Game.players[i].actor is a character
+                    , location: dungeon.startingLocation[k]
+                    , equipped: {}
+                    , id: rand
+                });
             }
-            Game.players.push({
-                actor: players[k]                                    // Game.players[i].actor is a character
-                , location: dungeon.startingLocation[k]
-                , equipped: {}
-                , id: rand
-            });
         }
 
         room = gameId;
@@ -399,7 +400,9 @@ export default function engineService(sockets){
                     free: true
                     , trap: {}
                     , door: {}
-                    , items: { stuff: [] }
+                    , item: {
+                        items:[]
+                    }
                     , type: ""                  // Types are monster, player, or environment
                     , id: ""                    // Unique ids point to the element in the array of one of the three types
                 }
@@ -427,9 +430,9 @@ export default function engineService(sockets){
 
     function loadTraps(){
         for(let i = 0; i < Game.traps.length; i++){
-            let x = Game.traps[i].location.x;
-            let y = Game.traps[i].location.y;
-            Game.board[x][y].trap = Game.traps[i].trap
+            let x = dungeon.traps[i].location.x;
+            let y = dungeon.traps[i].location.y;
+            Game.board[x][y].trap = dungeon.traps[i].trap
         }
     }
 
@@ -458,10 +461,26 @@ export default function engineService(sockets){
     }
 
     function loadItems(){
-        for(let i = 0; i < Game.items.length; i++){
-            let x = Game.items[i].location.x;
-            let y = Game.items[i].location.y;
-            Game.board[x][y].items.stuff.push(Game.items[i].item);
+        for(let i = 0; i < dungeon.items.armor.length; i++){
+            let x = dungeon.items[i].armor.location.x;
+            let y = dungeon.items[i].armor.location.y;
+            Game.board[x][y].item.items.push(dungeon.items.armor[i].item);
+            Game.board[x][y].item.found = dungeon.items.armor[i].found;
+            Game.board[x][y].item.findDC = dungeon.items.armor[i].findDC;
+        }
+        for(let i = 0; i < dungeon.items.weapons.length; i++){
+            let x = dungeon.items[i].weapons.location.x;
+            let y = dungeon.items[i].weapons.location.y;
+            Game.board[x][y].item.items.push(dungeon.items.weapons[i].item);
+            Game.board[x][y].item.found = dungeon.items.weapons[i].found;
+            Game.board[x][y].item.findDC = dungeon.items.weapons[i].findDC;
+        }
+        for(let i = 0; i < dungeon.items.gear.length; i++){
+            let x = dungeon.items[i].gear.location.x;
+            let y = dungeon.items[i].gear.location.y;
+            Game.board[x][y].item.items.push(dungeon.items.gear[i].item);
+            Game.board[x][y].item.found = dungeon.items.gear[i].found;
+            Game.board[x][y].item.findDC = dungeon.items.gear[i].findDC;
         }
     }
 
