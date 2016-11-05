@@ -64,7 +64,13 @@ io.on("connection", socket => {
         socket.to(data.room).broadcast.emit(data);
     });
 
+    socket.on("perception", data => {
+        socket.to(data.room).broadcast.emit(data);
+    });
 
+    socket.on("rogueTrapfind", data => {
+        socket.to(data.room).broadcast.emit(data);
+    });
 
 
 
