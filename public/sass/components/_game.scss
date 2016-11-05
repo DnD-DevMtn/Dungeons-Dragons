@@ -4,13 +4,15 @@
     position:relative;
     #pixi-game-engine {
       z-index:-2;
+      width:80%;
+      display:inline-block;
       canvas {
         width:100%;
       }
     }
-    iframe {
-      position:absolute;
-      top:0;
-      left:0;
+    iframe.game-chat {
+      float:left;
+      width:20%;
+      height:100vh;
     }
 }
