@@ -1,9 +1,13 @@
-const mongoose = require("mongoose");
-const Dungeon  = require("./Dungeon");
+const mongoose  = require("mongoose");
+const Dungeon   = require("./Dungeon");
+const Character = require("../users/Character");
 
 const Campaign = new mongoose.Schema({
     name: {type: String, required: true, unique: true}
-    , dm: {type: String}
+    , dm: {
+        name: {type: String, required: true, trim: true}
+        , facebookId: {type: String, required: true, trim: true}
+    }
     , available: Boolean
     , maxPlayers: Number
     , level: Number
@@ -11,13 +15,12 @@ const Campaign = new mongoose.Schema({
     , players: [{
         _id: false
         , facebookId: {type: String, trim: true}
-        , character: {type: String, trim: true}
+        , character: Character
     }]
     , dungeons: [Dungeon]
     , description: {
-        background: {type: String}
-        , story: {type: String}
-        , pictures: {type: String}
+        background: {type: String, required: true, trim: true}
+        , story: {type: String, required: true, trim: true}
     }
 
 });
