@@ -11,7 +11,9 @@ module.exports = {
     }
 
     , postCampaign(req, res){
+        console.log(req.body);
         new Campaign(req.body).save((err, campaign) => {
+            console.log(err);
             return (err) ? res.status(500).json(err) : res.status(201).json(campaign);
         });
     }
