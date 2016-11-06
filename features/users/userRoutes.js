@@ -30,4 +30,6 @@ module.exports = app => {
     app.route("/api/users/:id")
         .get(userCtrl.getUserById)
         .put(userCtrl.addCharacterToUser);
+
+    app.get("/api/users/facebook/:id", userCtrl.getUserByFacebook);
 }
