@@ -1,4 +1,4 @@
-export default function(joinService, userService){
+export default function(joinService, userService, $state){
 
     const joinGame = this;
 
@@ -19,6 +19,10 @@ export default function(joinService, userService){
     }
 
     joinGame.getCampaigns();
+
+    joinGame.charBuilder = gameId => {
+        $state.go("characterBuilder", {room: gameId})
+    }
 
 
 }
