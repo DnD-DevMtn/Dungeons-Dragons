@@ -55,11 +55,14 @@ io.on("connection", socket => {
     socket.on("join", data => {
         const room = data.room;
 
+        let isHost = (data.char.name === "dm") ? true : false;
+
         if(!(room in campaigns)){
             let players = [{
                     player: data.userId
                     , char: data.char
                     , status: "pending"
+                    , dm: isHost
             }];
             campaigns[room] = {
                 room: room
@@ -67,7 +70,22 @@ io.on("connection", socket => {
                 , players: players
             };
             socket.join(room);
-            io.sockets.to(room).emit("joined", data);
+            io.sockets.to(room).emit("joined", players[0]);
+            return;
+        }
+        const game = campaigns[room];
+        if(game.status === "inProgress"){
+            socket.emit("Cannot Join"); // TODO
+        } else {
+            socket.join(room);
+            let newPlayer = {
+                player: data.userId
+                , char: data.char
+                , status: "waiting"
+                , dm: isHost
+            }
+            game.players.push(newPlayer);
+            io.sockets.to(room).emit("joined", newPlayer);
         }
     });
 
