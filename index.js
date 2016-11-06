@@ -61,6 +61,13 @@ io.on("connection", socket => {
                     , char: data.char
                     , status: "pending"
             }];
+            campaigns[room] = {
+                room: room
+                , status: "waiting"
+                , players: players
+            };
+            socket.join(room);
+            io.sockets.to(room).emit("joined", data);
         }
     });
 
