@@ -52,6 +52,10 @@ io.on("connection", socket => {
         console.log(`Disconnected, ${connections.length} socket(s) now connected on ${port}`)
     });
 
+    socket.on("join", data => {
+
+    });
+
     socket.on("bash", data => {
         socket.to(data.room).broadcast.emit(data);
     });

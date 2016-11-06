@@ -17,6 +17,7 @@ import redirectCtrl from "./js/controllers/redirectCtrl";
 import loginCtrl from "./js/controllers/loginCtrl";
 import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
 import gameViewCtrl from "./js/controllers/gameViewCtrl";
+import lobbyCtrl from "./js/controllers/lobbyCtrl";
 
 // Services
 import mainService from "./js/services/mainService";
@@ -68,7 +69,7 @@ angular.module("DnD", [uiRouter])
       })
       .state("init-prompt", {
           url:"/init-prompt",
-          templateUrl: "./views/init/createJoinDash.html",
+          templateUrl: "./views/init/createJoinDash.html"
       })
       .state("join", {
           url: "/join",
@@ -76,7 +77,9 @@ angular.module("DnD", [uiRouter])
       })
       .state("lobby", {
           url: "/lobby",
-          templateUrl: "./views/init/lobby.html"
+          templateUrl: "./views/init/lobby.html",
+          controller: lobbyCtrl,
+          controllerAs: "lobby"
       })
   })
   .controller("mainCtrl", mainCtrl)
