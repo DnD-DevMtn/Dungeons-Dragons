@@ -16,6 +16,7 @@ import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
 import gameViewCtrl from          "./js/controllers/gameViewCtrl";
 import lobbyCtrl from             "./js/controllers/lobbyCtrl";
 import joinGameCtrl from          "./js/controllers/joinGameCtrl";
+import createGameCtrl from        "./js/controllers/createGameCtrl";
 
 // Services
 import mainService from           "./js/services/mainService";
@@ -25,6 +26,7 @@ import engineService from         "./js/services/engineService";
 import dungeonService from        "./js/services/dungeonService";
 import userService from           "./js/services/userService";
 import joinService from           "./js/services/joinService";
+import createGameService from     "./js/services/createGameService";
 
 // Factories
 import sockets from               "./js/services/sockets";

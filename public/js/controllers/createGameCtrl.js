@@ -6,9 +6,10 @@ export default function($http, $state, createGameService, userService) {
       name: `${userService.user.first_name } ${userService.user.first_name}`,
       facebookId: userService.user.facebookId
     }
-    createGameService.postCampaign(campaign).then(campaignData => {
-      const campaign = campaignData.data;
-      $state.go('lobby', {gameId:campaign._id, userChar: userService.user.character});
+    campaign.status = "open";
+    campaign.available = true;
+    createGameService.postCampaign(campaign).then(response => {
+      $state.go('lobby', {gameId:response.data._id, userChar: userService.user.character});
     });
   }
 }

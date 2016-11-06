@@ -8,7 +8,6 @@ const Campaign = new mongoose.Schema({
         name: {type: String, required: true, trim: true}
         , facebookId: {type: String, required: true, trim: true}
     }
-    , available: Boolean
     , maxPlayers: Number
     , level: Number
     , status: {type: String, trim: true, required: true, enum: ["open", "closed", "completed"]}
