@@ -53,7 +53,15 @@ io.on("connection", socket => {
     });
 
     socket.on("join", data => {
+        const room = data.room;
 
+        if(!(room in campaigns)){
+            let players = [{
+                    player: data.userId
+                    , char: data.char
+                    , status: "pending"
+            }];
+        }
     });
 
     socket.on("bash", data => {

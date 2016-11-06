@@ -2,10 +2,14 @@ const mongoose = require("mongoose");
 const Dungeon  = require("./Dungeon");
 
 const Campaign = new mongoose.Schema({
-    dm: {type: String}
+    name: {type: String, required: true, unique: true}
+    , dm: {type: String}
+    , available: Boolean
+    , maxPlayers: Number
+    , level: Number
     , players: [{
         _id: false
-        , facebookId: {type: String, trim: true, unique: true}
+        , facebookId: {type: String, trim: true}
         , character: {type: String, trim: true}
     }]
     , dungeons: [Dungeon]
