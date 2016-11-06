@@ -1,4 +1,4 @@
-import angular from "angular";
+import angular from  "angular";
 import uiRouter from "angular-ui-router";
 
 // Styles
@@ -9,37 +9,37 @@ import "./sass/styles.scss";
 
 // Controllers
 
-import mainCtrl from "./js/controllers/mainCtrl";
-import redirectCtrl from "./js/controllers/redirectCtrl";
-import loginCtrl from "./js/controllers/loginCtrl";
+import mainCtrl from              "./js/controllers/mainCtrl";
+import redirectCtrl from          "./js/controllers/redirectCtrl";
+import loginCtrl from             "./js/controllers/loginCtrl";
 import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
-import gameViewCtrl from "./js/controllers/gameViewCtrl";
-import createGameCtrl from "./js/controllers/createGameCtrl";
-import lobbyCtrl from "./js/controllers/lobbyCtrl";
+import gameViewCtrl from          "./js/controllers/gameViewCtrl";
+import lobbyCtrl from             "./js/controllers/lobbyCtrl";
+import joinGameCtrl from          "./js/controllers/joinGameCtrl";
 
 // Services
-import mainService from "./js/services/mainService";
-import gameService from "./js/services/gameService";
-import characterService from "./js/services/characterService";
-import engineService from "./js/services/engineService";
-import dungeonService from "./js/services/dungeonService";
-import userService from "./js/services/userService";
-import createGameService from "./js/services/createGameService";
+import mainService from           "./js/services/mainService";
+import gameService from           "./js/services/gameService";
+import characterService from      "./js/services/characterService";
+import engineService from         "./js/services/engineService";
+import dungeonService from        "./js/services/dungeonService";
+import userService from           "./js/services/userService";
+import joinService from           "./js/services/joinService";
 
 // Factories
-import sockets from "./js/services/sockets";
+import sockets from               "./js/services/sockets";
 
 // Directives
-import game from "./js/directives/game";
-import videoChat from "./js/directives/videoChat";
-import gameInfo from "./js/directives/gameInfo";
-import charInfo from "./js/directives/characterInfo";
-import inventory from "./js/directives/inventory";
-import party from "./js/directives/party";
-import spells from "./js/directives/spells";
-import dice from "./js/directives/dice";
-import explore from "./js/directives/explore";
-import combat from "./js/directives/combat";
+import game from                  "./js/directives/game";
+import videoChat from             "./js/directives/videoChat";
+import gameInfo from              "./js/directives/gameInfo";
+import charInfo from              "./js/directives/characterInfo";
+import inventory from             "./js/directives/inventory";
+import party from                 "./js/directives/party";
+import spells from                "./js/directives/spells";
+import dice from                  "./js/directives/dice";
+import explore from               "./js/directives/explore";
+import combat from                "./js/directives/combat";
 
 angular.module("DnD", [uiRouter])
   .config(($stateProvider, $urlRouterProvider) => {
@@ -83,7 +83,9 @@ angular.module("DnD", [uiRouter])
       })
       .state("join", {
           url: "/join",
-          templateUrl: "./views/init/join.html"
+          templateUrl: "./views/init/join.html",
+          controller: joinGameCtrl,
+          controllerAs: "joinGame"
       })
       .state("lobby", {
           url: "/lobby/:gameId",
