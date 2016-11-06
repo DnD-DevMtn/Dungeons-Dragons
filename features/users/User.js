@@ -8,12 +8,7 @@ const User = new mongoose.Schema({
     , facebookId: {type: String, required: true, trim: true, unique: true}
     , profilePic: {type: String}
     , characters: [Character]
-    , dmCampaigns: [{
-        _id: false
-        , campaignName: {type: String, trim: true}
-        , partySize: Number
-        , numOfDungeons: Number
-    }]
+    , campaigns: [{type: mongoose.Schema.Types.ObjectId, ref: "Campaign"}]
 });
 
 module.exports = mongoose.model("User", User);
