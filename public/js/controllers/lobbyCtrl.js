@@ -36,7 +36,7 @@ export default function(sockets, $stateParams, userService){
         lobby.userEnter();
     }
 
-    socket.
+    
 
     // user
     // userChar
