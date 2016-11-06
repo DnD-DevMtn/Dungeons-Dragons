@@ -5,6 +5,8 @@ export default function(sockets, $stateParams, userService){
     lobby.userChar = $stateParams.userChar;
     lobby.gameId   = $stateParams.gameId;
     lobby.user     = userService.user;
+    lobby.party    = [];
+    lobby.dm       = {};
 
     let socketChar = {}
 
@@ -15,6 +17,8 @@ export default function(sockets, $stateParams, userService){
     if($stateParams.userChar){
         if($stateParams.userChar === "dm"){
             socketChar.name = "dm";
+            lobby.dm.player = lobby.user._id;
+            lobby.dm.char   = ""
             lobby.userEnter();
         } else {
             socketChar = {
@@ -31,6 +35,8 @@ export default function(sockets, $stateParams, userService){
         }
         lobby.userEnter();
     }
+
+    
 
     // user
     // userChar
