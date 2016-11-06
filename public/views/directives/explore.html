@@ -185,16 +185,19 @@
     </li>
     <!-- rouge -->
     <!-- lockpick -->
-    <li ng-if="charClass === 'rouge'" class="flex-content explore-action">
+    <li ng-if="GV.user.character.classType.name === 'Rogue'" class="flex-content explore-action">
       <img src="" />
+      <span>Lockpick</span>
     </li>
     <!-- search trap -->
-    <li ng-if="charClass === 'rouge'" class="flex-content explore-action">
+    <li ng-if="GV.user.character.classType.name === 'Rogue'" class="flex-content explore-action">
       <img src="" />
+      <span>Search trap</span>
     </li>
     <!-- disarm -->
-    <li ng-if="charClass === 'rouge'" class="flex-content explore-action">
+    <li ng-if="GV.user.character.classType.name === 'Rogue'" class="flex-content explore-action">
       <img src="" />
+      <span>Disarm</span>
     </li>
   </ul>
 </section>
