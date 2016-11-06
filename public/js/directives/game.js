@@ -1,12 +1,12 @@
-import gameCtrl from "../controllers/directives/gameCtrl";
+import pixiCtrl from "../controllers/directives/pixiCtrl";
 
 export default function () {
     return {
         restrict: "E",
         replace: true,
         templateUrl: "../../views/directives/game.html",
-        controllerAs: "game",
-        controller: gameCtrl,
+        controllerAs: "pixi",
+        controller: pixiCtrl,
     // let's worry about scope later
     // scope: {
     // }
