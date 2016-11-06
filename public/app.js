@@ -7,9 +7,6 @@ import "./sass/styles.scss";
 
 // HTML
 
-//Sockets
-//import "socket.io";
-
 // Controllers
 
 import mainCtrl from              "./js/controllers/mainCtrl";
@@ -19,6 +16,7 @@ import characterBuildingCtrl from "./js/controllers/characterBuildingCtrl";
 import gameViewCtrl from          "./js/controllers/gameViewCtrl";
 import lobbyCtrl from             "./js/controllers/lobbyCtrl";
 import joinGameCtrl from          "./js/controllers/joinGameCtrl";
+import createGameCtrl from        "./js/controllers/createGameCtrl";
 
 // Services
 import mainService from           "./js/services/mainService";
@@ -28,6 +26,7 @@ import engineService from         "./js/services/engineService";
 import dungeonService from        "./js/services/dungeonService";
 import userService from           "./js/services/userService";
 import joinService from           "./js/services/joinService";
+import createGameService from     "./js/services/createGameService";
 
 // Factories
 import sockets from               "./js/services/sockets";
@@ -60,10 +59,14 @@ angular.module("DnD", [uiRouter])
           controller: redirectCtrl,
       })
       .state("gameView", {
-          url: "/game",
+          url: "/game/:gameId",
           templateUrl: "./views/game/gameView.html",
           controllerAs: 'GV',
-          controller: gameViewCtrl
+          controller: gameViewCtrl,
+          params: {
+            gameId: null,
+            userChar:null
+          }
       })
       .state("characterBuilder", {
           url: "/init/character-builder",
@@ -77,6 +80,12 @@ angular.module("DnD", [uiRouter])
           url:"/init-prompt",
           templateUrl: "./views/init/createJoinDash.html"
       })
+      .state("create", {
+          url: "/create",
+          templateUrl: "./views/init/create.html",
+          controllerAs: 'create',
+          controller: createGameCtrl
+      })
       .state("join", {
           url: "/join",
           templateUrl: "./views/init/join.html",
@@ -84,10 +93,14 @@ angular.module("DnD", [uiRouter])
           controllerAs: "joinGame"
       })
       .state("lobby", {
-          url: "/lobby",
+          url: "/lobby/:gameId",
           templateUrl: "./views/init/lobby.html",
           controller: lobbyCtrl,
-          controllerAs: "lobby"
+          controllerAs: "lobby",
+          params: {
+            gameId: null,
+            userChar:null
+          }
       })
   })
   .controller("mainCtrl", mainCtrl)
@@ -106,5 +119,6 @@ angular.module("DnD", [uiRouter])
   .service("characterService", characterService)
   .service("engineService", engineService)
   .service("dungeonService", dungeonService)
+  .service("createGameService", createGameService)
   .service("userService", userService)
   .factory("sockets", sockets);
