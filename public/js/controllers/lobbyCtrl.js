@@ -1,4 +1,4 @@
-export default function(sockets, $stateParams, userService){
+export default function(sockets, $stateParams, userService) {
 
     const lobby = this;
 

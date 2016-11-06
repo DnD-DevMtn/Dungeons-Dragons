@@ -57,10 +57,14 @@ angular.module("DnD", [uiRouter])
           controller: redirectCtrl,
       })
       .state("gameView", {
-          url: "/game",
+          url: "/game/:gameId",
           templateUrl: "./views/game/gameView.html",
           controllerAs: 'GV',
-          controller: gameViewCtrl
+          controller: gameViewCtrl,
+          params: {
+            gameId: null,
+            userChar:null
+          }
       })
       .state("characterBuilder", {
           url: "/init/character-builder",
@@ -82,10 +86,14 @@ angular.module("DnD", [uiRouter])
           templateUrl: "./views/init/join.html"
       })
       .state("lobby", {
-          url: "/lobby",
+          url: "/lobby/:gameId",
           templateUrl: "./views/init/lobby.html",
           controller: lobbyCtrl,
-          controllerAs: "lobby"
+          controllerAs: "lobby",
+          params: {
+            gameId: null,
+            userChar:null
+          }
       })
   })
   .controller("mainCtrl", mainCtrl)

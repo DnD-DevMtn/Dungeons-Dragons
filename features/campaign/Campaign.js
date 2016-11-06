@@ -3,7 +3,7 @@ const Dungeon  = require("./Dungeon");
 
 const Campaign = new mongoose.Schema({
     name: {type: String, required: true, unique: true}
-    , dm: {type: String}
+    , dm: {type: Object}
     , available: Boolean
     , maxPlayers: Number
     , level: Number

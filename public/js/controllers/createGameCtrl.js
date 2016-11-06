@@ -1,9 +1,14 @@
-export default function($http, createGameService) {
+export default function($http, $state, createGameService, userService) {
   const create = this;
-  create.hi = "hiiiiiii";
   create.postCampaign = (campaign) => {
-    createGameService.postCampaign(campaign).then(campaign => {
-      console.log(campaign);
+    userService.user.character = {name:"dm"};
+    campaign.dm = {
+      name: `${userService.user.first_name } ${userService.user.first_name}`,
+      facebookId: userService.user.facebookId
+    }
+    createGameService.postCampaign(campaign).then(campaignData => {
+      const campaign = campaignData.data;
+      $state.go('lobby', {gameId:campaign._id, userChar: userService.user.character});
     });
   }
 }
