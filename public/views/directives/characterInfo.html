@@ -1,35 +1,35 @@
 <section id="character-info">
   <header class="base-info">
-    <h4>Snuffles the Magic Bard</h4>
-    <h5>Level: 4</h5>
+    <h4>{{GV.user.character.name}} the {{GV.user.character.classType.name}} {{GV.user.character.race.name}}</h4>
+    <h5>Level: {{GV.user.character.level}}</h5>
   </header>
   <div class="page-wrapper">
     <div ng-if="UT.page === 1" class="page1">
       <div class="extended-info">
         <div class="left">
           <div>
-            <span>XP : </span>
+            <span>XP : {{GV.user.character.xp}} </span>
           </div>
           <div class="stats">
             <!-- angular variables go here -->
-            <span>Str : </span>
-            <span>Dex : </span>
-            <span>Con : </span>
-            <span>Int : </span>
-            <span>Wis : </span>
-            <span>Cha : </span>
+            <span>Str : {{GV.user.character.baseStats.str}}</span>
+            <span>Dex : {{GV.user.character.baseStats.str}}</span>
+            <span>Con : {{GV.user.character.baseStats.str}}</span>
+            <span>Int : {{GV.user.character.baseStats.str}}</span>
+            <span>Wis : {{GV.user.character.baseStats.str}}</span>
+            <span>Cha : {{GV.user.character.baseStats.str}}</span>
           </div>
         </div>
         <div class="right">
           <div>
-            <span>HP : </span>
+            <span>HP : {{GV.user.character.hp}}</span>
             <span>AC : </span>
             <span>Initiative : </span>
           </div>
           <div>
-            <span>Fort : </span>
-            <span>Ref : </span>
-            <span>Will : </span>
+            <span>Fort : {{GV.user.character.saves.fort}}</span>
+            <span>Ref : {{GV.user.character.saves.ref}}</span>
+            <span>Will : {{GV.user.character.saves.will}}</span>
           </div>
         </div>
       </div>
@@ -38,10 +38,11 @@
       <p>Languages : </p>
       <ul class="languages flex-wrapper">
         <!-- ng repeat goes here -->
-        <li class="language flex-content">Zulu</li>
-        <li class="language flex-content">Swahili</li>
-        <li class="language flex-content">Orc</li>
-        <li class="language flex-content">Common</li>
+        <li
+          class="language flex-content"
+          ng-repeat="language in GV.user.character.languages">
+          {{language}}
+        </li>
       </ul>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <section id="inventory">
   <header>
     <h4>Inventory</h4>
-    <h5>Gold : </h5>
+    <h5>Gold : {{GV.user.character.money.gold}}</h5>
     <h5 ng-if="UT.page === 1">Weapons</h5>
     <h5 ng-if="UT.page === 2">Armor</h5>
     <h5 ng-if="UT.page === 3">Gear</h5>
@@ -9,26 +9,32 @@
   <div class="items">
     <div ng-if="UT.page === 1">
       <ul class="weapons flex-wrapper">
-        <li class="flex-content">Battle axe</li>
-        <li class="flex-content">Morning star</li>
-        <li class="flex-content">Sword</li>
-        <li class="flex-content">Pencil</li>
+        <li
+          class="flex-content"
+          ng-repeat="weapon in GV.user.character.weapons"
+        >
+          {{weapon}}
+        </li>
       </ul>
     </div>
     <div ng-if="UT.page === 2">
       <ul class="armor flex-wrapper">
-        <li class="flex-content">Shield</li>
-        <li class="flex-content">Chainmail</li>
-        <li class="flex-content">Leather</li>
-        <li class="flex-content">Chicken suit</li>
+        <li
+          class="flex-content"
+          ng-repeat="armor in GV.user.character.armor"
+        >
+          {{armor}}
+        </li>
       </ul>
     </div>
     <div ng-if="UT.page === 3">
       <ul class="gear flex-wrapper">
-        <li class="flex-content">Potion</li>
-        <li class="flex-content">Gloves</li>
-        <li class="flex-content">Sandwich</li>
-        <li class="flex-content">Arrows</li>
+        <li
+          class="flex-content"
+          ng-repeat="gear in GV.user.character.gear"
+        >
+          {{gear}}
+        </li>
       </ul>
     </div>
     <div class="gold">

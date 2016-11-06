@@ -1,20 +1,25 @@
-function redirectCtrl($scope, $http, mainService) {
+function redirectCtrl($scope, $http, mainService, userService) {
     mainService.getFBUser().then((response) => {
-        $scope.user = response;
+        userService.user = response;
+        $scope.user = userService.user;
+        console.log(userService.user);
     });
 
     const baseUserElmUrl = 'http://swapi.co/api/';
 
     $scope.emulateUser1 = () => {
       $scope.user.character = rouge;
+      console.log(userService.user);
     }
 
     $scope.emulateUser2 = () => {
       $scope.user.character = fighter;
+      console.log(userService.user);
     }
 
     $scope.emulateUser3 = () => {
       $scope.user.character = sorcerer;
+      console.log(userService.user);
     }
 }
 
@@ -145,7 +150,8 @@ const fighter = {
 }
 
 const sorcerer = {
-    "name": "Idiot"
+    "_id": 3
+    , "name": "Idiot"
     , "race": {
       "name": "Human"
     }
