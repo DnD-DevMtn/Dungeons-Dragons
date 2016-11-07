@@ -77,13 +77,18 @@ export default function(socket, $stateParams, userService, $state) {
         if(data.newPlayer.dm){
             lobby.dm.name = "dm";
             lobby.dm.userName = data.newPlayer.userName;
+            lobby.party = data.party;
             return;
         }
+        console.log(data.party);
+        console.log(lobby.party);
         lobby.party = data.party;
-        for(let i = 0; i < lobby.party.length; i++){
-            if(lobby.party[i].dm){
+        console.log(lobby.party);
+        for(let i = 0; i < lobby.party.players.length; i++){
+            if(lobby.party.players[i].dm){
                 lobby.dm.name = "dm";
-                lobby.dm.userName = lobby.party[i].userName;
+                lobby.dm.userName = lobby.party.players[i].userName;
+                lobby.dm.status = lobby.party.players[i].status;
             }
         }
     });
@@ -91,7 +96,7 @@ export default function(socket, $stateParams, userService, $state) {
     socket.on("return ready", party => {
         for(let i = 0; i < party.players.length; i++){
             if(party.players[i].dm){
-                lobby.dm.status = "ready";
+                lobby.dm.status = party.players[i].status;
             }
         }
         lobby.party = party;

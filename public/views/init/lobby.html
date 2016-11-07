@@ -7,7 +7,7 @@
             <h3>Dungeon Master</h3>
             <p ng-if="!lobby.dm.name">Waiting for DM</p>
             <p ng-if="lobby.dm.name">{{lobby.dm.userName}} the <span>{{lobby.dm.name}}</span></p>
-            <p>Status: {{lobby.dm.ready}}</p>
+            <p>Status: {{lobby.dm.status}}</p>
         </div>
 
         <!-- ng-repeat goes on party member -->
@@ -44,9 +44,9 @@
                 </li>
             <ul>
             <!-- ng if DM && game === ready-->
-            <a class="btn" ng-click="signalStart()">Start Game</a>
+            <a class="btn" ng-click="lobby.signalStart()">Start Game</a>
             <!-- ng if party member -->
-            <a class="btn" ng-click="signalReady()">I'm ready</a>
+            <a class="btn" ng-click="lobby.signalReady()">I'm ready</a>
         </section>
     </section>
 </section>
