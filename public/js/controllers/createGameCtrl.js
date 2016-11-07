@@ -13,7 +13,7 @@ export default function($http, $state, createGameService, userService) {
       facebookId: userService.user.facebookId
     }
     createGameService.postCampaign(data).then(response => {
-      $state.go('lobby', {gameId:response.data._id, userChar: userService.user.character});
+      $state.go('lobby', {campaign:response.data, gameId:response.data._id, userChar: userService.user.character});
     });
   }
 }

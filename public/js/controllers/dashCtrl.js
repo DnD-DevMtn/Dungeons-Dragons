@@ -6,9 +6,12 @@ export default function(userService){
     dash.campaigns = [];
 
     dash.getCampaigns = () => {
-        for(let i = 0; i < dash.currentUser.campaigns; i++){
-            userService.getUserCampaigns(dash.currentUser.campaigns[i]._id)
+        console.log('this fired');
+        for(let i = 0; i < dash.currentUser.campaigns.length; i++){
+            console.log(i);
+            userService.getUserCampaigns(dash.currentUser.campaigns[i])
                 .then(campaign => {
+                    console.log(campaign);
                     dash.campaigns.push(campaign);
                 });
         }
