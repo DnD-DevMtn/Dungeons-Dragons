@@ -9,4 +9,12 @@ export default function($http) {
             return response.data;
         });
   }
+
+  userService.getUserCampaigns = gameId => {
+      return $http.get("/api/campaigns/:id", gameId)
+        .then(response => {
+            return response.data;
+        });
+  }
+
 }
