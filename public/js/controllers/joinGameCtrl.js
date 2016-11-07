@@ -7,6 +7,7 @@ export default function(joinService, userService, $state){
     joinGame.campaigns = [];
     joinGame.getCampaigns = () => {
         joinService.getCampaigns().then(campaigns => {
+            console.log("BACON", campaigns);
             for(let i = 0; i < campaigns; i++){
                 for(let j = 0; j < campaigns[i].players.length; j++){
                     if(campaigns[i].players[j].facebookId === currentUser.facebookId){
@@ -14,6 +15,7 @@ export default function(joinService, userService, $state){
                     }
                 }
             }
+            console.log("AFTER THE PURGE", campaigns);
             joinGame.campaigns = campaigns;
         });
     }

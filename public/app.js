@@ -121,4 +121,5 @@ angular.module("DnD", [uiRouter])
   .service("dungeonService", dungeonService)
   .service("createGameService", createGameService)
   .service("userService", userService)
+  .service("joinService", joinService)
   .factory("sockets", sockets);

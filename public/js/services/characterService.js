@@ -60,7 +60,7 @@ function characterService($http, $state) {
     console.log(currentCharacter);
     $http.put(`/api/users/${currentUser}`, currentCharacter);
     $http.put(`/api/campaigns/join/${room}`, currentCharacter);
-    $state.go("lobby", {})
+    $state.go("lobby", {gameId: room, userChar: currentCharacter});
   }
 
   this.getUser();
