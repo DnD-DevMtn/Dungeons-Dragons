@@ -62,6 +62,7 @@ io.on("connection", socket => {
         if(!(room in campaigns)){
             let players = [{
                     player: data.userId
+                    , userName: data.userName
                     , char: data.char
                     , status: "pending"
                     , dm: isHost
@@ -72,7 +73,7 @@ io.on("connection", socket => {
                 , players: players
             };
             socket.join(room);
-            io.sockets.to(room).emit("joined", players[0]);
+            io.sockets.to(room).emit("joined", campaigns[room]);
             return;
         }
         const game = campaigns[room];
@@ -83,13 +84,28 @@ io.on("connection", socket => {
             let newPlayer = {
                 player: data.userId
                 , char: data.char
-                , status: "waiting"
+                , status: "pending"
                 , dm: isHost
             }
             game.players.push(newPlayer);
-            io.sockets.to(room).emit("joined", newPlayer);
+            io.sockets.to(room).emit("joined", campaigns[room]);
         }
     });
+
+    socket.on("send ready", data => {
+        const room = data.room;
+        for(let i = 0; i < campaigns[room].players.length; i++){
+            if(campaigns[room].players[i].player === data.userId){
+                campaigns[room].players[i].status = "ready";
+            }
+        }
+        io.sockets.to(room).emit("return ready", campaigns[room]);
+    });
+
+    socket.on("send start", room => {
+        campaigns[room].status = "inProgress";
+        io.sockets.to(room).emit("return start", campaigns[room]);
+    })
 
     socket.on("bash", data => {
         socket.to(data.room).broadcast.emit(data);
