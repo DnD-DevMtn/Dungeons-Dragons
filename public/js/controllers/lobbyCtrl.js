@@ -6,7 +6,11 @@ export default function(socket, $stateParams, userService, $state) {
     lobby.gameId    = $stateParams.gameId;
     lobby.user      = userService.user;
     lobby.party     = [];
-    lobby.hideStart = true;
+    lobby.start     = false;
+
+    lobby.filterDm = item => {
+        return item.dm === false;
+    }
 
     if(lobby.userChar.name === "dm") {
       lobby.dm = {
@@ -47,12 +51,16 @@ export default function(socket, $stateParams, userService, $state) {
     }
 
     lobby.signalReady = () => {
+        console.log("FROM SIGNAL READY", lobby.user._id, lobby.gameId);
         socket.emit("send ready", {userId: lobby.user._id, room: lobby.gameId});
         checkStart();
     }
 
     lobby.signalStart = () => {
-        socket.emit("send start", gameId);
+        console.log("FROM SIGNAL READY", lobby.gameId);
+        if(lobby.start && lobby.userChar.name === "dm"){
+            socket.emit("send start", lobby.gameId);
+        }
     }
 
     lobby.checkStart = () => {
@@ -66,26 +74,35 @@ export default function(socket, $stateParams, userService, $state) {
     }
 
     socket.on("joined", data => {
-        console.log("FROM JOINED", data);
         if(data.newPlayer.dm){
             lobby.dm.name = "dm";
             lobby.dm.userName = data.newPlayer.userName;
+            lobby.party = data.party;
+            return;
         }
+        console.log(data.party);
+        console.log(lobby.party);
         lobby.party = data.party;
+        console.log(lobby.party);
+        for(let i = 0; i < lobby.party.players.length; i++){
+            if(lobby.party.players[i].dm){
+                lobby.dm.name = "dm";
+                lobby.dm.userName = lobby.party.players[i].userName;
+                lobby.dm.status = lobby.party.players[i].status;
+            }
+        }
     });
 
     socket.on("return ready", party => {
-        console.log("FROM RETURN READY", party);
         for(let i = 0; i < party.players.length; i++){
             if(party.players[i].dm){
-                lobby.dm.status = "ready";
+                lobby.dm.status = party.players[i].status;
             }
         }
         lobby.party = party;
     });
 
     socket.on("return start", party => {
-        console.log("FROM RETURN", party);
         lobby.party = party;
         $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.uesrChar, party: lobby.party.players})
     });
