@@ -55,8 +55,6 @@ io.on("connection", socket => {
     socket.on("join", data => {
         const room = data.room;
 
-        console.log(data);
-
         let isHost = (data.char.name === "dm") ? true : false;
 
         if(!(room in campaigns)){
@@ -73,7 +71,6 @@ io.on("connection", socket => {
                 , players: players
             };
             socket.join(room);
-            console.log("ABOVE JOINED NEW ROOM", campaigns[room]);
             io.sockets.to(room).emit("joined", {party: campaigns[room], newPlayer: players[0]});
             return;
         }
@@ -90,25 +87,24 @@ io.on("connection", socket => {
                 , dm: isHost
             }
             game.players.push(newPlayer);
-            console.log("ABOVE JOINED EXISTING ROOM", campaigns[room]);
             io.sockets.to(room).emit("joined", {party: campaigns[room], newPlayer: newPlayer});
         }
     });
 
     socket.on("send ready", data => {
-
         const room = data.room;
         for(let i = 0; i < campaigns[room].players.length; i++){
             if(campaigns[room].players[i].player === data.userId){
                 campaigns[room].players[i].status = "ready";
             }
         }
-        console.log("FROM SEND READY", campaigns[room]);
+        console.log("FROM READY", campaigns[room]);
         io.sockets.to(room).emit("return ready", campaigns[room]);
     });
 
     socket.on("send start", room => {
         campaigns[room].status = "inProgress";
+        console.log("FROM READY", campaigns[room]);
         io.sockets.to(room).emit("return start", campaigns[room]);
     })
 

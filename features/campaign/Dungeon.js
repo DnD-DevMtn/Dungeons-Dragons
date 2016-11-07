@@ -15,7 +15,6 @@ const Dungeon = new mongoose.Schema({
     }]
     , environment: [{
         _id: false
-        , thing: {type: String, trim: true}
         , image: String
         , location: {
             x: Number
@@ -31,6 +30,7 @@ const Dungeon = new mongoose.Schema({
             , y: Number
         }
     }]
+    , backgroundImage: {type: String, trim: true, required: true}
     , items: {
         armor: [{
             _id: false
