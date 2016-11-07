@@ -30,18 +30,18 @@ export default function(socket, $stateParams, userService, $state) {
             lobby.dm.player = lobby.user._id;
             lobby.dm.char   = ""
             lobby.userEnter();
-        } else {
-            socketChar = {
-                name: lobby.userChar.name
-                , race: lobby.userChar.race
-                , classType: lobby.userChar.classType
-                , sprite: lobby.userChar.sprite
-                , level: lobby.userChar.level
-                , alignment: lobby.userChar.alignment
-                , hp: lobby.userChar.hp
-                , size: lobby.userChar.size
-                , speed: lobby.userChar.speed
-            }
+            return;
+        }
+        socketChar = {
+            name: lobby.userChar.name
+            , race: lobby.userChar.race
+            , classType: lobby.userChar.classType
+            , sprite: lobby.userChar.sprite
+            , level: lobby.userChar.level
+            , alignment: lobby.userChar.alignment
+            , hp: lobby.userChar.hp
+            , size: lobby.userChar.size
+            , speed: lobby.userChar.speed
         }
         lobby.userEnter();
     }
@@ -65,17 +65,19 @@ export default function(socket, $stateParams, userService, $state) {
         lobby.hideStart = false;
     }
 
-    socket.on("joined", party => {
-        if(party.players[party.players.length - 1].isHost){
+    socket.on("joined", data => {
+        console.log("FROM JOINED", data);
+        if(data.newPlayer.dm){
             lobby.dm.name = "dm";
-            lobby.dm.userName = party.players[party.players.length - 1].userName;
+            lobby.dm.userName = data.newPlayer.userName;
         }
-        lobby.party = party;
+        lobby.party = data.party;
     });
 
     socket.on("return ready", party => {
+        console.log("FROM RETURN READY", party);
         for(let i = 0; i < party.players.length; i++){
-            if(party.players[i].isHost){
+            if(party.players[i].dm){
                 lobby.dm.status = "ready";
             }
         }
@@ -83,6 +85,7 @@ export default function(socket, $stateParams, userService, $state) {
     });
 
     socket.on("return start", party => {
+        console.log("FROM RETURN", party);
         lobby.party = party;
         $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.uesrChar, party: lobby.party.players})
     });
