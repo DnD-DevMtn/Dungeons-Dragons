@@ -11,7 +11,7 @@ export default function($http) {
   }
 
   userService.getUserCampaigns = gameId => {
-      return $http.get("/api/campaigns/:id", gameId)
+      return $http.get(`/api/campaigns/${gameId}`)
         .then(response => {
             return response.data;
         });
