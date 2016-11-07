@@ -1,5 +1,6 @@
 function redirectCtrl($scope, $http, mainService, userService) {
     mainService.getFBUser().then((response) => {
+        console.log('FB user response from mainService in redirect ctrl', response);
         userService.user = response;
         $scope.user = userService.user;
     });
