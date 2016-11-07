@@ -3,13 +3,15 @@
     <section class="party">
       <div class="dm">
         <img />
-        <p>Ian the DM</p>
+        <p ng-if="!lobby.dm.name">Waiting for DM</p>
+        <p ng-if="lobby.dm.name">{{lobby.dm.userName}} the <span>{{lobby.dm.name}}</span></p>
       </div>
       <!-- ng-repeat goes on party member -->
       <div class="party-member">
         <!-- char img plus char name -->
         <img />
-        <p>Lovelace the Orc</p>
+        <p ng-if="lobby.userChar.name !== 'dm'">{{lobby.userChar.name}} the {{lobby.userChar.race}} {{lobby.userChar.classType}}</p>
+        <p ng-if="lobby.userChar.name === 'dm'">Waiting for party member</p>
       </div>
       <div class="party-member">
         <img />
