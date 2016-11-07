@@ -17,6 +17,7 @@ import gameViewCtrl from          "./js/controllers/gameViewCtrl";
 import lobbyCtrl from             "./js/controllers/lobbyCtrl";
 import joinGameCtrl from          "./js/controllers/joinGameCtrl";
 import createGameCtrl from        "./js/controllers/createGameCtrl";
+import dashCtrl from              "./js/controllers/dashCtrl";
 
 // Services
 import mainService from           "./js/services/mainService";
@@ -101,6 +102,12 @@ angular.module("DnD", [uiRouter])
             gameId: null,
             userChar:null
           }
+      })
+      .state("dash", {
+          url: "/dashboard",
+          templateUrl: "./views/init/dash.html",
+          controller: dashCtrl,
+          controllerAs: "dash"
       })
   })
   .controller("mainCtrl", mainCtrl)

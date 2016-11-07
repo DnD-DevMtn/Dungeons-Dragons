@@ -2,6 +2,8 @@ export default function(sockets, $stateParams, userService) {
 
     const lobby = this;
 
+    console.log(socket);
+
     lobby.userChar = $stateParams.userChar;
     lobby.gameId   = $stateParams.gameId;
     lobby.user     = userService.user;
@@ -36,7 +38,7 @@ export default function(sockets, $stateParams, userService) {
         lobby.userEnter();
     }
 
-    
+
 
     // user
     // userChar
