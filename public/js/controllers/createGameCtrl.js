@@ -8,7 +8,6 @@ export default function($http, $state, createGameService, userService) {
       facebookId: userService.user.facebookId
     }
     campaign.status = "open";
-    campaign.available = true;
     createGameService.postCampaign(campaign).then(response => {
       $state.go('lobby', {gameId:response.data._id, userChar: userService.user.character});
     });

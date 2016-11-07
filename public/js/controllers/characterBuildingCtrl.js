@@ -1,4 +1,4 @@
-function characterBuilderCtrl($scope, $characterService, $stateParams, sockets) {
+function characterBuilderCtrl($scope, characterService, $stateParams, sockets) {
 
     $scope.room = $stateParams.room;
 
