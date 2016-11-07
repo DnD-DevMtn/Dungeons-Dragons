@@ -187,8 +187,9 @@ class Game {
       actor = new PIXI.Sprite( this.id[ `${ characters[ i ].image }30.png` ] );
       actor.image = characters[ i ].image;
       actor.direction = 3; // left: 0, top: 1, right: 2, bottom: 3
-      actor.coordinate = { x: characters[ i ].location.x, y: characters[ i ].location.y };
+      // actor.coordinate = { x: characters[ i ].location.x, y: characters[ i ].location.y };
       this.gameUtil.setGridWidthHeight( actor, this.tileGridWidth, this.tileGridHeight );
+      actor.coordinate = this.gameUtil.gridCooridnate( actor, { x: characters[ i ].location.x, y: characters[ i ].location.y } );
       actor.gridOccupation = this.gameUtil.gridOccupation( actor );
       this.gameUtil.addObstacle( actor, this.obstacles );
       this.gameUtil.setPositionFromGrid( actor, this.tileGridWidth, this.tileGridHeight );
@@ -204,8 +205,8 @@ class Game {
     for ( let i = 0; i < properties.length; i++ ) {
       prop = new PIXI.Sprite( this.id[ `${ properties[ i ].image }.png` ] );
       prop.image = properties[ i ].image;
-      prop.coordinate = { x: properties[ i ].location.x, y: properties[ i ].location.y };
       this.gameUtil.setGridWidthHeight( prop, this.tileGridWidth, this.tileGridHeight );
+      prop.coordinate = this.gameUtil.gridCooridnate( prop, { x: properties[ i ].location.x, y: properties[ i ].location.y } );
       prop.gridOccupation = this.gameUtil.gridOccupation( prop );
       this.gameUtil.addObstacle( prop, this.obstacles );
       this.gameUtil.setPositionFromGrid( prop, this.tileGridWidth, this.tileGridHeight );
@@ -253,6 +254,18 @@ class Game {
 class Game_Util {
   constructor() {}
 
+  setGridWidthHeight( object, tileGridWidth, tileGridHeight ) {
+    object.gridWidth = object.width / tileGridWidth;
+    object.gridHeight = object.height / tileGridHeight;
+  }
+
+  gridCooridnate( object, coordinate ) {
+    return {
+      x: coordinate.x,
+      y: coordinate.y - object.gridHeight + 1
+    }
+  }
+
   gridOccupation( object ) {
     var result = [];
 
@@ -264,11 +277,6 @@ class Game_Util {
     }
 
     return result;
-  }
-
-  setGridWidthHeight( object, tileGridWidth, tileGridHeight ) {
-    object.gridWidth = object.width / tileGridWidth;
-    object.gridHeight = object.height / tileGridHeight;
   }
 
   addObstacle( object, obstacles ) {
