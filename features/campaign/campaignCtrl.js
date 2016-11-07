@@ -29,7 +29,12 @@ module.exports = {
     }
 
     , addPlayer(req, res){
-        Campaign.findByIdAndUpdate(req.params.id, {$push: {players: req.body}}, (err, campaign) => {
+        console.log("ADDING PLAYER", req.body);
+        console.log("THIS IS THE ID", req.params.id);
+        Campaign.findByIdAndUpdate(req.params.id
+                                   , {$push: {players: {facebookId: req.body.facebookId, character: req.body.character}}}
+                                   , (err, campaign) => {
+                                       console.log(campaign);
             return (err) ? res.status(500).json(err) : res.status(200).json(campaign);
         });
     }
