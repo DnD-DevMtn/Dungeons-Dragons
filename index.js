@@ -73,7 +73,7 @@ io.on("connection", socket => {
                 , players: players
             };
             socket.join(room);
-            io.sockets.to(room).emit("joined", capaigns[room]);
+            io.sockets.to(room).emit("joined", campaigns[room]);
             return;
         }
         const game = campaigns[room];
