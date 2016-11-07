@@ -8,7 +8,7 @@
       </tr>
   </th>
   <!-- Ng repeat goes into the tr -->
-  <tr ng-repeat="campaign in dash.campaigns">
+  <tr ng-repeat="campaign in dash.campaigns track by $index">
       <td>{{campaign.name}}</td>
       <td>{{campaign.dm.name}}</td>
       <td>{{campaign.players.length}}/{{campaign.maxPlayers}}</td>
