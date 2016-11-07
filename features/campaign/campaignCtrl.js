@@ -1,4 +1,5 @@
 const Campaign = require("./Campaign");
+const User = require("../users/User");
 
 module.exports = {
 
@@ -16,8 +17,15 @@ module.exports = {
     }
 
     , postCampaign(req, res){
-        new Campaign(req.body).save((err, campaign) => {
-            return (err) ? res.status(500).json(err) : res.status(201).json(campaign);
+        new Campaign(req.body.campaign).save((err, campaign) => {
+            if(err) {
+              return res.status(500).json(err);
+            } else {
+              User.findOneAndUpdate({facebookId: req.body.facebookId}, {$push: {campaigns: campaign._id}}, (err, user) => {
+              })
+              return res.status(201).json(campaign);
+            }
+            //return (err) ? res.status(500).json(err) : res.status(201).json(campaign);
         });
     }
 
