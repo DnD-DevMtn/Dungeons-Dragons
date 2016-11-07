@@ -1,4 +1,4 @@
-function characterService($http, $state) {
+function characterService($http, $state, userService) {
 
   let currentUser = "";
 
@@ -57,9 +57,9 @@ function characterService($http, $state) {
       currentCharacter.sprite = "CLERIC";
       currentCharacter.hp = (8 * currentCharacter.level) + (Math.floor(con - 10) / 2);
     }
-    console.log(currentCharacter);
     $http.put(`/api/users/${currentUser}`, currentCharacter);
     $http.put(`/api/campaigns/join/${room}`, currentCharacter);
+    userService.user.character = currentCharacter;
     $state.go("lobby", {gameId: room, userChar: currentCharacter});
   }
 

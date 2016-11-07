@@ -17,6 +17,7 @@ import gameViewCtrl from          "./js/controllers/gameViewCtrl";
 import lobbyCtrl from             "./js/controllers/lobbyCtrl";
 import joinGameCtrl from          "./js/controllers/joinGameCtrl";
 import createGameCtrl from        "./js/controllers/createGameCtrl";
+import initPromptCtrl from        "./js/controllers/initPromptCtrl";
 
 // Services
 import mainService from           "./js/services/mainService";
@@ -78,7 +79,9 @@ angular.module("DnD", [uiRouter])
       })
       .state("init-prompt", {
           url:"/init-prompt",
-          templateUrl: "./views/init/createJoinDash.html"
+          templateUrl: "./views/init/createJoinDash.html",
+          controllerAs: 'init',
+          controller:initPromptCtrl
       })
       .state("create", {
           url: "/create",
