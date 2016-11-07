@@ -71,7 +71,10 @@ angular.module("DnD", [uiRouter])
       .state("characterBuilder", {
           url: "/init/character-builder",
           templateUrl: "./views/init/characterBuilder.html",
-          controller : characterBuildingCtrl
+          controller : characterBuildingCtrl,
+          params: {
+              room: null
+          }
       })
       .state("init-prompt", {
           url:"/init-prompt",
@@ -118,4 +121,5 @@ angular.module("DnD", [uiRouter])
   .service("dungeonService", dungeonService)
   .service("createGameService", createGameService)
   .service("userService", userService)
+  .service("joinService", joinService)
   .factory("sockets", sockets);
