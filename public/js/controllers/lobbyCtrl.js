@@ -1,8 +1,6 @@
-export default function(socket, $stateParams, userService) {
+export default function(socket, $stateParams, userService, $state) {
 
     const lobby = this;
-
-    console.log(socket);
 
     lobby.userChar = $stateParams.userChar;
     lobby.gameId   = $stateParams.gameId;
@@ -45,8 +43,27 @@ export default function(socket, $stateParams, userService) {
         lobby.userEnter();
     }
 
-    // user
-    // userChar
+    lobby.signalReady = () => {
+        socket.emit("send ready", {userId: lobby.user._id, room: lobby.gameId});
+    }
+
+    lobby.signalStart = () => {
+        socket.emit("send start", gameId);
+    }
+
+    socket.on("joined", party => {
+        lobby.party = party;
+    });
+
+    socket.on("return ready", party => {
+        lobby.party = party;
+    });
+
+    socket.on("return start", party => {
+        lobby.party = party;
+        $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.uesrChar, party: lobby.party.players})
+    });
+
 
 
 }
