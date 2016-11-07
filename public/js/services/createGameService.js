@@ -1,7 +1,7 @@
 export default function($http) {
 
-  this.postCampaign = (campaign) => {
-    return $http.post('/api/campaigns', campaign).then(campaign => {
+  this.postCampaign = (data) => {
+    return $http.post('/api/campaigns', data).then(campaign => {
         return campaign;
     });
   }
