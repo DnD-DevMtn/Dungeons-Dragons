@@ -70,6 +70,7 @@ export default function(socket, $stateParams, userService, $state) {
         if(data.newPlayer.dm){
             lobby.dm.name = "dm";
             lobby.dm.userName = data.newPlayer.userName;
+            return;
         }
         lobby.party = data.party;
     });
