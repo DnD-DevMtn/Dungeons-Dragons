@@ -62,6 +62,7 @@ io.on("connection", socket => {
         if(!(room in campaigns)){
             let players = [{
                     player: data.userId
+                    , userName: data.userName
                     , char: data.char
                     , status: "pending"
                     , dm: isHost
