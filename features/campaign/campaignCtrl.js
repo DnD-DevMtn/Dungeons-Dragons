@@ -29,15 +29,15 @@ module.exports = {
     }
 
     , addPlayer(req, res){
-        Campaign.findByIdAndUpdate(req.params.id, {$push: {players: req.body.newPlayer}}, (err, campaign) => {
+        Campaign.findByIdAndUpdate(req.params.id, {$push: {players: req.body}}, (err, campaign) => {
             return (err) ? res.status(500).json(err) : res.status(200).json(campaign);
-        })
+        });
     }
 
     , updateStatus(req, res){
         Campaign.findByIdAndUpdate(req.params.id, {status: req.body.status}, (err, campaign) => {
             return (err) ? res.status(500).json(err) : res.status(200).json(campaign);
-        })
+        });
     }
 
     , addDungeon(req, res){

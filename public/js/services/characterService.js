@@ -1,4 +1,4 @@
-function characterService($http) {
+function characterService($http, $state) {
 
   let currentUser = "";
 
@@ -25,7 +25,7 @@ function characterService($http) {
     currentCharacter.level = level;
   }
 
-  this.finalStats = (str, dex, con, int, wis, cha) => {
+  this.finalStats = (str, dex, con, int, wis, cha, room) => {
     currentCharacter.baseStats.str = str;
     currentCharacter.baseStats.dex = dex;
     currentCharacter.baseStats.con = con;
@@ -59,6 +59,8 @@ function characterService($http) {
     }
     console.log(currentCharacter);
     $http.put(`/api/users/${currentUser}`, currentCharacter);
+    $http.put(`/api/campaigns/join/${room}`, currentCharacter);
+    $state.go("lobby", {gameId: room, userChar: currentCharacter});
   }
 
   this.getUser();
