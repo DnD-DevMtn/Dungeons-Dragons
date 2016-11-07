@@ -55,11 +55,14 @@ io.on("connection", socket => {
     socket.on("join", data => {
         const room = data.room;
 
+        console.log(data);
+
         let isHost = (data.char.name === "dm") ? true : false;
 
         if(!(room in campaigns)){
             let players = [{
                     player: data.userId
+                    , userName: data.userName
                     , char: data.char
                     , status: "pending"
                     , dm: isHost
@@ -70,7 +73,8 @@ io.on("connection", socket => {
                 , players: players
             };
             socket.join(room);
-            io.sockets.to(room).emit("joined", players[0]);
+            console.log("ABOVE JOINED NEW ROOM", campaigns[room]);
+            io.sockets.to(room).emit("joined", {party: campaigns[room], newPlayer: players[0]});
             return;
         }
         const game = campaigns[room];
@@ -80,14 +84,33 @@ io.on("connection", socket => {
             socket.join(room);
             let newPlayer = {
                 player: data.userId
+                , userName: data.userName
                 , char: data.char
-                , status: "waiting"
+                , status: "pending"
                 , dm: isHost
             }
             game.players.push(newPlayer);
-            io.sockets.to(room).emit("joined", newPlayer);
+            console.log("ABOVE JOINED EXISTING ROOM", campaigns[room]);
+            io.sockets.to(room).emit("joined", {party: campaigns[room], newPlayer: newPlayer});
         }
     });
+
+    socket.on("send ready", data => {
+
+        const room = data.room;
+        for(let i = 0; i < campaigns[room].players.length; i++){
+            if(campaigns[room].players[i].player === data.userId){
+                campaigns[room].players[i].status = "ready";
+            }
+        }
+        console.log("FROM SEND READY", campaigns[room]);
+        io.sockets.to(room).emit("return ready", campaigns[room]);
+    });
+
+    socket.on("send start", room => {
+        campaigns[room].status = "inProgress";
+        io.sockets.to(room).emit("return start", campaigns[room]);
+    })
 
     socket.on("bash", data => {
         socket.to(data.room).broadcast.emit(data);
