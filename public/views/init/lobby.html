@@ -8,6 +8,7 @@
             <p ng-if="!lobby.dm.name">Waiting for DM</p>
             <p ng-if="lobby.dm.name">{{lobby.dm.userName}} the <span>{{lobby.dm.name}}</span></p>
             <p>Status: {{lobby.dm.ready}}</p>
+            <button ng-hide="lobby.hideStart" type="button" class="btn" ng-click="signalStart()">Start Game</button>
         </div>
 
         <!-- ng-repeat goes on party member -->
