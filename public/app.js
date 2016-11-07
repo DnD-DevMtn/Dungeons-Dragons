@@ -31,7 +31,7 @@ import joinService from           "./js/services/joinService";
 import createGameService from     "./js/services/createGameService";
 
 // Factories
-import sockets from               "./js/services/sockets";
+import socket from               "./js/services/socket";
 
 // Directives
 import game from                  "./js/directives/game";
@@ -132,4 +132,4 @@ angular.module("DnD", [uiRouter])
   .service("createGameService", createGameService)
   .service("userService", userService)
   .service("joinService", joinService)
-  .factory("sockets", sockets);
+  .factory("socket", socket);

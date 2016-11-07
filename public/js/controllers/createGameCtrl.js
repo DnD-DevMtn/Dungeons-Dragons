@@ -1,10 +1,9 @@
 export default function($http, $state, createGameService, userService) {
   const create = this;
   create.postCampaign = (campaign) => {
-    console.log(userService.user);
     userService.user.character = {name:"dm"};
     campaign.dm = {
-      name: `${userService.user.firstName } ${userService.user.firstName}`,
+      name: `${userService.user.firstName } ${userService.user.lastName}`,
       facebookId: userService.user.facebookId
     }
     campaign.status = "open";

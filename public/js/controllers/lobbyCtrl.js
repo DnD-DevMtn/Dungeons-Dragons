@@ -1,4 +1,4 @@
-export default function(sockets, $stateParams, userService) {
+export default function(socket, $stateParams, userService) {
 
     const lobby = this;
 
@@ -8,7 +8,14 @@ export default function(sockets, $stateParams, userService) {
     lobby.gameId   = $stateParams.gameId;
     lobby.user     = userService.user;
     lobby.party    = [];
-    lobby.dm       = {};
+    if(lobby.userChar.name === "dm") {
+      lobby.dm = {
+        name: "dm"
+        , userName: `${userService.user.firstName} ${userService.user.lastName}`
+      }
+    } else {
+      lobby.dm = {};
+    }
 
     let socketChar = {}
 
@@ -37,8 +44,6 @@ export default function(sockets, $stateParams, userService) {
         }
         lobby.userEnter();
     }
-
-
 
     // user
     // userChar

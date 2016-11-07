@@ -1,4 +1,4 @@
-export default function engineService(sockets){
+export default function engineService(socket){
 
     // this is the dungeon format that will be retrieved from the backend
 

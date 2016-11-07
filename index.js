@@ -55,6 +55,8 @@ io.on("connection", socket => {
     socket.on("join", data => {
         const room = data.room;
 
+        console.log(data);
+
         let isHost = (data.char.name === "dm") ? true : false;
 
         if(!(room in campaigns)){
