@@ -1,0 +1,17 @@
+<table>
+  <th>
+      <tr class="join-head">
+        <td class="campaign">Campaign</td>
+        <td class="host">Host</td>
+        <td class="spots">Available Spots</td>
+        <td class="join"></td>
+      </tr>
+  </th>
+  <!-- Ng repeat goes into the tr -->
+  <tr ng-repeat="campaign in dash.campaigns track by $index">
+      <td>{{campaign.name}}</td>
+      <td>{{campaign.dm.name}}</td>
+      <td>{{campaign.players.length}}/{{campaign.maxPlayers}}</td>
+      <td><a class="btn" ng-click="joinGame.charBuilder(campaign._id)">Join Campaign</a></td>
+  </tr>
+</table>

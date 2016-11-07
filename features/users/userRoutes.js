@@ -7,7 +7,7 @@ module.exports = app => {
 
     app.get("/auth/facebook", passport.authenticate("facebook"));
     app.get("/auth/facebook/callback", passport.authenticate("facebook", {
-        successRedirect: "/#/redirect",
+        successRedirect: "/#/init-prompt",
         failureRedirect: "/",
     }));
 
@@ -30,4 +30,6 @@ module.exports = app => {
     app.route("/api/users/:id")
         .get(userCtrl.getUserById)
         .put(userCtrl.addCharacterToUser);
+
+    app.get("/api/users/facebook/:id", userCtrl.getUserByFacebook);
 }

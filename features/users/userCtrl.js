@@ -32,6 +32,12 @@ module.exports = {
         }
     }
 
+    , getUserByFacebook(req, res){
+        User.find({facebookId: req.params.id}, (err, user) => {
+            return (err) ? res.status(500).json(err) : res.status(200).json(user);
+        });
+    }
+
     , userExists(req, res, next) {
         if(req.user){
             User.findOne({facebookId: req.user.id}, (err, user) => {

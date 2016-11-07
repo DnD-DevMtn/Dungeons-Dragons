@@ -10,11 +10,11 @@
         </tr>
     </th>
     <!-- Ng repeat goes into the tr -->
-    <tr>
-        <td>The Magical Land of Nore</td>
-        <td>Snuffle McSnuffSnuffs</td>
-        <td>3/4</td>
-        <td><a class="btn" ng-src="{{campaign.url}}">Join Campaign</a></td>
+    <tr ng-repeat="campaign in joinGame.campaigns">
+        <td>{{campaign.name}}</td>
+        <td>{{campaign.dm.name}}</td>
+        <td>{{campaign.players.length}}/{{campaign.maxPlayers}}</td>
+        <td><a class="btn" ng-click="joinGame.charBuilder(campaign._id)">Join Campaign</a></td>
     </tr>
   </table>
 </section>

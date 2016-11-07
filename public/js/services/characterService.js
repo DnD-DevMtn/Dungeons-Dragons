@@ -1,6 +1,8 @@
-function characterService($http) {
+function characterService($http, $state, userService) {
 
   let currentUser = "";
+
+  this.currUser = userService.user
 
   this.getUser = () => {
     return $http.get("/api/facebook").then(response => {
@@ -25,7 +27,7 @@ function characterService($http) {
     currentCharacter.level = level;
   }
 
-  this.finalStats = (str, dex, con, int, wis, cha) => {
+  this.finalStats = (str, dex, con, int, wis, cha, room) => {
     currentCharacter.baseStats.str = str;
     currentCharacter.baseStats.dex = dex;
     currentCharacter.baseStats.con = con;
@@ -57,8 +59,10 @@ function characterService($http) {
       currentCharacter.sprite = "CLERIC";
       currentCharacter.hp = (8 * currentCharacter.level) + (Math.floor(con - 10) / 2);
     }
-    console.log(currentCharacter);
     $http.put(`/api/users/${currentUser}`, currentCharacter);
+    $http.put(`/api/campaigns/join/${room}`, {facebookId: this.currUser.facebookId, character: currentCharacter});
+    userService.user.character = currentCharacter;
+    $state.go("lobby", {gameId: room, userChar: currentCharacter});
   }
 
   this.getUser();

@@ -1,6 +1,8 @@
-function redirectCtrl($scope, $http, mainService) {
+function redirectCtrl($scope, $http, mainService, userService) {
     mainService.getFBUser().then((response) => {
-        $scope.user = response;
+        console.log('FB user response from mainService in redirect ctrl', response);
+        userService.user = response;
+        $scope.user = userService.user;
     });
 
     const baseUserElmUrl = 'http://swapi.co/api/';
@@ -145,7 +147,8 @@ const fighter = {
 }
 
 const sorcerer = {
-    "name": "Idiot"
+    "_id": 3
+    , "name": "Idiot"
     , "race": {
       "name": "Human"
     }

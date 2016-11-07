@@ -63,6 +63,20 @@ const Dungeon = new mongoose.Schema({
             }
         }]
     }
+    , doors: [{
+        _id: false
+        , door: {
+            name: String
+            , bashDC: Number
+            , hp: Number
+            , locked: Boolean
+            , pickDC: Number
+        }
+        , location: {
+            x: Number
+            , y: Number
+        }
+    }]
     , traps: [{
         _id: false
         , trap: {

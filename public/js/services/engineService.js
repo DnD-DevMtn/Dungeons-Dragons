@@ -1,4 +1,4 @@
-export default function engineService(sockets){
+export default function engineService(socket){
 
     // this is the dungeon format that will be retrieved from the backend
 
@@ -640,7 +640,7 @@ export default function engineService(sockets){
     }
 
     function statMod(stat){
-        return (Game.user.baseStats[stat] - 10 < 0) ? Math.floor((Game.user.baseStats[stat] - 10) / 2) : Math.ceil((Game.user.baseStats[stat] - 10) / 2)
+        return Math.floor((Game.user.baseStats[stat] - 10) / 2)
     }
 
     const dice = {};
