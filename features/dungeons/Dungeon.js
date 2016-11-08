@@ -60,7 +60,7 @@ const Dungeon = new mongoose.Schema({
             _id: false
             , item: {type: mongoose.Schema.Types.ObjectId, ref: "Gear"}
             , settings:{
-                , found: Boolean
+                found: Boolean
                 , findDC: Number
             }
             , location: {
