@@ -1,47 +1,39 @@
 <section class="container" id="lobby">
     <h1>Waiting for your Party</h1>
     <section class="party">
-
-        <div class="dm">
-            <img />
-            <h3>Dungeon Master</h3>
-            <p ng-if="!lobby.dm.name">Waiting for DM</p>
-            <p ng-if="lobby.dm.name">{{lobby.dm.userName}} the <span>{{lobby.dm.name}}</span></p>
-            <p>Status: {{lobby.dm.status}}</p>
-        </div>
-
-        <!-- ng-repeat goes on party member -->
-
-        <div class="party-members">
-            <div class="party-member" ng-repeat="player in lobby.party.players | filter: lobby.filterDm">
-                <h3>Player</h3>
-                Username: {{player.userName}}
-                Character Name: {{player.char.name}}
-                Race: {{player.char.race}}
-                Class: {{player.char.classType}}
-                Level: {{player.char.level}}
-                Status: {{player.status}}
+            <div class="party-member" ng-repeat="player in lobby.party.players">
+                <span ng-if="player.char.name !== 'dm'">
+                  <h3>Player</h3>
+                  <p><span class="uppercase">{{player.char.name}}</span> the <span class="uppercase">{{player.char.race}} {{player.char.classType}}</span> joined</p>
+                </span>
+                <span ng-if="player.char.name === 'dm'">
+                  <h3>Dungeon Master</h3>
+                  <p><span class="uppercase">{{lobby.dm.userName}}</span> joined</p>
+                </span>
             </div>
-        </div>
-
     </section>
     <section class="video-status-wrapper">
         <section class="video-chat">
             <!-- this is going to need a custom room name based on campaign name -->
-            <iframe src="https://appear.in/dnddm4" width="100%" height="450" frameborder="0">
+            <iframe ng-src="https://appear.in/dnddm4" width="100%" height="450" frameborder="0">
             </iframe>
         </section>
         <section class="party-status">
             <h3>Party Status</h3>
-            {{lobby.start}}
             <ul>
-                <!-- ng-repeat goes on li -->
-                <li class="party-member-status">Waiting for snuffle butter.
-                    <!-- ng if ready ? check : times (both icons will be on the li)-->
-                    <i class="fa fa-times waiting" aria-hidden="true"></i>
-                </li>
-                <li class="party-member-status">Snuffle butter is ready.
-                    <i class="fa fa-check ready" aria-hidden="true"></i>
+                <li
+                  ng-repeat="player in lobby.party.players"
+                  class="party-member-status">
+                    <span ng-if="player.status === 'pending'">
+                      <span ng-if="player.char.name === 'dm'">Waiting for <span class="caps">{{player.char.name}}</span></span>
+                      <span ng-if="player.char.name !== 'dm'">Waiting for <span class="uppercase">{{player.char.name}}</span></span>
+                      <i class="fa fa-times waiting" aria-hidden="true"></i>
+                    </span>
+                    <span ng-if="player.status === 'ready'">
+                      <span ng-if="player.char.name === 'dm'"><span class="caps">{{player.char.name}}</span> is ready.</span>
+                      <span ng-if="player.char.name !== 'dm'"><span class="uppercase">{{player.char.name}}</span> is ready.</span>
+                      <i class="fa fa-check ready" aria-hidden="true"></i>
+                    </span>
                 </li>
             <ul>
             <!-- ng if DM && game === ready-->
