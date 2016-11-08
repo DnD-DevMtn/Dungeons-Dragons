@@ -21,24 +21,24 @@
     </li>
     <!-- rouge -->
     <!-- sneak attack -->
-    <li ng-if="GV.user.character.classType.name === 'Rogue'" class="combat-action flex-content">
+    <li ng-if="GV.user.character.classType === 'Rogue'" class="combat-action flex-content">
       <img src="" />
       <span>Sneak Attack</span>
     </li>
     <!-- fighter -->
     <!-- power attack -->
-    <li ng-if="GV.user.character.classType.name === 'Fighter'" class="combat-action flex-content">
+    <li ng-if="GV.user.character.classType === 'Fighter'" class="combat-action flex-content">
       <img src="" />
       <span>Power Attack</span>
     </li>
     <!-- cleve -->
-    <li ng-if="GV.user.character.classType.name === 'Fighter'" class="combat-action flex-content">
+    <li ng-if="GV.user.character.classType === 'Fighter'" class="combat-action flex-content">
       <img src="" />
       <span>Cleve</span>
     </li>
     <!-- sorcerer and cleric -->
     <!-- spells -->
-    <li ng-if="GV.user.character.classType.name === 'Sorcerer'" class="combat-action flex-content">
+    <li ng-if="GV.user.character.classType === 'Sorcerer'" class="combat-action flex-content">
       <img src="" />
     </li>
   </ul>
