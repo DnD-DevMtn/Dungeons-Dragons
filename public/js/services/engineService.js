@@ -61,6 +61,7 @@ export default function engineService(socket){
         , hp: 20
         , locked: false
         , pickDC: 15
+        , open: false
     }
 
 
@@ -80,6 +81,7 @@ export default function engineService(socket){
         , actions: ["draw", "sheath"]
         , gameState: "explore"
         , turnOver: false
+        , dmMode: false
     }
 
     this.getGame = () => {
@@ -276,6 +278,7 @@ export default function engineService(socket){
             Game.turnOver = true;
             socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
                                 , target: target
+                                , roll: roll
                                 , success: success
                                 , damage: damage
                                 , crit: crit
@@ -378,7 +381,6 @@ export default function engineService(socket){
 
     // available in explore mode. Item that is dropped is marked as found.
     Game.dropItem = (item) => {
-
         socket.emit("dropItem", {source: Game.user.location, item: item, room: room});
     }
 
@@ -423,24 +425,6 @@ export default function engineService(socket){
             return false;
         }
         socket.emit("move", {source: Game.user.location, target: target, room: room});
-        // if(Game.board[source.x][source.y].id === Game.user.id){      // TODO in ctrl
-        //     Game.user.location.x = target.x;
-        //     Game.user.location.y = target.y;
-        // } else {
-        //     updateActorPosition(source, target);
-        // }
-        //
-        // let type = Game.board[source.x][source.y].type;       // save the reference variables
-        // let id   = Game.board[source.x][source.y].id;
-        //
-        // Game.board[source.x][source.y].type = "";             // set source square props to empty
-        // Game.board[source.x][source.y].id   = "";
-        // Game.board[source.x][source.y].free = true;
-        //
-        // Game.board[source.x][source.y].type = type;           // set target square props to actor
-        // Game.board[source.x][source.y].id   = id;
-        // Game.board[source.x][source.y].free = false;
-        // printBoard();
     }
 
     // GAME FUNCTIONS * * *
@@ -454,12 +438,17 @@ export default function engineService(socket){
                                                                       // so players array will not be tied to the Dungeon object.
         for(let k = 0; k < players.length; k++){                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
+
             if(players[k]._id === userCharacter._id){
-                Game.user.actor = userCharacter;                     // Game.user is a character
-                Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
-                Game.user.id = rand;
-                Game.user.ac = findAC(Game.user.actor);
-                Game.user.equipped = {};
+                if(players[k].dm){
+                    Game.dmMode = true;
+                } else {
+                    Game.user.actor = userCharacter;                     // Game.user is a character
+                    Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
+                    Game.user.id = rand;
+                    Game.user.ac = findAC(Game.user.actor);
+                    Game.user.equipped = {};
+                }
             } else {
                 Game.players.push({
                     actor: players[k].userChar                                    // Game.players[i].actor is a character
@@ -581,21 +570,21 @@ export default function engineService(socket){
     // * * * PRINTBOARD
 
     function printBoard(){
-        for(let row = 0; row < Game.width; row++){
+        for(let x = 0; x < Game.width; x++){
             let line = "";
-            for(let col = 0; col < Game.height; col++){
-                if(Game.board[row][col].items.length > 0){
+            for(let y = 0; y < Game.height; y++){
+                if(Game.board[x][y].items.length > 0){
                     line += " I";
-                } else if(Game.board[row][col].trap.name){
+                } else if(Game.board[x][y].trap.name){
                     line += " T";
-                } else if(Game.board[row][col].type === "player"){
+                } else if(Game.board[x][y].type === "player"){
                     line += " P";
-                } else if(Game.board[row][col].type === "monster"){
+                } else if(Game.board[x][y].type === "monster"){
                     line += " M";
-                } else if(Game.board[row][col].type === "environmental"){
+                } else if(Game.board[x][y].type === "environmental"){
                     line += " E";
                 } else {
-                    line += " ."
+                    line += " .";
                 }
             }
             console.log(line);
@@ -648,17 +637,9 @@ export default function engineService(socket){
         ];
     }
 
-    function updateActorPosition(source, target){
-        for(let i = 0; i < Game[source.type].length; i++){
-            if(Game[source.type][i].id === Game.board[source.x][source.y].id){
-                Game[source.type][i].location.x = target.x;
-                Game[source.type][i].location.y = target.y;
-            }
-        }
-    }
+
 
     function rangedRadius(source, range){
-        // TODO
         let x = source.x, y = source.y;
         let ranged = [];
         for(let i = (x - range); i < (x + range); i++){
