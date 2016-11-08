@@ -35,8 +35,10 @@ const Dungeon = new mongoose.Schema({
         armor: [{
             _id: false
             , item: {type: mongoose.Schema.Types.ObjectId, ref: "Armor"}
-            , found: Boolean
-            , findDC: Number
+            , settings: {
+                found: Boolean
+                , findDC: Number
+            }
             , location: {
                 x: Number
                 , y: Number
@@ -45,8 +47,10 @@ const Dungeon = new mongoose.Schema({
         , weapons: [{
             _id: false
             , item: {type: mongoose.Schema.Types.ObjectId, ref: "Weapon"}
-            , found: Boolean
-            , findDC: Number
+            , settings: {
+                found: Boolean
+                , findDC: Number
+            }
             , location: {
                 x: Number
                 , y: Number
@@ -55,8 +59,10 @@ const Dungeon = new mongoose.Schema({
         , gear: [{
             _id: false
             , item: {type: mongoose.Schema.Types.ObjectId, ref: "Gear"}
-            , found: Boolean
-            , findDC: Number
+            , settings:{
+                found: Boolean
+                , findDC: Number
+            }
             , location: {
                 x: Number
                 , y: Number
@@ -65,7 +71,7 @@ const Dungeon = new mongoose.Schema({
     }
     , doors: [{
         _id: false
-        , door: {
+        , settings: {
             name: String
             , bashDC: Number
             , hp: Number
@@ -79,7 +85,7 @@ const Dungeon = new mongoose.Schema({
     }]
     , traps: [{
         _id: false
-        , trap: {
+        , settings: {
             name: String
             , findDC: Number
             , disarmDC: Number
@@ -103,4 +109,4 @@ const Dungeon = new mongoose.Schema({
     }]
 });
 
-module.exports = Dungeon;
+module.exports = mongoose.model("Dungeon", Dungeon);

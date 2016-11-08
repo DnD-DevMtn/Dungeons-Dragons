@@ -332,7 +332,7 @@ export default function engineService(socket){
         let ranged = rangedRadius(Game.user.location);
         let wis    = statMod(Game.user.actor.baseStats.wis);
         let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
-        let lvl    = Game.user.actor.totalLvl;
+        let lvl    = Game.user.actor.level;
         let found = [];
         for(let i = 0; i < ranged.length; i++){
             let x = ranged[i][0], y = ranged[i][1];
@@ -348,33 +348,44 @@ export default function engineService(socket){
 
     // available if the player is a rogue and is next to a trap that has been found
     Game.rogueDisarmTrap = (source, target) => {
-        let x = target.x, y = target.y;
+        let x    = target.x, y = target.y;
         let int  = statMod(Game.user.actor.baseStats.int);
+        let lvl  = Game.user.actor.level;
+        let rand = Math.floor(Math.random() * 20) + 1;                          // TODO DICEROLL
+        if(rand === 20 || (int + lvl + rand) >= Game.board[x][y].trap.disarmDC){
+            
+        }
     }
 
+    // available if item on square is found through successful perception and character is on the square
     Game.pickUpItem = (source) => {
-        // available if item on square is found through successful perception and character is on the square
+
     }
 
+    // available in explore mode. Item that is dropped is marked as found.
     Game.dropItem = (source, item) => {
-        // available in explore mode. Item that is dropped is marked as found.
+
     }
 
     // combat options
+    // available if an enemy is next to the player
     Game.melee = (source, target) => {
-        // available if an enemy is next to the player
+
     }
 
+    // available if enemies are within an unblocked radius
     Game.ranged = (source, target) => {
-        // available if enemies are within an unblocked radius
+
     }
 
+    // sacrifice accuracy for damage
     Game.fighterPowerAttack = (source, target) => {
-        // sacrifice accuracy for damage
+
     }
 
+    // can hit an additional enemy if the first is killed
     Game.fighterCleave = (source, target) => {
-        // can hit an additional enemy if the first is killed
+
     }
 
     Game.castSpell = (source, target) => {
@@ -508,22 +519,22 @@ export default function engineService(socket){
 
     function loadItems(){
         for(let i = 0; i < dungeon.items.armor.length; i++){
-            let x = dungeon.items[i].armor.location.x;
-            let y = dungeon.items[i].armor.location.y;
+            let x = dungeon.items.armor[i].location.x;
+            let y = dungeon.items.armor[i].location.y;
             Game.board[x][y].item.items.push(dungeon.items.armor[i].item);
             Game.board[x][y].item.found = dungeon.items.armor[i].found;
             Game.board[x][y].item.findDC = dungeon.items.armor[i].findDC;
         }
         for(let i = 0; i < dungeon.items.weapons.length; i++){
-            let x = dungeon.items[i].weapons.location.x;
-            let y = dungeon.items[i].weapons.location.y;
+            let x = dungeon.items.weapons[i].location.x;
+            let y = dungeon.items.weapons[i].location.y;
             Game.board[x][y].item.items.push(dungeon.items.weapons[i].item);
             Game.board[x][y].item.found = dungeon.items.weapons[i].found;
             Game.board[x][y].item.findDC = dungeon.items.weapons[i].findDC;
         }
         for(let i = 0; i < dungeon.items.gear.length; i++){
-            let x = dungeon.items[i].gear.location.x;
-            let y = dungeon.items[i].gear.location.y;
+            let x = dungeon.items.gear[i].location.x;
+            let y = dungeon.items.gear[i].location.y;
             Game.board[x][y].item.items.push(dungeon.items.gear[i].item);
             Game.board[x][y].item.found = dungeon.items.gear[i].found;
             Game.board[x][y].item.findDC = dungeon.items.gear[i].findDC;
