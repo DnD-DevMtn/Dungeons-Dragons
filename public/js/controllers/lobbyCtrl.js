@@ -3,6 +3,7 @@ export default function(socket, $stateParams, userService, $state) {
     const lobby = this;
 
     lobby.userChar  = $stateParams.userChar;
+    lobby.campaign  = $stateParams.campaign;
     lobby.gameId    = $stateParams.gameId;
     lobby.user      = userService.user;
     lobby.party     = [];
@@ -51,13 +52,11 @@ export default function(socket, $stateParams, userService, $state) {
     }
 
     lobby.signalReady = () => {
-        console.log("FROM SIGNAL READY", lobby.user._id, lobby.gameId);
         socket.emit("send ready", {userId: lobby.user._id, room: lobby.gameId});
         checkStart();
     }
 
     lobby.signalStart = () => {
-        console.log("FROM SIGNAL READY", lobby.gameId);
         if(lobby.start && lobby.userChar.name === "dm"){
             socket.emit("send start", lobby.gameId);
         }
@@ -80,10 +79,7 @@ export default function(socket, $stateParams, userService, $state) {
             lobby.party = data.party;
             return;
         }
-        console.log(data.party);
-        console.log(lobby.party);
         lobby.party = data.party;
-        console.log(lobby.party);
         for(let i = 0; i < lobby.party.players.length; i++){
             if(lobby.party.players[i].dm){
                 lobby.dm.name = "dm";
