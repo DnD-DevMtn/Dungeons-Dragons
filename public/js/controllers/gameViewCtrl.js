@@ -7,9 +7,6 @@ export default function(engineService, userService, socket, $stateParams) {
 
   GV.user = userService.user;
 
-  console.log(GV.user)
-
   GV.party = $stateParams.party;
 
-  console.log(GV.party);
 }
