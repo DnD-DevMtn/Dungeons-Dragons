@@ -76,7 +76,8 @@ angular.module("DnD", [uiRouter])
           templateUrl: "./views/init/characterBuilder.html",
           controller : characterBuildingCtrl,
           params: {
-              room: null
+              room: null,
+              campaign: null
           }
       })
       .state("init-prompt", {
@@ -104,6 +105,7 @@ angular.module("DnD", [uiRouter])
           controllerAs: "lobby",
           params: {
             gameId: null,
+            campaign: null,
             userChar:null
           }
       })

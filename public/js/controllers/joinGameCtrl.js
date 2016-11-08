@@ -20,8 +20,8 @@ export default function(joinService, userService, $state){
 
     joinGame.getCampaigns();
 
-    joinGame.charBuilder = gameId => {
-        $state.go("characterBuilder", {room: gameId})
+    joinGame.charBuilder = (gameId, campaign) => {
+        $state.go("characterBuilder", {room: gameId, campaign:campaign})
     }
 
 
