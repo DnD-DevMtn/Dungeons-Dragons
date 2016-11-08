@@ -268,10 +268,10 @@ export default function engineService(socket){
                 if(crit){
                     damage *= 2;
                 }
-                Game.board[x][y].door.hp -= damage;
-                if(Game.board[x][y].door.hp <= 0){
-                    Game.board[x][y].door.open = true;
-                }
+                // Game.board[x][y].door.hp -= damage;  // TODO in ctrl
+                // if(Game.board[x][y].door.hp <= 0){
+                //     Game.board[x][y].door.open = true;
+                // }
             }
             Game.turnOver = true;
             socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
@@ -286,7 +286,7 @@ export default function engineService(socket){
 
     // available if a door is next to the user, ie. directly above, beneath, left or right
     Game.closeDoor = (source, target) => {
-        Game.board[target.x][target.y].door.open = false;
+        // Game.board[target.x][target.y].door.open = false;    // TODO ctrl
         socket.emit("closeDoor", {source: source, target: target, room: room}); // TODO socket.on("closeDoor") controller side
     }
 
@@ -304,12 +304,12 @@ export default function engineService(socket){
             if(Game.board[x][y].item.items.length > 0){
                 if(rand === 20 || ((rand + wis) >= Game.board[x][y].item.findDC)){
                     found.push([x, y]);              // pushes the coordinates on found items to be emitted by socket
-                    Game.board[x][y].item.found = true;
+                    // Game.board[x][y].item.found = true;      // TODO ctrl on listener
                 }
             }
         }
         Game.turnOver = true;
-        socket.emit("perception", {source: source, roll: rand, found: found, room: room});
+        socket.emit("perception", {source: source, roll: rand, found: found, room: room});      // TODO socket.on perception comtroller side
     }
 
     // available if player is a rogue and next to a door that is locked
@@ -322,8 +322,9 @@ export default function engineService(socket){
         let success = false;
         if(rand === 20 || ((rand + int + lvl) >= dc)){
             success = true;
-            Game.board[x][y].door.locked = false;
+            // Game.board[x][y].door.locked = false;        // TODO put on the on listener the on ctrl
         }
+        Game.turnOver = true;
         socket.emit("rogueLockpick", {source: source, target: target, roll: rand, success: success, room: room});
     }
 
@@ -339,61 +340,81 @@ export default function engineService(socket){
             if(Game.board[x][y].trap.name){
                 if(roll === 20 || ((rand + wis + lvl) >= Game.board[x][y].trap.findDC)){
                     found.push([x, y]);
-                    Game.board[x][y].trap.found = true;
+                    // Game.board[x][y].trap.found = true; // TODO put on the on listener in the ctrl
                 }
             }
         }
-        socket.emit("rogueTrapfind", {source: source, roll: rand, found: found, room: room});
+        Game.turnOver = true;
+        socket.emit("rogueTrapfind", {source: source, roll: rand, found: found, room: room});   // TODO socket.on rogueTrapFind controller side
     }
 
     // available if the player is a rogue and is next to a trap that has been found
     Game.rogueDisarmTrap = (source, target) => {
-        let x    = target.x, y = target.y;
-        let int  = statMod(Game.user.actor.baseStats.int);
-        let lvl  = Game.user.actor.level;
-        let rand = Math.floor(Math.random() * 20) + 1;                          // TODO DICEROLL
-        if(rand === 20 || (int + lvl + rand) >= Game.board[x][y].trap.disarmDC){
-            
+        let x      = target.x, y = target.y;
+        let int    = statMod(Game.user.actor.baseStats.int);
+        let lvl    = Game.user.actor.level;
+        let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
+        let damage = 0;
+        if(rand !== 20 || (int + lvl + rand) < Game.board[x][y].trap.disarmDC){
+            for(let i = 0; i < Game.board[x][y].trap.damage.numDice; i++){
+                damage += (Math.floor(Math.random() * Game.board[x][y].trap.damage.diceType) + 1); // TODO DICEROLL
+                damage += Game.board[x][y].trap.damage.mod;
+                damage /= 2;
+            }
         }
+        // Game.board[x][y].trap.triggered = true;
+        // TODO SOCKETTYS
+        socket.emit("rogueDisarmTrap", {source: Game.user.location, roll: rand, damage: damage, room: room});
     }
 
     // available if item on square is found through successful perception and character is on the square
     Game.pickUpItem = (source) => {
-
+        let x = Game.user.location.x, y = Game.user.location.y;
+        for(let i = 0; i < Game.board[x][y].item.items.length; i++){
+            Game.user.items.push(Game.board[x][y].item.items[i]);
+        }
+        socket.emit("pickUpItem", {source: Game.user.location, item: item, room: room});
     }
 
     // available in explore mode. Item that is dropped is marked as found.
-    Game.dropItem = (source, item) => {
+    Game.dropItem = (item) => {
 
+        socket.emit("dropItem", {source: Game.user.location, item: item, room: room});
     }
 
     // combat options
     // available if an enemy is next to the player
     Game.melee = (source, target) => {
 
+        socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     // available if enemies are within an unblocked radius
     Game.ranged = (source, target) => {
 
+        socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     // sacrifice accuracy for damage
-    Game.fighterPowerAttack = (source, target) => {
+    Game.fighterPowerAttack = (source, target1, target2) => {
 
+        socket.emit("fighterPowerAttack", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     // can hit an additional enemy if the first is killed
     Game.fighterCleave = (source, target) => {
 
+        socket.emit("fighterCleave", {source: Game.user.location, target1: target1, target2: target2, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     Game.castSpell = (source, target) => {
 
+        socket.emit("castSpell", {source: Game.user.location, target: target, spell: spell, roll: rand, room: room});
     }
 
     Game.rogueSneakAttack = (source, target) => {
 
+        socket.emit("rogueSneakAttack", {source: Game.user.location, roll: rand, damage: damage, crit: crit, room: room})
     }
 
     // checks if target square is available and returns a boolean
@@ -401,23 +422,25 @@ export default function engineService(socket){
         if(!Game.board[target.x][target.y].free){
             return false;
         }
-        if(Game.board[source.x][source.y].id === Game.user.id){
-            Game.user.location.x = target.x;
-            Game.user.location.y = target.y;
-        } else {
-            updateActorPosition(source, target);
-        }
-
-        let type = Game.board[source.x][source.y].type;       // save the reference variables
-        let id   = Game.board[source.x][source.y].id;
-
-        Game.board[source.x][source.y].type = "";             // set source square props to empty
-        Game.board[source.x][source.y].id   = "";
-        Game.board[source.x][source.y].free = true;
-
-        Game.board[source.x][source.y].type = type;           // set target square props to actor
-        Game.board[source.x][source.y].id   = id;
-        Game.board[source.x][source.y].free = false;
+        socket.emit("move", {source: Game.user.location, target: target, room: room});
+        // if(Game.board[source.x][source.y].id === Game.user.id){      // TODO in ctrl
+        //     Game.user.location.x = target.x;
+        //     Game.user.location.y = target.y;
+        // } else {
+        //     updateActorPosition(source, target);
+        // }
+        //
+        // let type = Game.board[source.x][source.y].type;       // save the reference variables
+        // let id   = Game.board[source.x][source.y].id;
+        //
+        // Game.board[source.x][source.y].type = "";             // set source square props to empty
+        // Game.board[source.x][source.y].id   = "";
+        // Game.board[source.x][source.y].free = true;
+        //
+        // Game.board[source.x][source.y].type = type;           // set target square props to actor
+        // Game.board[source.x][source.y].id   = id;
+        // Game.board[source.x][source.y].free = false;
+        // printBoard();
     }
 
     // GAME FUNCTIONS * * *
@@ -435,15 +458,19 @@ export default function engineService(socket){
                 Game.user.actor = userCharacter;                     // Game.user is a character
                 Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
                 Game.user.id = rand;
+                Game.user.ac = findAC(Game.user.actor);
                 Game.user.equipped = {};
             } else {
                 Game.players.push({
-                    actor: players[k]                                    // Game.players[i].actor is a character
+                    actor: players[k].userChar                                    // Game.players[i].actor is a character
                     , location: dungeon.startingLocation[k]
+                    , userName: players[k].userName
                     , equipped: {}
                     , id: rand
+                    , ac: findAC(players[k].userChar)
                 });
             }
+            Game.exploreOrder.push(players);
         }
 
         room = gameId;
@@ -651,7 +678,11 @@ export default function engineService(socket){
     }
 
     function statMod(stat){
-        return Math.floor((Game.user.baseStats[stat] - 10) / 2)
+        return Math.floor((Game.user.baseStats[stat] - 10) / 2);
+    }
+
+    function findAC(character){
+        return (10 + statMod(character.baseStats.dex) + character.armor[0].bonus);
     }
 
     const dice = {};
