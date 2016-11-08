@@ -136,6 +136,9 @@
       }
     }
     #inventory {
+      .inventory-page {
+        width:100%;
+      }
       .items {
         display:flex;
         flex-wrap:wrap;
