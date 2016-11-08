@@ -8,3 +8,11 @@ body {
   max-width:$container-size-max;
   margin:0 auto;
 }
+
+.uppercase {
+  text-transform:capitalize;
+}
+
+.caps {
+  text-transform:uppercase;
+}
