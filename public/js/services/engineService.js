@@ -309,7 +309,7 @@ export default function engineService(socket){
             }
         }
         Game.turnOver = true;
-        socket.emit("perception", {source: source, roll: rand, found: found, room: room});
+        socket.emit("perception", {source: source, roll: rand, found: found, room: room});      // TODO socket.on perception comtroller side
     }
 
     // available if player is a rogue and next to a door that is locked
@@ -324,6 +324,7 @@ export default function engineService(socket){
             success = true;
             Game.board[x][y].door.locked = false;
         }
+        Game.turnOver = true;
         socket.emit("rogueLockpick", {source: source, target: target, roll: rand, success: success, room: room});
     }
 
@@ -343,17 +344,22 @@ export default function engineService(socket){
                 }
             }
         }
-        socket.emit("rogueTrapfind", {source: source, roll: rand, found: found, room: room});
+        Game.turnOver = true;
+        socket.emit("rogueTrapfind", {source: source, roll: rand, found: found, room: room});   // TODO socket.on rogueTrapFind controller side
     }
 
     // available if the player is a rogue and is next to a trap that has been found
     Game.rogueDisarmTrap = (source, target) => {
-        let x    = target.x, y = target.y;
-        let int  = statMod(Game.user.actor.baseStats.int);
-        let lvl  = Game.user.actor.level;
-        let rand = Math.floor(Math.random() * 20) + 1;                          // TODO DICEROLL
-        if(rand === 20 || (int + lvl + rand) >= Game.board[x][y].trap.disarmDC){
-            
+        let x      = target.x, y = target.y;
+        let int    = statMod(Game.user.actor.baseStats.int);
+        let lvl    = Game.user.actor.level;
+        let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
+        let damage = 0;
+        if(rand !== 20 || (int + lvl + rand) < Game.board[x][y].trap.disarmDC){
+            Game.board[x][y].trap.triggered = true;
+            for(let i = 0; i < Game.board[x][y].trap.damage.numDice; i++){
+                damage += (Math.floor(Math.random() * Game.board[x][y].trap.damage.diceType) + 1); // TODO DICEROLL
+            }
         }
     }
 
