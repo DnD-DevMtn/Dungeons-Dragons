@@ -1,5 +1,4 @@
 const mongoose  = require("mongoose");
-const Dungeon   = require("./Dungeon");
 const Character = require("../users/Character");
 
 const Campaign = new mongoose.Schema({
@@ -16,7 +15,7 @@ const Campaign = new mongoose.Schema({
         , facebookId: {type: String, trim: true}
         , character: Character
     }]
-    , dungeons: [Dungeon]
+    , dungeons: [{type: mongoose.Schema.Types.ObjectId, ref: "Dungeon"}]
     , description: {
         background: {type: String, required: true, trim: true}
         , story: {type: String, required: true, trim: true}
