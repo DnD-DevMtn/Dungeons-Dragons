@@ -40,6 +40,11 @@ export default function($http, $state, createGameService, userService) {
     create.dungeonBuilder.deleteShadow();
     create.dungeonBuilder.deleteSelected = true;
   }
+
+  create.saveDungeon = function() {
+    PIXI.loader.reset();
+    // USE $scope.dungeonBuilder.dungeon;
+  }
 }
 
 class DungeonBuilder {
@@ -63,7 +68,7 @@ class DungeonBuilder {
     this.createDungeon();
 
     this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridWidth );
-    document.getElementById( "pixi-game-engine" ).appendChild( this.renderer.view );
+    document.getElementById( "pixi-map-builder" ).appendChild( this.renderer.view );
 
     PIXI.loader.add( "./assets/GameImages/_sample.json" ).load( this.initView.bind( this ) );
   }
@@ -188,7 +193,7 @@ class DungeonBuilder {
 
   moveShadow() {
     this.shadow.coordinate = this.gameUtil.gridCoordinate( this.shadow, this.property );
-    this.shadow.gridOccupation = this.gameUtil.gridOccupation( this.shadow, this.property );
+    this.shadow.gridOccupation = this.gameUtil.gridOccupation( this.shadow );
 
     this.gameUtil.setPositionFromGrid( this.shadow, this.tileGridWidth, this.tileGridHeight );
   }
@@ -206,6 +211,7 @@ class DungeonBuilder {
 
             this.gameUtil.removeObstacle( this.gameScene.children[ i ], this.obstacles );
             this.gameScene.removeChild( this.gameScene.children[ i ] );
+            console.log( this.dungeon );
 
             return;
           }
@@ -219,7 +225,7 @@ class DungeonBuilder {
     prop.type = this.property.type;
     this.gameUtil.setGridWidthHeight( prop, this.tileGridWidth, this.tileGridHeight );
     prop.coordinate = this.gameUtil.gridCoordinate( prop, this.property );
-    prop.gridOccupation = this.gameUtil.gridOccupation( prop, this.property );
+    prop.gridOccupation = this.gameUtil.gridOccupation( prop );
 
     if ( this.gameUtil.validateTargetLocation( prop.gridOccupation, this.obstacles, this.floor ) ) {
       this.gameUtil.setPositionFromGrid( prop, this.tileGridWidth, this.tileGridHeight );
@@ -239,19 +245,20 @@ class DungeonBuilder {
       backgroundImage: this.floor.tileImage,
       monsters: [],
       environment: [],
-      background: [],
       doors: [],
       traps: [],
       items: {
         armor: [],
         weapons: [],
         gear: []
-      }
+      },
+      players: []
     };
   }
 
   saveDungeonProp( property ) {
     var dungeonProp = {
+      id: ( new Date() ).getTime(),
       image: property.image,
       location: {
         x: property.location.x,
@@ -286,17 +293,9 @@ class DungeonBuilder {
 class Game_Util {
   constructor() {}
 
-  gridOccupation( object, property ) {
-    var result = [];
-
-    for ( let i = 0; i < object.gridWidth; i++ ) {
-      result.push( {
-        x: object.coordinate.x + i,
-        y: property.location.y
-      } );
-    }
-
-    return result;
+  setGridWidthHeight( object, tileGridWidth, tileGridHeight ) {
+    object.gridWidth = object.width / tileGridWidth;
+    object.gridHeight = object.height / tileGridHeight;
   }
 
   gridCoordinate( object, property ) {
@@ -306,9 +305,17 @@ class Game_Util {
     }
   }
 
-  setGridWidthHeight( object, tileGridWidth, tileGridHeight ) {
-    object.gridWidth = object.width / tileGridWidth;
-    object.gridHeight = object.height / tileGridHeight;
+  gridOccupation( object ) {
+    var result = [];
+
+    for ( let i = 0; i < object.gridWidth; i++ ) {
+      result.push( {
+        x: object.coordinate.x + i,
+        y: object.coordinate.y + object.gridHeight - 1
+      } );
+    }
+
+    return result;
   }
 
   addObstacle( object, obstacles ) {
