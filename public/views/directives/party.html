@@ -3,40 +3,13 @@
     <h4>Party</h4>
   </header>
   <div class="party-members">
-    <div class="party-member">
-        <h5>Snuffle McSnuff Snuff</h5>
+    <div ng-if="player.char.name !== 'dm'" ng-repeat="player in GV.party" class="party-member">
+        <h5>{{player.char.name}} the {{player.char.race}} {{player.char.classType}}</h5>
         <ul class="member-stats flex-wrapper">
-          <li class="flex-content">HP : </li>
-          <li class="flex-content">AC :</li>
+          <li class="flex-content">HP : {{player.char.hp}}</li>
+          <li class="flex-content">AC : </li>
           <li class="flex-content">Initiative : </li>
-          <li class="flex-content">Move Speed : 1</li>
-        </ul>
-    </div>
-    <div class="party-member">
-        <h5>Jay Z</h5>
-        <ul class="member-stats flex-wrapper">
-          <li class="flex-content">HP : </li>
-          <li class="flex-content">AC :</li>
-          <li class="flex-content">Initiative : </li>
-          <li class="flex-content">Move Speed : 3</li>
-        </ul>
-    </div>
-    <div class="party-member">
-        <h5>Bobby Brown</h5>
-        <ul class="member-stats flex-wrapper">
-          <li class="flex-content">HP : </li>
-          <li class="flex-content">AC :</li>
-          <li class="flex-content">Initiative : </li>
-          <li class="flex-content">Move Speed : 8</li>
-        </ul>
-    </div>
-    <div class="party-member">
-        <h5>Donald Trump</h5>
-        <ul class="member-stats flex-wrapper">
-          <li class="flex-content">HP : </li>
-          <li class="flex-content">AC :</li>
-          <li class="flex-content">Initiative : </li>
-          <li class="flex-content">Move Speed : 5</li>
+          <li class="flex-content">Move Speed : </li>
         </ul>
     </div>
   </div>
