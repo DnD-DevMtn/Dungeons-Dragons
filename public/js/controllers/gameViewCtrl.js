@@ -75,16 +75,42 @@ export default function(engineService, userService, socket, $stateParams) {
     });
 
     socket.on("return perception", data => {
-        for(let i = 0; i < data.found.length; i++){
-            
+
+        // + + + PIXI DATA.ROLL + + + \\
+
+        if(data.found.length === 0){
+            // + + + PIXI NOTHING FOUND + + + \\
+            return;
         }
+
+        for(let i = 0; i < data.found.length; i++){
+            let x = data.found[i][0], y = data.found[i][1];
+            Game.board[x][y].item.found = true;
+        }
+
+        // + + + PIXI FOUND ANIMATION + + + \\
     });
 
     socket.on("return rogueTrapFind", data => {
 
+        // + + + PIXI DATA.ROLL + + + \\
+
+        if(data.found.length === 0){
+            // + + + PIXI NOTHING FOUND + + + \\
+            return;
+        }
+
+        for(let i = 0; i < data.found.length; i++){
+            let x = data.found[i][0], y = data.found[i][1];
+            Game.board[x][y].
+        }
     });
 
     socket.on("return rogueDisarmTrap", data => {
+
+    });
+
+    socket.on("return rogueLockpick", data => {
 
     });
 
@@ -117,6 +143,10 @@ export default function(engineService, userService, socket, $stateParams) {
     });
 
     socket.on("rogueTrapFind", data => {
+
+    });
+
+    socket.on("return endTurn", data => {
 
     });
 
