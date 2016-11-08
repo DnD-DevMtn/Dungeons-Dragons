@@ -2,12 +2,18 @@
 This is the parent ctrl of everything game related. It should talk to the Pixi
 engine, the game Engine, and the gameInfo Ctrls.
  */
-export default function(engineService, userService, socket, $stateParams) {
+export default function(engineService, userService, socket, $stateParams, $http, inventoryService) {
   const GV = this;
 
   GV.user = userService.user;
 
   GV.party = $stateParams.party;
+
+  console.log(GV.user);
+
+  if(GV.user.character.weapons) {
+    getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+  }
 
   socket.on("return move", data => {
 
@@ -70,7 +76,14 @@ export default function(engineService, userService, socket, $stateParams) {
   });
 
 
-
-
-
+  function getInventory(weapons, gear, armor) {
+    console.log('this fired');
+    inventoryService.getInventory(weapons, gear, armor)
+    .then(results => {
+      console.log(results);
+      GV.user.character.weapons = results.weapons;
+      GV.user.character.armor = results.armor;
+      GV.user.character.gear = results.gear;
+    })
+  }
 }
