@@ -1,6 +1,7 @@
 function characterBuilderCtrl($scope, characterService, $stateParams) {
 
     $scope.room = $stateParams.room;
+    $scope.campaign = $stateParams.campaign;
 
     let activeSection = "race";
     $scope.selectedRaceTitle = "Human";
@@ -381,7 +382,7 @@ function characterBuilderCtrl($scope, characterService, $stateParams) {
     $scope.finish = () => {
       if(activeSection === "stats"){
        if($scope.baseStatsPoints === 0){
-         characterService.finalStats($scope.baseStr, $scope.baseDex, $scope.baseCon, $scope.baseInt, $scope.baseWis, $scope.baseCha, $scope.room)
+         characterService.finalStats($scope.baseStr, $scope.baseDex, $scope.baseCon, $scope.baseInt, $scope.baseWis, $scope.baseCha, $scope.room, $scope.campaign)
        } else {
          alert("You still have points left");
        }

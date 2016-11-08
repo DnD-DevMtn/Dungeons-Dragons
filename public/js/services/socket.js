@@ -4,18 +4,18 @@ export default function($rootScope){
 
     return {
         on: function(eventName, callback){
-            socket.on(eventName, () => {
+            socket.on(eventName, function(){
                 const args = arguments;
-                $rootScope.$apply(() => {
+                $rootScope.$apply(function(){
                     callback.apply(socket, args);
                 });
             });
         }
 
         , emit: function(eventName, data, callback){
-            socket.emit(eventName, data, () => {
+            socket.emit(eventName, data, function(){
                 const args = arguments;
-                $rootScope.$apply(() => {
+                $rootScope.$apply(function(){
                     if(callback){
                         callback.apply(socket, args);
                     }

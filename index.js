@@ -55,8 +55,6 @@ io.on("connection", socket => {
     socket.on("join", data => {
         const room = data.room;
 
-        console.log(data);
-
         let isHost = (data.char.name === "dm") ? true : false;
 
         if(!(room in campaigns)){
@@ -73,7 +71,7 @@ io.on("connection", socket => {
                 , players: players
             };
             socket.join(room);
-            io.sockets.to(room).emit("joined", campaigns[room]);
+            io.sockets.to(room).emit("joined", {party: campaigns[room], newPlayer: players[0]});
             return;
         }
         const game = campaigns[room];
@@ -83,12 +81,13 @@ io.on("connection", socket => {
             socket.join(room);
             let newPlayer = {
                 player: data.userId
+                , userName: data.userName
                 , char: data.char
                 , status: "pending"
                 , dm: isHost
             }
             game.players.push(newPlayer);
-            io.sockets.to(room).emit("joined", campaigns[room]);
+            io.sockets.to(room).emit("joined", {party: campaigns[room], newPlayer: newPlayer});
         }
     });
 
@@ -99,11 +98,13 @@ io.on("connection", socket => {
                 campaigns[room].players[i].status = "ready";
             }
         }
+        console.log("FROM READY", campaigns[room]);
         io.sockets.to(room).emit("return ready", campaigns[room]);
     });
 
     socket.on("send start", room => {
         campaigns[room].status = "inProgress";
+        console.log("FROM READY", campaigns[room]);
         io.sockets.to(room).emit("return start", campaigns[room]);
     })
 

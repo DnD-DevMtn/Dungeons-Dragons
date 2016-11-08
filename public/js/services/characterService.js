@@ -2,8 +2,6 @@ function characterService($http, $state, userService) {
 
   let currentUser = "";
 
-  this.currUser = userService.user
-
   this.getUser = () => {
     return $http.get("/api/facebook").then(response => {
       currentUser = response.data._id;
@@ -27,7 +25,7 @@ function characterService($http, $state, userService) {
     currentCharacter.level = level;
   }
 
-  this.finalStats = (str, dex, con, int, wis, cha, room) => {
+  this.finalStats = (str, dex, con, int, wis, cha, room, campaign) => {
     currentCharacter.baseStats.str = str;
     currentCharacter.baseStats.dex = dex;
     currentCharacter.baseStats.con = con;
@@ -60,10 +58,9 @@ function characterService($http, $state, userService) {
       currentCharacter.hp = (8 * currentCharacter.level) + (Math.floor(con - 10) / 2);
     }
     $http.put(`/api/users/${currentUser}`, currentCharacter);
-    console.log("ABOUT TO ADD PLAYER");
-    $http.put(`/api/campaigns/join/${room}`, {facebookId: this.currUser.facebookId, character: currentCharacter});
+    $http.put(`/api/campaigns/join/${room}`, {facebookId: userService.user.facebookId, character: currentCharacter});
     userService.user.character = currentCharacter;
-    $state.go("lobby", {gameId: room, userChar: currentCharacter});
+    $state.go("lobby", {campaign: campaign, gameId: room, userChar: currentCharacter});
   }
 
   this.getUser();
