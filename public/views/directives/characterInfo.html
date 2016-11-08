@@ -7,9 +7,6 @@
     <div ng-if="UT.page === 1" class="page1">
       <div class="extended-info">
         <div class="left">
-          <div>
-            <span>XP : {{GV.user.character.xp}} </span>
-          </div>
           <div class="stats">
             <!-- angular variables go here -->
             <span>Str : {{GV.user.character.baseStats.str}}</span>
@@ -22,14 +19,12 @@
         </div>
         <div class="right">
           <div>
+            <span>XP : {{GV.user.character.xp}} </span>
+          </div>
+          <div>
             <span>HP : {{GV.user.character.hp}}</span>
             <span>AC : </span>
             <span>Initiative : </span>
-          </div>
-          <div>
-            <span>Fort : {{GV.user.character.saves.fort}}</span>
-            <span>Ref : {{GV.user.character.saves.ref}}</span>
-            <span>Will : {{GV.user.character.saves.will}}</span>
           </div>
         </div>
       </div>
