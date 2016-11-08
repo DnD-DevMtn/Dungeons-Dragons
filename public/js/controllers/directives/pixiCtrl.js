@@ -3,8 +3,9 @@ import "pixi.js";
 export default function( $scope ) {
     // dummy data
     $scope.Dungeon = {
-      width: 40,
-      height: 40,
+      width: 20,
+      height: 20,
+      backgroundImage: "GRS2ROC03",
       players: [ {
         id: 101,
         image: "STARLORD",
@@ -13,32 +14,60 @@ export default function( $scope ) {
       monsters: [ {
         id: 103,
         image: "DRAGON",
-        location: { x: 15, y: 15 }
+        location: { x: 13, y: 13 }
       } ],
       doors: [ {
         id: 721,
-        image: "TREE03",
-        location: { x: 22, y: 30 }
+        image: "DOOR",
+        location: { x: 5, y: 5 },
+        settings: {
+          bashDC: 3,
+          hp: 3,
+          locked: true,
+          pickDC: 4
+        }
       } ],
       environment: [ {
         id: 115,
         image: "TREE00",
-        location: { x: 19, y: 20 }
-      } ]
+        location: { x: 5, y: 13 }
+      } ],
+      traps: [ {
+        id: 990,
+        image: "TRAP",
+        location: { x: 9, y: 6 },
+        settings: {
+          damage: {
+            diceNum: 3,
+            diceType: 3,
+            mod: 3
+          },
+          disarmDC: 3,
+          findDC: 4,
+          found: true,
+          triggered: false
+        }
+      } ],
+      items: {
+        weapons: [ {
+          id: 875,
+          image: "WEAPON",
+          location: { x: 11, y: 4 },
+          settings: {
+            findDC: 4,
+            found: false
+          }
+        } ]
+      }
     };
 
     // Actual class declaration
     var p = new Game( $scope.Dungeon );
+    var character = $scope.Dungeon.players[ 0 ];
 
     // Delete below up to stop point....
     window.addEventListener ( "keydown", downHandler, false );
     window.addEventListener ( "keyup", upHandler, false );
-
-    var character = {
-      id: 101,
-      image: "STARLORD",
-      location: { x: 10, y: 10 }
-    };
 
     function downHandler() {
       if ( $scope.keyUp ) {
@@ -97,13 +126,14 @@ class Game {
 
     this.floor.gridWidth = Dungeon.width;
     this.floor.gridHeight = Dungeon.height;
+    this.floor.tileImage = Dungeon.backgroundImage;
     this.players = Dungeon.players;
     this.monsters = Dungeon.monsters;
     this.doors = Dungeon.doors;
     this.environment = Dungeon.environment;
 
     this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridWidth );
-    document.getElementById( "pixi-game-engine" ).appendChild( this.renderer.view );
+    document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
     PIXI.loader.add( "./assets/GameImages/_sample.json" ).load( this.initView.bind( this ) );
   }
@@ -133,7 +163,7 @@ class Game {
     // Compose floor tiles
     for ( let i = 0; i < this.floor.gridHeight; i++ ) {
       for ( let j = 0; j < this.floor.gridWidth; j++ ) {
-        tile = new PIXI.Sprite( this.id[ `GRS2ROC11.png` ] );
+        tile = new PIXI.Sprite( this.id[ `${ this.floor.tileImage }.png` ] );
         tile.position.set( j * this.tileGridWidth, i * this.tileGridHeight );
 
         this.floor.addChild( tile );
@@ -189,13 +219,14 @@ class Game {
       actor.direction = 3; // left: 0, top: 1, right: 2, bottom: 3
       // actor.coordinate = { x: characters[ i ].location.x, y: characters[ i ].location.y };
       this.gameUtil.setGridWidthHeight( actor, this.tileGridWidth, this.tileGridHeight );
-      actor.coordinate = this.gameUtil.gridCooridnate( actor, { x: characters[ i ].location.x, y: characters[ i ].location.y } );
+      actor.coordinate = this.gameUtil.gridCoordinate( actor, characters[ i ] );
       actor.gridOccupation = this.gameUtil.gridOccupation( actor );
       this.gameUtil.addObstacle( actor, this.obstacles );
       this.gameUtil.setPositionFromGrid( actor, this.tileGridWidth, this.tileGridHeight );
 
       this.actors[ characters[ i ].id ] = actor;
       this.gameScene.addChild( actor );
+      this.gameUtil.orderProps( this.gameScene.children );
     }
   }
 
@@ -206,12 +237,13 @@ class Game {
       prop = new PIXI.Sprite( this.id[ `${ properties[ i ].image }.png` ] );
       prop.image = properties[ i ].image;
       this.gameUtil.setGridWidthHeight( prop, this.tileGridWidth, this.tileGridHeight );
-      prop.coordinate = this.gameUtil.gridCooridnate( prop, { x: properties[ i ].location.x, y: properties[ i ].location.y } );
+      prop.coordinate = this.gameUtil.gridCoordinate( prop, properties[ i ] );
       prop.gridOccupation = this.gameUtil.gridOccupation( prop );
       this.gameUtil.addObstacle( prop, this.obstacles );
       this.gameUtil.setPositionFromGrid( prop, this.tileGridWidth, this.tileGridHeight );
 
       this.gameScene.addChild( prop );
+      this.gameUtil.orderProps( this.gameScene.children );
     }
   }
 
@@ -246,6 +278,7 @@ class Game {
     actor.gridOccupation = this.gameUtil.gridOccupation( actor );
     this.gameUtil.addObstacle( actor, this.obstacles );
     this.gameUtil.setPositionFromGrid( actor, this.tileGridWidth, this.tileGridHeight );
+    this.gameUtil.orderProps( this.gameScene.children );
 
     return result;
   }
@@ -259,10 +292,10 @@ class Game_Util {
     object.gridHeight = object.height / tileGridHeight;
   }
 
-  gridCooridnate( object, coordinate ) {
+  gridCoordinate( object, property ) {
     return {
-      x: coordinate.x,
-      y: coordinate.y - object.gridHeight + 1
+      x: property.location.x,
+      y: property.location.y - object.gridHeight + 1
     }
   }
 
@@ -306,6 +339,17 @@ class Game_Util {
     );
   }
 
+  orderProps( props ) {
+    props.sort( ( prop1, prop2 ) => {
+      if ( !prop1.gridOccupation )
+        return -1;
+      else if ( !prop2.gridOccupation )
+        return 1;
+      else
+        return prop1.gridOccupation[ 0 ].y - prop2.gridOccupation[ 0 ].y ;
+    } )
+  }
+
   getObjectDirection( source, target ) {
     if ( target.x - source.x > 0 )
       return 2;
@@ -328,7 +372,6 @@ class Game_Util {
           return false;
         }
       }
-
       // Check if target location sits within range
       if (
           targetOccupation[ i ].x < floor.boundaries.left ||

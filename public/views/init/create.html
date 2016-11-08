@@ -16,9 +16,9 @@
   <button ng-click="create.createFloor()">Create</button>
 </div>
 
-<div id="pixi-game-engine" ng-show="create.dungeonBuilder">
+<div id="pixi-map-builder" ng-show="create.dungeonBuilder">
   <div>
-    <img src="./assets/GameImages/sample/DRAGON30.png" alt="ironman" ng-click="create.imageSelected( 'DRAGON30', 'monsters' )">
+    <img src="./assets/GameImages/sample/DRAGON.png" alt="dragon" ng-click="create.imageSelected( 'DRAGON', 'monsters' )">
     <img src="./assets/GameImages/sample/FENCE00.png" alt="fence" ng-click="create.imageSelected( 'FENCE00', 'environment' )">
     <img src="./assets/GameImages/sample/FENCE01.png" alt="fence" ng-click="create.imageSelected( 'FENCE01', 'environment' )">
     <img src="./assets/GameImages/sample/FENCE02.png" alt="fence" ng-click="create.imageSelected( 'FENCE02', 'environment' )">
@@ -53,6 +53,7 @@
       Find Difficulty <input type="text" ng-model="create.settings.findDC">
       <button ng-click="create.imageSelected( 'WEAPON', 'weapons', settings ); create.weapon = false; create.settings = '';">Confirm</button>
     </div>
+    <img src="./assets/GameImages/sample/IRONMAN.png" alt="player" ng-click="create.imageSelected( 'IRONMAN', 'players' )">
     <button ng-click="create.deleteSelected()">DELETE</button>
     <button>Save</button>
   </div>
