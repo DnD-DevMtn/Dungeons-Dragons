@@ -106,31 +106,67 @@ io.on("connection", socket => {
         campaigns[room].status = "inProgress";
         console.log("FROM READY", campaigns[room]);
         io.sockets.to(room).emit("return start", campaigns[room]);
-    })
+    });
+
+    socket.on("move", data => {
+        io.sockets.to(data.room).emit("return move", data);
+    });
 
     socket.on("bash", data => {
-        socket.to(data.room).broadcast.emit(data);
+        io.sockets.to(data.room).emit("return bash", data);
     });
 
     socket.on("openDoor", data => {
-        socket.to(data.room).broadcast.emit(data);
+        io.sockets.to(data.room).emit("return openDoor", data);
     });
 
     socket.on("closeDoor", data => {
-        socket.to(data.room).broadcast.emit(data);
+        io.sockets.to(data.room).emit("return closeDoor", data);
     });
 
     socket.on("perception", data => {
-        socket.to(data.room).broadcast.emit(data);
+        io.sockets.to(data.room).emit("return perception", data);
     });
 
     socket.on("rogueTrapfind", data => {
-        socket.to(data.room).broadcast.emit(data);
+        io.sockets.to(data.room).emit("return rogueTrapFind", data);
     });
 
+    socket.on("rogueDisarmTrap", data => {
+        io.sockets.to(data.room).emit("return rogueDisarmTrap", data);
+    });
 
+    socket.on("pickUpItem", data => {
+        io.sockets.to(data.room).emit("return pickUpItem", data);
+    });
 
+    socket.on("dropItem", data => {
+        io.sockets.to(data.room).emit("return dropItem", data);
+    });
 
+    socket.on("melee", data => {
+        io.sockets.to(data.room).emit("return melee", data);
+    });
+
+    socket.on("ranged", data => {
+        io.sockets.to(data.room).emit("return ranged", data);
+    });
+
+    socket.on("fighterPowerAttack", data => {
+        io.sockets.to(data.room).emit("return fighterPowerAttack", data);
+    });
+
+    socket.on("fighterCleave", data => {
+        io.sockets.to(data.room).emit("return fighterCleave", data);
+    });
+
+    socket.on("castSpell", data => {
+        io.sockets.to(data.room).emit("return castSpell", data);
+    });
+
+    socket.on("rogueSneakAttack", data => {
+        io.sockets.to(data.room).emit("return rogueSneakAttack", data);
+    });
 
 
 });
