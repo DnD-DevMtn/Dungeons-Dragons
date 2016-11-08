@@ -356,16 +356,21 @@ export default function engineService(socket){
         let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
         let damage = 0;
         if(rand !== 20 || (int + lvl + rand) < Game.board[x][y].trap.disarmDC){
-            Game.board[x][y].trap.triggered = true;
             for(let i = 0; i < Game.board[x][y].trap.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.board[x][y].trap.damage.diceType) + 1); // TODO DICEROLL
+                damage += Game.board[x][y].trap.damage.mod;
+                damage /= 2;
             }
         }
+        Game.board[x][y].trap.triggered = true;
     }
 
     // available if item on square is found through successful perception and character is on the square
     Game.pickUpItem = (source) => {
-
+        let x = Game.user.location.x, y = Game.user.location.y;
+        for(let i = 0; i < Game.board[x][y].item.items.length; i++){
+            Game.user.
+        }
     }
 
     // available in explore mode. Item that is dropped is marked as found.
@@ -441,15 +446,18 @@ export default function engineService(socket){
                 Game.user.actor = userCharacter;                     // Game.user is a character
                 Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
                 Game.user.id = rand;
+                Game.user.ac = findAC(Game.user.actor);
                 Game.user.equipped = {};
             } else {
                 Game.players.push({
-                    actor: players[k]                                    // Game.players[i].actor is a character
+                    actor: players[k].userChar                                    // Game.players[i].actor is a character
                     , location: dungeon.startingLocation[k]
+                    , userName: players[k].userName
                     , equipped: {}
                     , id: rand
                 });
             }
+            Game.exploreOrder.push(players);
         }
 
         room = gameId;
