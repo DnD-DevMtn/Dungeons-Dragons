@@ -363,6 +363,7 @@ export default function engineService(socket){
             }
         }
         Game.board[x][y].trap.triggered = true;
+        // TODO SOCKETTYS
     }
 
     // available if item on square is found through successful perception and character is on the square
