@@ -6,5 +6,4 @@ export default function(engineService, userService, socket) {
   const GV = this;
 
   GV.user = userService.user;
-  console.log(GV.user);
 }

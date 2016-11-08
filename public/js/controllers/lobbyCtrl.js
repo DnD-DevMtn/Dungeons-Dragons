@@ -56,8 +56,6 @@ export default function(socket, $stateParams, userService, $state) {
     }
 
     lobby.signalStart = () => {
-        console.log('this fired');
-        console.log('')
         if(lobby.start && lobby.userChar.name === "dm") {
             socket.emit("send start", lobby.gameId);
         }
