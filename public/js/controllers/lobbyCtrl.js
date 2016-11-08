@@ -53,27 +53,26 @@ export default function(socket, $stateParams, userService, $state) {
 
     lobby.signalReady = () => {
         socket.emit("send ready", {userId: lobby.user._id, room: lobby.gameId});
-        checkStart();
     }
 
     lobby.signalStart = () => {
-        if(lobby.start && lobby.userChar.name === "dm"){
+        if(lobby.start && lobby.userChar.name === "dm") {
             socket.emit("send start", lobby.gameId);
         }
     }
 
     lobby.checkStart = () => {
-        for(let i = 0; i < lobby.party.players.length; i++){
-            if(lobby.party.players.status === "pending"){
-                lobby.hideStart = true;
+        for(let i = 0; i < lobby.party.players.length; i++) {
+            if(lobby.party.players[i].status === "pending") {
+                lobby.start = false;
                 return;
             }
         }
-        lobby.hideStart = false;
+        lobby.start = true;
     }
 
     socket.on("joined", data => {
-        if(data.newPlayer.dm){
+        if(data.newPlayer.dm) {
             lobby.dm.name = "dm";
             lobby.dm.userName = data.newPlayer.userName;
             lobby.party = data.party;
@@ -81,7 +80,7 @@ export default function(socket, $stateParams, userService, $state) {
         }
         lobby.party = data.party;
         for(let i = 0; i < lobby.party.players.length; i++){
-            if(lobby.party.players[i].dm){
+            if(lobby.party.players[i].dm) {
                 lobby.dm.name = "dm";
                 lobby.dm.userName = lobby.party.players[i].userName;
                 lobby.dm.status = lobby.party.players[i].status;
@@ -96,13 +95,12 @@ export default function(socket, $stateParams, userService, $state) {
             }
         }
         lobby.party = party;
+        lobby.checkStart();
     });
 
     socket.on("return start", party => {
         lobby.party = party;
         $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.uesrChar, party: lobby.party.players})
     });
-
-
 
 }

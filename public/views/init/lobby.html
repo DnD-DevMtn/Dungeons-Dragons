@@ -33,6 +33,7 @@
         </section>
         <section class="party-status">
             <h3>Party Status</h3>
+            {{lobby.start}}
             <ul>
                 <!-- ng-repeat goes on li -->
                 <li class="party-member-status">Waiting for snuffle butter.
@@ -44,7 +45,7 @@
                 </li>
             <ul>
             <!-- ng if DM && game === ready-->
-            <a ng-if="lobby.userChar.name === 'dm'" class="btn" ng-click="lobby.signalStart()">Start Game</a>
+            <a ng-if="lobby.userChar.name === 'dm'" class="btn" ng-click="lobby.start ? lobby.signalStart() : null">Start Game</a>
             <!-- ng if party member -->
             <a class="btn" ng-click="lobby.signalReady()">I'm ready</a>
         </section>
