@@ -503,7 +503,9 @@ export default function engineService(socket){
 
         Game.monsters = dungeon.monsters;       // Monsters and environment objects already have locations
         Game.environment = dungeon.environment;
+        Game.board = new Array(dungeon.height);
         for(let i = 0; i < dungeon.height; i++){
+
             Game.board.push([]);
             for(let j = 0; j < dungeon.width; j++){
                 let square = {
