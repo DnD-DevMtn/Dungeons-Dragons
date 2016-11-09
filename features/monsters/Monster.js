@@ -14,7 +14,7 @@ const Monster = new mongoose.Schema({
         , damage: {
             diceType: {type: Number, required: true}
             , numDice: {type: Number, required: true}
-            , mod: {type: required: true}
+            , mod: {type: Number, required: true}
         }
     }
     , ranged: {
@@ -22,7 +22,7 @@ const Monster = new mongoose.Schema({
         , damage: {
             diceType: {type: Number, required: true}
             , numDice: {type: Number, required: true}
-            , mod: {type: required: true}
+            , mod: {type: Number, required: true}
         }
     }
     , ac: {type: Number, required: true}
