@@ -5,4 +5,8 @@ export default function($http) {
         return campaign;
     });
   }
+
+  this.postDungeon = ( dungeon ) => {
+    return $http.post( '/api/dungeons', dungeon );
+  }
 }

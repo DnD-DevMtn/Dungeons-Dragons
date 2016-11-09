@@ -25,6 +25,7 @@ const Character = new mongoose.Schema({
         , wis: {type: Number, required: true}
         , cha: {type: Number, required: true}
     }
+    , baseAttack: [{type: Number, required: true}]
     , hp: {type: Number, required: true}
     , size: {type: String, enum: ["tiny", "small", "medium", "large", "huge"], trim: true}
     , speed: {type: Number}
