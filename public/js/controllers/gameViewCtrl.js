@@ -185,6 +185,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return melee", data => {
+        let x = data.target.x, y = data.target.y;
+        let xx = data.source.x, yy = data.source.y;
 
     });
 
