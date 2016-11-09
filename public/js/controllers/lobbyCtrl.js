@@ -103,4 +103,632 @@ export default function(socket, $stateParams, userService, $state) {
         $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.uesrChar, party: lobby.party.players})
     });
 
+
+    ////////////
+
+    const dungeon = {
+    "_id" : "58227553face2d1598c1c865",
+    "name" : "sample",
+    "height" : 25,
+    "width" : 24,
+    "backgroundImage" : "BRICKTILE",
+    "startingLocation" : [],
+    "traps" : [],
+    "doors" : [
+        {
+            "location" : {
+                "x" : 4,
+                "y" : 8
+            }
+        },
+        {
+            "location" : {
+                "x" : 7,
+                "y" : 9
+            }
+        },
+        {
+            "location" : {
+                "x" : 13,
+                "y" : 4
+            }
+        },
+        {
+            "location" : {
+                "x" : 13,
+                "y" : 7
+            }
+        },
+        {
+            "location" : {
+                "x" : 19,
+                "y" : 13
+            }
+        },
+        {
+            "location" : {
+                "x" : 19,
+                "y" : 20
+            }
+        }
+    ],
+    "items" : {
+        "gear" : [],
+        "weapons" : [],
+        "armor" : []
+    },
+    "background" : [],
+    "environment" : [
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 2,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 3,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE02",
+            "location" : {
+                "x" : 4,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 4,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 4,
+                "y" : 7
+            }
+        },
+        {
+            "image" : "FENCE22",
+            "location" : {
+                "x" : 4,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 2,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 3,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 5,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 6,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 8,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE02",
+            "location" : {
+                "x" : 9,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 9,
+                "y" : 8
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 9,
+                "y" : 7
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 9,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "FENCE00",
+            "location" : {
+                "x" : 9,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 10,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 11,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 12,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE02",
+            "location" : {
+                "x" : 13,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 13,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 13,
+                "y" : 3
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 13,
+                "y" : 8
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 13,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "FENCE20",
+            "location" : {
+                "x" : 13,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 14,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 15,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 16,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "FENCE02",
+            "location" : {
+                "x" : 17,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 17,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 17,
+                "y" : 12
+            }
+        },
+        {
+            "image" : "FENCE20",
+            "location" : {
+                "x" : 17,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 18,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 20,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 21,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 16,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE00",
+            "location" : {
+                "x" : 15,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 15,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 15,
+                "y" : 17
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 15,
+                "y" : 16
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 15,
+                "y" : 15
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 15,
+                "y" : 18
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 15,
+                "y" : 19
+            }
+        },
+        {
+            "image" : "FENCE20",
+            "location" : {
+                "x" : 15,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 16,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 17,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 18,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 20,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 21,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 14,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 13,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 12,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 11,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 10,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 9,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 8,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 6,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 5,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 7,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 4,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 3,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 2,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 3,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 4,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 5,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 6,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 7,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 8,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 9,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "FENCE02",
+            "location" : {
+                "x" : 9,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "FENCE10",
+            "location" : {
+                "x" : 9,
+                "y" : 12
+            }
+        },
+        {
+            "image" : "FENCE20",
+            "location" : {
+                "x" : 9,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 10,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 11,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 12,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 13,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 14,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 2,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 3,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 4,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "FENCE11",
+            "location" : {
+                "x" : 5,
+                "y" : 13
+            }
+        }
+    ],
+    "monsters" : [],
+    "__v" : 0
+}
+
 }
