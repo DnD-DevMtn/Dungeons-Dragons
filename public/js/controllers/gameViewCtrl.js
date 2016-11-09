@@ -103,7 +103,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         for(let i = 0; i < data.found.length; i++){
             let x = data.found[i][0], y = data.found[i][1];
-            Game.board[x][y].
+            Game.board[x][y].trap.found = true;
         }
 
         // + + + PIXI FOUND ANIMATION + + + \\
