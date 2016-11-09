@@ -9,6 +9,7 @@
 </div>
 
 <div ng-hide="create.dungeonBuilder">
+  <input type="text" placeholder="Name" ng-model="create.name">
   <input type="text" placeholder="Width" ng-model="create.width">
   <input type="text" placeholder="Height" ng-model="create.height">
   <img src="./assets/GameImages/sample/GRS2ROC03.png" alt="grass" ng-click="create.tileImage='GRS2ROC03'">
@@ -55,6 +56,6 @@
     </div>
     <img src="./assets/GameImages/sample/IRONMAN.png" alt="player" ng-click="create.imageSelected( 'IRONMAN', 'players' )">
     <button ng-click="create.deleteSelected()">DELETE</button>
-    <button>Save</button>
+    <button ng-click="create.saveDungeon()">Save</button>
   </div>
 </div>

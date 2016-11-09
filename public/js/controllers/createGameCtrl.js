@@ -18,6 +18,7 @@ export default function($http, $state, createGameService, userService) {
 
   create.createFloor = function() {
     var dungeon = {
+      name: create.name,
       width: create.width,
       height: create.height,
       tileImage: create.tileImage
@@ -43,7 +44,9 @@ export default function($http, $state, createGameService, userService) {
 
   create.saveDungeon = function() {
     PIXI.loader.reset();
-    // USE $scope.dungeonBuilder.dungeon;
+    createGameService.postDungeon( create.dungeonBuilder.dungeon ).then( response => {
+      console.log( "It's done" )
+    } );
   }
 }
 
@@ -62,6 +65,7 @@ class DungeonBuilder {
     this.tileGridWidth = 40;
     this.tileGridHeight = 40;
 
+    this.name = dungeon.name;
     this.floor.gridWidth = dungeon.width;
     this.floor.gridHeight = dungeon.height;
     this.floor.tileImage = dungeon.tileImage;
@@ -211,7 +215,7 @@ class DungeonBuilder {
 
             this.gameUtil.removeObstacle( this.gameScene.children[ i ], this.obstacles );
             this.gameScene.removeChild( this.gameScene.children[ i ] );
-            console.log( this.dungeon );
+            // console.log( this.dungeon );
 
             return;
           }
@@ -234,12 +238,13 @@ class DungeonBuilder {
       this.gameUtil.addObstacle( prop, this.obstacles );
 
       this.saveDungeonProp( this.property );
-      console.log( this.dungeon );
+      // console.log( this.dungeon );
     }
   }
 
   createDungeon() {
     this.dungeon = {
+      name: this.name,
       height: this.floor.gridHeight,
       width: this.floor.gridWidth,
       backgroundImage: this.floor.tileImage,
