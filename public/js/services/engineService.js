@@ -405,7 +405,10 @@ export default function engineService(socket){
         if(Game.board[x][y].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
                 if(Game.monsters[i].id === Game.board[x][y].id){
-                    Game.monsters[i].monster
+                    for(let j = 0; j < Game.monsters[i].monster.melee.damage.numDice; j++){
+                        damage += (Math.floor(Math.random() * Game.monsters[i].monster.melee.damage.diceType) + 1);
+                    }
+                    damage += Game.monsters[i].monster.melee.damage.mod;
                 }
             }
         }
@@ -424,6 +427,16 @@ export default function engineService(socket){
             let critMod = Game.user.equipped.crit.critDamage;
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
+            }
+        }
+        if(Game.board[x][y].type === "monster"){
+            for(let i = 0; i < Game.monsters.length; i++){
+                if(Game.monsters[i].id === Game.board[x][y].id){
+                    for(let j = 0; j < Game.monsters[i].monster.ranged.damage.numDice; j++){
+                        damage += (Math.floor(Math.random() * Game.monsters[i].monster.ranged.damage.diceType) + 1);
+                    }
+                    damage += Game.monsters[i].monster.ranged.damage.mod;
+                }
             }
         }
         socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
@@ -475,13 +488,15 @@ export default function engineService(socket){
                 if(players[k].dm){
                     Game.dmMode = true;
                 } else {
-                    Game.user.actor = userCharacter;                     // Game.user is a character
+                    Game.user.actor    = userCharacter;                     // Game.user is a character
                     Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
-                    Game.user.id = rand;
-                    Game.user.ac = findAC(Game.user.actor);
-                    Game.user.hp = userCharacter.hp;
+                    Game.user.id       = rand;
+                    Game.user.ac       = findAC(Game.user.actor);
+                    Game.user.hp       = userCharacter.hp;
                     Game.user.equipped = {};
                     Game.user.newItems = [];
+                    Game.user.napTime  = false;
+                    Game.user.youDead  = false;
                 }
             } else {
                 Game.players.push({
@@ -494,6 +509,8 @@ export default function engineService(socket){
                     , ac: findAC(players[k].userChar)
                     , hp: players[k].userChar.hp
                     , newItems: []
+                    , napTime: false
+                    , youDead: false
                 });
             }
             Game.exploreOrder.push(players);

@@ -190,9 +190,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
         // + + + PIXI DATA.ROLL (crit?) + + + \\
 
         // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
-        
+
         let id   = Game.board[x][y].id;
         let type = Game.board[x][y].type;
+
         if(type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
                 if(id === Game.monsters[i].id){
@@ -200,6 +201,25 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         // + + + PIXI HIT + + + \\
                         Game.monsters[i].monster.hp -= damage;
                         if(Game.monsters[i].monster.hp <= 0){
+                            // + + + PIXI DEAD + + + \\
+                        }
+                    } else {
+                        // + + + PIXI MISS + + + \\
+                    }
+                }
+            }
+        }
+
+        if(type === "player"){
+            if(Game.board[x][y].id === Game.user.id){
+                Game.user
+            }
+            for(let i = 0; i < Game.players.length; i++){
+                if(id === Game.players[i].id){
+                    if(Game.players[i].monster.ac <= data.roll || data.crit){
+                        // + + + PIXI HIT + + + \\
+                        Game.players[i].monster.hp -= damage;
+                        if(Game.players[i].monster.hp <= 0){
                             // + + + PIXI DEAD + + + \\
                         }
                     } else {
