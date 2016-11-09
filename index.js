@@ -136,6 +136,10 @@ io.on("connection", socket => {
         io.sockets.to(data.room).emit("return rogueDisarmTrap", data);
     });
 
+    socket.on("rogueLockpick", data => {
+        io.sockets.to(data.room).emit("return rogueLockpick", data);
+    });
+
     socket.on("pickUpItem", data => {
         io.sockets.to(data.room).emit("return pickUpItem", data);
     });
@@ -166,6 +170,10 @@ io.on("connection", socket => {
 
     socket.on("rogueSneakAttack", data => {
         io.sockets.to(data.room).emit("return rogueSneakAttack", data);
+    });
+
+    socket.on("endTurn", data => {
+        io.sockets.to(data.room).emit("return endTurn", data);
     });
 
 
