@@ -16,5 +16,4 @@ export default function($http) {
             return response.data;
         });
   }
-
 }

@@ -57,5 +57,63 @@
       <button ng-click="create.deleteSelected()">DELETE</button>
       <button>Save</button>
     </div>
+<div ng-hide="create.dungeonBuilder">
+  <input type="text" placeholder="Name" ng-model="create.name">
+  <input type="text" placeholder="Width" ng-model="create.width">
+  <input type="text" placeholder="Height" ng-model="create.height">
+  <img src="./assets/GameImages/sample/GRS2ROC03.png" alt="grass" ng-click="create.tileImage='GRS2ROC03'">
+  <img src="./assets/GameImages/sample/GRS2ROC11.png" alt="dirt" ng-click="create.tileImage='GRS2ROC11'">
+  <img src="./assets/GameImages/sample/BRICKTILE.png" alt="dirt" ng-click="create.tileImage='BRICKTILE'">
+  <button ng-click="create.createFloor()">Create</button>
+</div>
+
+<div id="pixi-map-builder" ng-show="create.dungeonBuilder">
+  <div>
+    <img src="./assets/GameImages/sample/DRAGON.png" alt="dragon" ng-click="create.imageSelected( 'DRAGON', 'monsters' )">
+    <img src="./assets/GameImages/sample/FENCE00.png" alt="fence" ng-click="create.imageSelected( 'FENCE00', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE01.png" alt="fence" ng-click="create.imageSelected( 'FENCE01', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE02.png" alt="fence" ng-click="create.imageSelected( 'FENCE02', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE10.png" alt="fence" ng-click="create.imageSelected( 'FENCE10', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE11.png" alt="fence" ng-click="create.imageSelected( 'FENCE11', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE12.png" alt="fence" ng-click="create.imageSelected( 'FENCE12', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE20.png" alt="fence" ng-click="create.imageSelected( 'FENCE20', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE21.png" alt="fence" ng-click="create.imageSelected( 'FENCE21', 'environment' )">
+    <img src="./assets/GameImages/sample/FENCE22.png" alt="fence" ng-click="create.imageSelected( 'FENCE22', 'environment' )">
+    <img src="./assets/GameImages/sample/DOOR.png" alt="door" ng-click="create.door = true">
+    <div ng-show="create.door">
+      Bash Difficulty <input type="text" ng-model="create.settings.bashDC">
+      Hp <input type="text" ng-model="create.settings.hp">
+      Locked <input type="text" ng-model="create.settings.locked">
+      Pick Difficulty <input type="text" ng-model="create.settings.pickDC">
+      <button ng-click="create.imageSelected( 'DOOR', 'doors', settings ); create.door = false; create.settings = '';">Confirm</button>
+    </div>
+    <img src="./assets/GameImages/sample/DOORSIDE.png" alt="door" ng-click="create.doorside = true">
+    <div ng-show="create.doorside">
+      Bash Difficulty <input type="text" ng-model="create.settings.bashDC">
+      Hp <input type="text" ng-model="create.settings.hp">
+      Locked <input type="text" ng-model="create.settings.locked">
+      Pick Difficulty <input type="text" ng-model="create.settings.pickDC">
+      <button ng-click="create.imageSelected( 'DOORSIDE', 'doors', settings ); create.door = false; create.settings = '';">Confirm</button>
+    </div>
+    <img src="./assets/GameImages/sample/TRAP.png" alt="trap" ng-click="create.trap = true">
+    <div ng-show="create.trap">
+      Find Difficulty <input type="text" ng-model="create.settings.findDC">
+      Disarm Difficulty <input type="text" ng-model="create.settings.disarmDC">
+      Found <input type="text" ng-model="create.settings.found">
+      Triggered <input type="text" ng-model="create.settings.triggered">
+      Dice Type <input type="text" ng-model="create.settings.damage.diceType">
+      Dice Number <input type="text" ng-model="create.settings.damage.diceNum">
+      Dice Mod <input type="text" ng-model="create.settings.damage.mod">
+      <button ng-click="create.imageSelected( 'TRAP', 'traps', settings ); create.trap = false; create.settings = '';">Confirm</button>
+    </div>
+    <img src="./assets/GameImages/sample/WEAPON.png" alt="weapon" ng-click="create.weapon = true">
+    <div ng-show="create.weapon">
+      Found <input type="text" ng-model="create.settings.found">
+      Find Difficulty <input type="text" ng-model="create.settings.findDC">
+      <button ng-click="create.imageSelected( 'WEAPON', 'weapons', settings ); create.weapon = false; create.settings = '';">Confirm</button>
+    </div>
+    <img src="./assets/GameImages/sample/IRONMAN.png" alt="player" ng-click="create.imageSelected( 'IRONMAN', 'players' )">
+    <button ng-click="create.deleteSelected()">DELETE</button>
+    <button ng-click="create.saveDungeon()">Save</button>
   </div>
 </div>

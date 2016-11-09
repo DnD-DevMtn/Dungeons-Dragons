@@ -4,12 +4,12 @@
   </header>
   <div class="party-members">
     <div ng-if="player.char.name !== 'dm'" ng-repeat="player in GV.party" class="party-member">
-        <h5>{{player.char.name}} the {{player.char.race}} {{player.char.classType}}</h5>
+        <h5><span class="uppercase">{{player.char.name}}</span> the {{player.char.race}} {{player.char.classType}}</h5>
         <ul class="member-stats flex-wrapper">
           <li class="flex-content">HP : {{player.char.hp}}</li>
           <li class="flex-content">AC : </li>
           <li class="flex-content">Initiative : </li>
-          <li class="flex-content">Move Speed : </li>
+          <li class="flex-content">Move Speed : {{player.char.speed}}</li>
         </ul>
     </div>
   </div>
