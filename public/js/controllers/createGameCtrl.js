@@ -45,7 +45,6 @@ export default function($http, $state, createGameService, userService) {
   create.saveDungeon = function() {
     PIXI.loader.reset();
     createGameService.postDungeon( create.dungeonBuilder.dungeon ).then( response => {
-      console.log( "It's done" )
     } );
   }
 }
@@ -74,11 +73,11 @@ class DungeonBuilder {
     this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridWidth );
     document.getElementById( "pixi-map-builder" ).appendChild( this.renderer.view );
 
-    PIXI.loader.add( "./assets/GameImages/_sample.json" ).load( this.initView.bind( this ) );
+    PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
   }
 
   initView() {
-    this.id = PIXI.loader.resources[ "./assets/GameImages/_sample.json" ].textures;
+    this.id = PIXI.loader.resources[ "./assets/GameImages/sprite.json" ].textures;
 
     this.createFloor();
     this.updateView();
@@ -124,8 +123,8 @@ class DungeonBuilder {
     var boundaryLeft, boundaryRight, boundaryTop, boundaryBottom;
 
     for ( let i = 0; i < this.floor.gridHeight; i++ ) {
-      boundaryLeft = new PIXI.Sprite( this.id[ `CLIFFVEG23.png` ] );
-      boundaryRight = new PIXI.Sprite( this.id[ `CLIFFVEG20.png` ] );
+      boundaryLeft = new PIXI.Sprite( this.id[ `BOUNDARY0.png` ] );
+      boundaryRight = new PIXI.Sprite( this.id[ `BOUNDARY2.png` ] );
 
       boundaryLeft.position.set( 0, i * this.tileGridHeight );
       boundaryRight.position.set(
@@ -138,8 +137,8 @@ class DungeonBuilder {
     }
 
     for ( let j = 0; j < this.floor.gridWidth; j++ ) {
-      boundaryTop = new PIXI.Sprite( this.id[ `CLIFFVEG32.png` ] );
-      boundaryBottom = new PIXI.Sprite( this.id[ `CLIFFVEG01.png` ] );
+      boundaryTop = new PIXI.Sprite( this.id[ `BOUNDARY1.png` ] );
+      boundaryBottom = new PIXI.Sprite( this.id[ `BOUNDARY3.png` ] );
 
       boundaryTop.position.set( j * this.tileGridWidth, 0 );
       boundaryBottom.position.set(

@@ -8,7 +8,7 @@ export default function( $scope ) {
       backgroundImage: "GRS2ROC03",
       players: [ {
         id: 101,
-        image: "STARLORD",
+        image: "IRONMAN",
         location: { x: 10, y: 10 }
       } ],
       monsters: [ {
@@ -18,7 +18,7 @@ export default function( $scope ) {
       } ],
       doors: [ {
         id: 721,
-        image: "DOOR",
+        image: "DOOR1",
         location: { x: 5, y: 5 },
         settings: {
           bashDC: 3,
@@ -29,7 +29,7 @@ export default function( $scope ) {
       } ],
       environment: [ {
         id: 115,
-        image: "TREE00",
+        image: "TREE0",
         location: { x: 5, y: 13 }
       } ],
       traps: [ {
@@ -135,11 +135,11 @@ class Game {
     this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridWidth );
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
-    PIXI.loader.add( "./assets/GameImages/_sample.json" ).load( this.initView.bind( this ) );
+    PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
   }
 
   initView() {
-    this.id = PIXI.loader.resources[ "./assets/GameImages/_sample.json" ].textures;
+    this.id = PIXI.loader.resources[ "./assets/GameImages/sprite.json" ].textures;
 
     this.createFloor();
     this.placeActors( this.players );
@@ -174,8 +174,8 @@ class Game {
     var boundaryLeft, boundaryRight, boundaryTop, boundaryBottom;
 
     for ( let i = 0; i < this.floor.gridHeight; i++ ) {
-      boundaryLeft = new PIXI.Sprite( this.id[ `CLIFFVEG23.png` ] );
-      boundaryRight = new PIXI.Sprite( this.id[ `CLIFFVEG20.png` ] );
+      boundaryLeft = new PIXI.Sprite( this.id[ `BOUNDARY0.png` ] );
+      boundaryRight = new PIXI.Sprite( this.id[ `BOUNDARY2.png` ] );
 
       boundaryLeft.position.set( 0, i * this.tileGridHeight );
       boundaryRight.position.set(
@@ -188,8 +188,8 @@ class Game {
     }
 
     for ( let j = 0; j < this.floor.gridWidth; j++ ) {
-      boundaryTop = new PIXI.Sprite( this.id[ `CLIFFVEG32.png` ] );
-      boundaryBottom = new PIXI.Sprite( this.id[ `CLIFFVEG01.png` ] );
+      boundaryTop = new PIXI.Sprite( this.id[ `BOUNDARY1.png` ] );
+      boundaryBottom = new PIXI.Sprite( this.id[ `BOUNDARY3.png` ] );
 
       boundaryTop.position.set( j * this.tileGridWidth, 0 );
       boundaryBottom.position.set(
