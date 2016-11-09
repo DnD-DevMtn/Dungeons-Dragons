@@ -4,6 +4,7 @@ function characterBuilderCtrl($scope, characterService, $stateParams) {
     $scope.campaign = $stateParams.campaign;
 
     let activeSection = "race";
+    
     $scope.selectedRaceTitle = "Human";
     $scope.showMales = true;
     $scope.showFemales = false;
