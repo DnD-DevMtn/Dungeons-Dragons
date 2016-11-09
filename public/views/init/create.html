@@ -14,6 +14,7 @@
   <input type="text" placeholder="Height" ng-model="create.height">
   <img src="./assets/GameImages/sample/GRS2ROC03.png" alt="grass" ng-click="create.tileImage='GRS2ROC03'">
   <img src="./assets/GameImages/sample/GRS2ROC11.png" alt="dirt" ng-click="create.tileImage='GRS2ROC11'">
+  <img src="./assets/GameImages/sample/BRICKTILE.png" alt="dirt" ng-click="create.tileImage='BRICKTILE'">
   <button ng-click="create.createFloor()">Create</button>
 </div>
 
@@ -36,6 +37,14 @@
       Locked <input type="text" ng-model="create.settings.locked">
       Pick Difficulty <input type="text" ng-model="create.settings.pickDC">
       <button ng-click="create.imageSelected( 'DOOR', 'doors', settings ); create.door = false; create.settings = '';">Confirm</button>
+    </div>
+    <img src="./assets/GameImages/sample/DOORSIDE.png" alt="door" ng-click="create.doorside = true">
+    <div ng-show="create.doorside">
+      Bash Difficulty <input type="text" ng-model="create.settings.bashDC">
+      Hp <input type="text" ng-model="create.settings.hp">
+      Locked <input type="text" ng-model="create.settings.locked">
+      Pick Difficulty <input type="text" ng-model="create.settings.pickDC">
+      <button ng-click="create.imageSelected( 'DOORSIDE', 'doors', settings ); create.door = false; create.settings = '';">Confirm</button>
     </div>
     <img src="./assets/GameImages/sample/TRAP.png" alt="trap" ng-click="create.trap = true">
     <div ng-show="create.trap">
