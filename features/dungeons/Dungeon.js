@@ -77,6 +77,7 @@ const Dungeon = new mongoose.Schema({
             , hp: Number
             , locked: Boolean
             , pickDC: Number
+            , open: Boolean
         }
         , location: {
             x: Number
