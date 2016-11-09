@@ -69,7 +69,8 @@ angular.module("DnD", [uiRouter])
           params: {
             gameId: null,
             userChar: null,
-            party: null
+            party: null,
+            dungeon: null
           }
       })
       .state("characterBuilder", {
