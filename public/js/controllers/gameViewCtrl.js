@@ -77,10 +77,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
 
   function getInventory(weapons, gear, armor) {
-    console.log('this fired');
     inventoryService.getInventory(weapons, gear, armor)
     .then(results => {
-      console.log(results);
       GV.user.character.weapons = results.weapons;
       GV.user.character.armor = results.armor;
       GV.user.character.gear = results.gear;

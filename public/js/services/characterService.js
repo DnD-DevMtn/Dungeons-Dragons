@@ -57,6 +57,19 @@ function characterService($http, $state, userService) {
       currentCharacter.sprite = "CLERIC";
       currentCharacter.hp = (8 * currentCharacter.level) + (Math.floor(con - 10) / 2);
     }
+    if(currentCharacter.race === "Dwarf"){
+      currentCharacter.speed = 4;
+    } else if(currentCharacter.race === "Human"){
+      currentCharacter.speed = 6;
+    } else if(currentCharacter.race === "Elf"){
+      currentCharacter.speed = 6;
+    } else if(currentCharacter.race === "Gnome"){
+      currentCharacter.speed = 4;
+    } else if(currentCharacter.race === "Halfling"){
+      currentCharacter.speed = 4;
+    } else if(currentCharacter.race === "Half Orc"){
+      currentCharacter.speed = 6;
+    }
     $http.put(`/api/users/${currentUser}`, currentCharacter);
     $http.put(`/api/campaigns/join/${room}`, {facebookId: userService.user.facebookId, character: currentCharacter});
     userService.user.character = currentCharacter;
