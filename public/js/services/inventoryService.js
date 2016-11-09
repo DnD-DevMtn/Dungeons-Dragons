@@ -27,7 +27,6 @@ export default function($http) {
       })
     }));
     return Promise.all(inventoryPromises).then(results => {
-      console.log(results);
       const invObj = {};
       results.forEach(entry => {
         invObj[entry.type] = entry.data;
@@ -42,13 +41,11 @@ export default function($http) {
         weaponPromises.push(new Promise((resolve, reject) => {
           $http.get(`/api/weapons/${weapons[i]}`)
           .then(weapon => {
-            console.log(weapon);
             resolve(weapon.data);
           })
         }));
     }
     return Promise.all(weaponPromises).then(results => {
-      console.log(results)
       return results;
     });
   }
@@ -59,13 +56,11 @@ export default function($http) {
         gearPromises.push(new Promise((resolve, reject) => {
           $http.get(`/api/gear/${gear[i]}`)
           .then(gear => {
-            console.log(gear);
             resolve(gear.data);
           })
         }));
     }
     return Promise.all(gearPromises).then(results => {
-      console.log(results);
       return results;
     });
   }
@@ -76,13 +71,11 @@ export default function($http) {
         armorPromises.push(new Promise((resolve, reject) => {
           $http.get(`/api/armor/${armor[i]}`)
           .then(armor => {
-            console.log(armor);
             resolve(armor.data);
           })
         }));
     }
     return Promise.all(armorPromises).then(results => {
-      console.log(results);
       return results;
     });
   }
