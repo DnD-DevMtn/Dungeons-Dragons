@@ -1,4 +1,5 @@
 export default function($http) {
+
   this.getInventory = (weapons, gear, armor) => {
     const inventory = {};
     const inventoryPromises = [];
@@ -10,6 +11,7 @@ export default function($http) {
         });
       })
     }));
+
     inventoryPromises.push(new Promise((resolve, reject) => {
         getGear(gear).then(gear => {
         resolve({
@@ -18,6 +20,7 @@ export default function($http) {
         });
       })
     }));
+
     inventoryPromises.push(new Promise((resolve, reject) => {
       getArmor(armor).then(armor => {
         resolve({
@@ -26,6 +29,7 @@ export default function($http) {
         });
       })
     }));
+
     return Promise.all(inventoryPromises).then(results => {
       const invObj = {};
       results.forEach(entry => {
@@ -33,10 +37,13 @@ export default function($http) {
       })
       return invObj;
     })
+
   }
 
   function getWeapons(weapons) {
+
     const weaponPromises = [];
+
     for(let i = 0; i < weapons.length; i++) {
         weaponPromises.push(new Promise((resolve, reject) => {
           $http.get(`/api/weapons/${weapons[i]}`)
@@ -45,13 +52,17 @@ export default function($http) {
           })
         }));
     }
+
     return Promise.all(weaponPromises).then(results => {
       return results;
     });
+
   }
 
   function getGear(gear) {
+
     const gearPromises = [];
+
     for(let i = 0; i < gear.length; i++) {
         gearPromises.push(new Promise((resolve, reject) => {
           $http.get(`/api/gear/${gear[i]}`)
@@ -60,13 +71,17 @@ export default function($http) {
           })
         }));
     }
+
     return Promise.all(gearPromises).then(results => {
       return results;
     });
+
   }
 
   function getArmor(armor) {
+
     const armorPromises = [];
+
     for(let i = 0; i < armor.length; i++) {
         armorPromises.push(new Promise((resolve, reject) => {
           $http.get(`/api/armor/${armor[i]}`)
@@ -75,8 +90,11 @@ export default function($http) {
           })
         }));
     }
+
     return Promise.all(armorPromises).then(results => {
       return results;
     });
+
   }
+  
 }

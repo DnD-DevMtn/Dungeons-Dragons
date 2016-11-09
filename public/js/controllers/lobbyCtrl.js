@@ -26,33 +26,37 @@ export default function(socket, $stateParams, userService, $state) {
     let socketChar = {}
 
     lobby.userEnter = function(){
-        socket.emit("join", {userId: lobby.user._id, userName: `${lobby.user.firstName} ${lobby.user.lastName}`, char: socketChar, room: lobby.gameId});
+        console.log('enter', lobby.userChar._id);
+        socket.emit("join", {charId: lobby.userChar._id, userName: `${lobby.user.firstName} ${lobby.user.lastName}`, char: socketChar, room: lobby.gameId});
     }
 
     if($stateParams.userChar){
         if($stateParams.userChar === "dm"){
             socketChar.name = "dm";
-            lobby.dm.player = lobby.user._id;
-            lobby.dm.char   = ""
+            lobby.dm.player = lobby.userChar._id;
+            lobby.dm.char   = "";
             lobby.userEnter();
             return;
         }
-        socketChar = {
-            name: lobby.userChar.name
-            , race: lobby.userChar.race
-            , classType: lobby.userChar.classType
-            , sprite: lobby.userChar.sprite
-            , level: lobby.userChar.level
-            , alignment: lobby.userChar.alignment
-            , hp: lobby.userChar.hp
-            , size: lobby.userChar.size
-            , speed: lobby.userChar.speed
-        }
+        socketChar = lobby.userChar;
+        // {
+        //     name: lobby.userChar.name
+        //     , race: lobby.userChar.race
+        //     , classType: lobby.userChar.classType
+        //     , sprite: lobby.userChar.sprite
+        //     , level: lobby.userChar.level
+        //     , alignment: lobby.userChar.alignment
+        //     , hp: lobby.userChar.hp
+        //     , size: lobby.userChar.size
+        //     , speed: lobby.userChar.speed
+        //     , _id: lobby.userChar._id
+        //     ,
+        // }
         lobby.userEnter();
     }
 
     lobby.signalReady = () => {
-        socket.emit("send ready", {userId: lobby.user._id, room: lobby.gameId});
+        socket.emit("send ready", {charId: lobby.userChar._id, room: lobby.gameId});
     }
 
     lobby.signalStart = () => {
@@ -100,7 +104,8 @@ export default function(socket, $stateParams, userService, $state) {
 
     socket.on("return start", party => {
         lobby.party = party;
-        $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.uesrChar, party: lobby.party.players})
+        console.log('userChar', lobby.userChar);
+        $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.userChar, party: lobby.party.players, dungeon: dungeon})
     });
 
 
@@ -112,7 +117,7 @@ export default function(socket, $stateParams, userService, $state) {
     "height" : 25,
     "width" : 24,
     "backgroundImage" : "BRICKTILE",
-    "startingLocation" : [],
+    "startingLocation" : [{x:2, y:3}, {x:2, y:4}],
     "traps" : [],
     "doors" : [
         {

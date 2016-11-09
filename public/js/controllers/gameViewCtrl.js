@@ -3,15 +3,23 @@ This is the parent ctrl of everything game related. It should talk to the Pixi
 engine, the game Engine, and the gameInfo Ctrls.
  */
 
-export default function(engineService, userService, socket, $stateParams, $http, inventoryService) {
+export default function(engineService, userService, socket, $stateParams, $http, inventoryService, $scope) {
     const GV = this;
-
 
     GV.user = userService.user;
 
     GV.party = $stateParams.party;
 
-    console.log(GV.user);
+    GV.userChar = $stateParams.userChar;
+
+    GV.gameId = $stateParams.gameId;
+
+    GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
+
+    if($stateParams.dungeon) {
+      const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
+      GV.pixiDungeon.players = Game.players
+    }
 
     if(GV.user.character.weapons) {
         getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);

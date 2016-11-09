@@ -436,13 +436,14 @@ export default function engineService(socket){
 
     // * * * MAIN INITS
 
-    this.initGame = function(dungeon, players, userCharacter, gameId){  // Players will already exist on the scope by the time the dungeon starts
+    this.initGame = function(dungeon, players, userCharacter, gameId){ debugger // Players will already exist on the scope by the time the dungeon starts
                                                                       // so players array will not be tied to the Dungeon object.
+
         for(let k = 0; k < players.length; k++){                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
 
-            if(players[k]._id === userCharacter._id){
-                if(players[k].dm){
+            if(players[k].player === userCharacter._id){
+                if(players[k].char.name === 'dm') {
                     Game.dmMode = true;
                 } else {
                     Game.user.actor = userCharacter;                     // Game.user is a character
@@ -454,16 +455,20 @@ export default function engineService(socket){
                     Game.user.newItems = [];
                 }
             } else {
-                Game.players.push({
-                    actor: players[k].userChar                                    // Game.players[i].actor is a character
-                    , location: dungeon.startingLocation[k]
-                    , userName: players[k].userName
-                    , equipped: {}
-                    , id: rand
-                    , ac: findAC(players[k].userChar)
-                    , hp: players[k].userChar.hp
-                    , newItems: []
-                });
+                if(players[k].char.name === 'dm') {
+                    Game.dmMode = true;
+                } else {
+                  Game.players.push({
+                      actor: players[k].char                                    // Game.players[i].actor is a character
+                      , location: dungeon.startingLocation[k]
+                      , userName: players[k].name
+                      , equipped: {}
+                      , id: rand
+                      , ac: findAC(players[k].char)
+                      , hp: players[k].char.hp
+                      , newItems: []
+                  });
+                }
             }
             Game.exploreOrder.push(players);
         }
@@ -472,6 +477,11 @@ export default function engineService(socket){
 
         Game.monsters = dungeon.monsters;       // Monsters and environment objects already have locations
         Game.environment = dungeon.environment;
+        Game.width = dungeon.width;
+        Game.height = dungeon.height;
+
+        let count = 0;
+
         for(let i = 0; i < dungeon.height; i++){
             Game.board.push([]);
             for(let j = 0; j < dungeon.width; j++){
@@ -485,16 +495,18 @@ export default function engineService(socket){
                     , type: ""                  // Types are monster, player, or environment
                     , id: ""                    // Unique ids point to the element in the array of one of the three types
                 }
-                Game.board[y].push(square);
+                Game.board[i].push(square);
             }
         }
         loadEnvironment();
         loadTraps();
         loadMonsters();
         loadPlayers();
-        loadItems();
+        loadItems(dungeon);
 
         printBoard();
+
+        return Game;
     }
 
     function loadEnvironment(){
@@ -539,7 +551,7 @@ export default function engineService(socket){
         }
     }
 
-    function loadItems(){
+    function loadItems(dungeon){
         for(let i = 0; i < dungeon.items.armor.length; i++){
             let x = dungeon.items.armor[i].location.x;
             let y = dungeon.items.armor[i].location.y;
@@ -576,10 +588,10 @@ export default function engineService(socket){
     // * * * PRINTBOARD
 
     function printBoard(){
-        for(let x = 0; x < Game.width; x++){
+        for(let x = 0; x < Game.height; x++){
             let line = "";
-            for(let y = 0; y < Game.height; y++){
-                if(Game.board[x][y].items.length > 0){
+            for(let y = 0; y < Game.width; y++){
+                if(Game.board[x][y].item.items.length > 0){
                     line += " I";
                 } else if(Game.board[x][y].trap.name){
                     line += " T";
@@ -669,7 +681,7 @@ export default function engineService(socket){
     }
 
     function findAC(character){
-        return (10 + statMod(character.baseStats.dex) + character.armor[0].bonus);
+        return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 
     const dice = {};

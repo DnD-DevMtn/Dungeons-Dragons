@@ -1,65 +1,67 @@
 import "pixi.js";
 
 export default function( $scope ) {
-    // dummy data
-    $scope.Dungeon = {
-      width: 20,
-      height: 20,
-      backgroundImage: "GRS2ROC03",
-      players: [ {
-        id: 101,
-        image: "STARLORD",
-        location: { x: 10, y: 10 }
-      } ],
-      monsters: [ {
-        id: 103,
-        image: "DRAGON",
-        location: { x: 13, y: 13 }
-      } ],
-      doors: [ {
-        id: 721,
-        image: "DOOR",
-        location: { x: 5, y: 5 },
-        settings: {
-          bashDC: 3,
-          hp: 3,
-          locked: true,
-          pickDC: 4
-        }
-      } ],
-      environment: [ {
-        id: 115,
-        image: "TREE00",
-        location: { x: 5, y: 13 }
-      } ],
-      traps: [ {
-        id: 990,
-        image: "TRAP",
-        location: { x: 9, y: 6 },
-        settings: {
-          damage: {
-            diceNum: 3,
-            diceType: 3,
-            mod: 3
-          },
-          disarmDC: 3,
-          findDC: 4,
-          found: true,
-          triggered: false
-        }
-      } ],
-      items: {
-        weapons: [ {
-          id: 875,
-          image: "WEAPON",
-          location: { x: 11, y: 4 },
-          settings: {
-            findDC: 4,
-            found: false
-          }
-        } ]
-      }
-    };
+
+    $scope.Dungeon = $scope.GV.pixiDungeon;
+      // dummy data
+    // $scope.Dungeon = {
+    //   width: 20,
+    //   height: 20,
+    //   backgroundImage: "GRS2ROC03",
+    //   players: [ {
+    //     id: 101,
+    //     image: "STARLORD",
+    //     location: { x: 10, y: 10 }
+    //   } ],
+    //   monsters: [ {
+    //     id: 103,
+    //     image: "DRAGON",
+    //     location: { x: 13, y: 13 }
+    //   } ],
+    //   doors: [ {
+    //     id: 721,
+    //     image: "DOOR",
+    //     location: { x: 5, y: 5 },
+    //     settings: {
+    //       bashDC: 3,
+    //       hp: 3,
+    //       locked: true,
+    //       pickDC: 4
+    //     }
+    //   } ],
+    //   environment: [ {
+    //     id: 115,
+    //     image: "TREE00",
+    //     location: { x: 5, y: 13 }
+    //   } ],
+    //   traps: [ {
+    //     id: 990,
+    //     image: "TRAP",
+    //     location: { x: 9, y: 6 },
+    //     settings: {
+    //       damage: {
+    //         diceNum: 3,
+    //         diceType: 3,
+    //         mod: 3
+    //       },
+    //       disarmDC: 3,
+    //       findDC: 4,
+    //       found: true,
+    //       triggered: false
+    //     }
+    //   } ],
+    //   items: {
+    //     weapons: [ {
+    //       id: 875,
+    //       image: "WEAPON",
+    //       location: { x: 11, y: 4 },
+    //       settings: {
+    //         findDC: 4,
+    //         found: false
+    //       }
+    //     } ]
+    //   }
+    // };
 
     // Actual class declaration
     var p = new Game( $scope.Dungeon );
@@ -108,6 +110,7 @@ export default function( $scope ) {
 
 class Game {
   constructor( Dungeon ) {
+    console.log(Dungeon);
     this.gameUtil = new Game_Util();
 
     this.stage = new PIXI.Container();

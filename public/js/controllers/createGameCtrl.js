@@ -1,7 +1,10 @@
 export default function($http, $state, createGameService, userService) {
   const create = this;
   create.postCampaign = (campaign) => {
-    userService.user.character = {name:"dm"};
+    userService.user.character = {
+      name:"dm"
+      , _id: "dm"
+    };
     campaign.dm = {
       name: `${userService.user.firstName } ${userService.user.lastName}`,
       facebookId: userService.user.facebookId
