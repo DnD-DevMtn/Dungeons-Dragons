@@ -2,19 +2,20 @@
 This is the parent ctrl of everything game related. It should talk to the Pixi
 engine, the game Engine, and the gameInfo Ctrls.
  */
-export default function(engineService, userService, socket, $stateParams) {
+
+export default function(engineService, userService, socket, $stateParams, $http, inventoryService) {
     const GV = this;
+
 
     GV.user = userService.user;
 
     GV.party = $stateParams.party;
 
+    console.log(GV.user);
 
-
-
-
-
-
+    if(GV.user.character.weapons) {
+        getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+    }
 
     socket.on("return move", data => {
         let source = data.source, target = data.target;
@@ -104,21 +105,80 @@ export default function(engineService, userService, socket, $stateParams) {
             let x = data.found[i][0], y = data.found[i][1];
             Game.board[x][y].
         }
+
+        // + + + PIXI FOUND ANIMATION + + + \\
     });
 
     socket.on("return rogueDisarmTrap", data => {
+        let x = data.target.x, y = data.target.y;
+        let xx = data.source.x, yy = data.target.y;
+
+        // + + + PIXI DATA.ROLL + + + \\
+
+        // + + + PIXI DATA.SUCCESS success + + + \\
+
+        if(!data.success){
+            // + + + PIXI DATA.SUCCESS failed + + + \\
+            // + + + PIXI DATA.DAMAGE + + + \\
+            if(Game.board[xx][yy].id === Game.user.id){
+                Game.user.hp -= data.damage;
+            }
+        }
+
+        Game.board[x][y].trap.triggered = true;
 
     });
 
     socket.on("return rogueLockpick", data => {
+        let x = data.target.x, y = data.target.y;
+
+        // + + + PIXI DATA.ROLL + + + \\
+
+        if(!success){
+            // + + + PIXI DATA.SUCCESS failed + + + \\
+            return;
+        }
+
+        // + + + PIXI DATA.SUCCESS success + + + \\
+        Game.board[x][y].door.locked = false;
 
     });
 
     socket.on("return pickUpItem", data => {
+        let x = data.source.x, y = data.source.y;
+
+        // + + + PIXI DATA.ITEM.NAME + + + \\
+        if(Game.board[x][y].id === Game.user.id){
+            Game.user.items.push(data.item);
+            Game.board[x][y].item = {};
+            return;
+        }
+        for(let i = 0; i < Game.players.length; i++){
+            if(Game.board[x][y].id === Game.players[i].id){
+                Game.players[i].newItems.push(data.item);
+                Game.board[x][y].item = {};
+                break;
+            }
+        }
 
     });
 
     socket.on("return dropItem", data => {
+        let x = data.source.x, y = data.source.y;
+
+        // + + + PIXI DATA.ITEM.NAME + + + \\
+        if(Game.board[x][y].id === Game.user.id){
+            Game.board[x][y].item.items.push(data.item);
+            // Game.user.items.splice(Game.user.items.indexOf(data.item), 1);   // TODO splice dropped item out of array of new Items;
+            return;
+        }
+        for(let i = 0; i < Game.players.length; i++){
+            if(Game.board[x][y].id === Game.players[i].id){
+                Game.board[x][y].item.items.push(data.item);
+                // Game.players[i].newItems.push(data.item);                    // TODO SAME AS ABOVE
+                break;
+            }
+        }
 
     });
 
@@ -184,5 +244,17 @@ export default function(engineService, userService, socket, $stateParams) {
         }
     }
 
+
+
+    function getInventory(weapons, gear, armor) {
+        console.log('this fired');
+        inventoryService.getInventory(weapons, gear, armor)
+        .then(results => {
+            console.log(results);
+            GV.user.character.weapons = results.weapons;
+            GV.user.character.armor = results.armor;
+            GV.user.character.gear = results.gear;
+        });
+    }
 
 }

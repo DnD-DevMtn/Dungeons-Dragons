@@ -353,12 +353,14 @@ export default function engineService(socket){
 
     // available if the player is a rogue and is next to a trap that has been found
     Game.rogueDisarmTrap = (source, target) => {
-        let x      = target.x, y = target.y;
-        let int    = statMod(Game.user.actor.baseStats.int);
-        let lvl    = Game.user.actor.level;
-        let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
-        let damage = 0;
+        let x       = target.x, y = target.y;
+        let int     = statMod(Game.user.actor.baseStats.int);
+        let lvl     = Game.user.actor.level;
+        let rand    = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
+        let damage  = 0;
+        let success = true;
         if(rand !== 20 || (int + lvl + rand) < Game.board[x][y].trap.disarmDC){
+            success = false;
             for(let i = 0; i < Game.board[x][y].trap.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.board[x][y].trap.damage.diceType) + 1); // TODO DICEROLL
                 damage += Game.board[x][y].trap.damage.mod;
@@ -367,7 +369,7 @@ export default function engineService(socket){
         }
         // Game.board[x][y].trap.triggered = true;
         // TODO SOCKETTYS
-        socket.emit("rogueDisarmTrap", {source: Game.user.location, roll: rand, damage: damage, room: room});
+        socket.emit("rogueDisarmTrap", {source: Game.user.location, roll: rand, damage: damage, success: success, room: room});
     }
 
     // available if item on square is found through successful perception and character is on the square
@@ -447,7 +449,9 @@ export default function engineService(socket){
                     Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
                     Game.user.id = rand;
                     Game.user.ac = findAC(Game.user.actor);
+                    Game.user.hp = userCharacter.hp;
                     Game.user.equipped = {};
+                    Game.user.newItems = [];
                 }
             } else {
                 Game.players.push({
@@ -457,6 +461,8 @@ export default function engineService(socket){
                     , equipped: {}
                     , id: rand
                     , ac: findAC(players[k].userChar)
+                    , hp: players[k].userChar.hp
+                    , newItems: []
                 });
             }
             Game.exploreOrder.push(players);

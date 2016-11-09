@@ -6,14 +6,13 @@
     <h5 ng-if="UT.page === 2">Armor</h5>
     <h5 ng-if="UT.page === 3">Gear</h5>
   </header>
-  <div class="items">
     <div ng-if="UT.page === 1">
       <ul class="weapons flex-wrapper">
         <li
           class="flex-content"
           ng-repeat="weapon in GV.user.character.weapons"
         >
-          {{weapon}}
+          {{weapon.name}}
         </li>
       </ul>
     </div>
@@ -23,7 +22,7 @@
           class="flex-content"
           ng-repeat="armor in GV.user.character.armor"
         >
-          {{armor}}
+          {{armor.name}}
         </li>
       </ul>
     </div>
@@ -33,7 +32,7 @@
           class="flex-content"
           ng-repeat="gear in GV.user.character.gear"
         >
-          {{gear}}
+          {{gear.name}}
         </li>
       </ul>
     </div>
@@ -53,5 +52,4 @@
         aria-hidden="true">
       </i>
     </div>
-  </div>
 </section>
