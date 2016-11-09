@@ -564,9 +564,9 @@ export default function engineService(socket){
         for(let i = 0; i < Game.environment.length; i++){
             let x = Game.environment[i].location.x;
             let y = Game.environment[i].location.y;
-            Game.board[x][y].free = false;
-            Game.board[x][y].type = "environmental";
-            Game.board[x][y].id = Game.environment[i].id;
+            Game.board[y][x].free = false;
+            Game.board[y][x].type = "environmental";
+            Game.board[y][x].id = Game.environment[i].id;
         }
     }
 
@@ -574,7 +574,7 @@ export default function engineService(socket){
         for(let i = 0; i < Game.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
-            Game.board[x][y].trap = dungeon.traps[i].trap
+            Game.board[y][x].trap = dungeon.traps[i].trap
         }
     }
 
@@ -583,9 +583,9 @@ export default function engineService(socket){
             Game.monsters[i].id = generateId();
             let x = Game.monsters[i].location.x;
             let y = Game.monsters[i].location.y;
-            Game.board[x][y].free = false;
-            Game.board[x][y].type = "monster";
-            Game.board[x][y].id   = Game.monsters[i].id
+            Game.board[y][x].free = false;
+            Game.board[y][x].type = "monster";
+            Game.board[y][x].id   = Game.monsters[i].id
         }
     }
 
@@ -594,9 +594,9 @@ export default function engineService(socket){
             Game.players[i].id = generateId();
             let x = Game.players[i].location.x;
             let y = Game.players[i].location.y;
-            Game.board[x][y].free = false;
-            Game.board[x][y].type = "player";
-            Game.board[x][y].id   = Game.players[i].id
+            Game.board[y][x].free = false;
+            Game.board[y][x].type = "player";
+            Game.board[y][x].id   = Game.players[i].id
         }
     }
 
@@ -604,23 +604,23 @@ export default function engineService(socket){
         for(let i = 0; i < dungeon.items.armor.length; i++){
             let x = dungeon.items.armor[i].location.x;
             let y = dungeon.items.armor[i].location.y;
-            Game.board[x][y].item.items.push(dungeon.items.armor[i].item);
-            Game.board[x][y].item.found = dungeon.items.armor[i].found;
-            Game.board[x][y].item.findDC = dungeon.items.armor[i].findDC;
+            Game.board[y][x].item.items.push(dungeon.items.armor[i].item);
+            Game.board[y][x].item.found = dungeon.items.armor[i].found;
+            Game.board[y][x].item.findDC = dungeon.items.armor[i].findDC;
         }
         for(let i = 0; i < dungeon.items.weapons.length; i++){
             let x = dungeon.items.weapons[i].location.x;
             let y = dungeon.items.weapons[i].location.y;
-            Game.board[x][y].item.items.push(dungeon.items.weapons[i].item);
-            Game.board[x][y].item.found = dungeon.items.weapons[i].found;
-            Game.board[x][y].item.findDC = dungeon.items.weapons[i].findDC;
+            Game.board[y][x].item.items.push(dungeon.items.weapons[i].item);
+            Game.board[y][x].item.found = dungeon.items.weapons[i].found;
+            Game.board[y][x].item.findDC = dungeon.items.weapons[i].findDC;
         }
         for(let i = 0; i < dungeon.items.gear.length; i++){
             let x = dungeon.items.gear[i].location.x;
             let y = dungeon.items.gear[i].location.y;
-            Game.board[x][y].item.items.push(dungeon.items.gear[i].item);
-            Game.board[x][y].item.found = dungeon.items.gear[i].found;
-            Game.board[x][y].item.findDC = dungeon.items.gear[i].findDC;
+            Game.board[y][x].item.items.push(dungeon.items.gear[i].item);
+            Game.board[y][x].item.found = dungeon.items.gear[i].found;
+            Game.board[y][x].item.findDC = dungeon.items.gear[i].findDC;
         }
     }
 
@@ -640,15 +640,15 @@ export default function engineService(socket){
         for(let x = 0; x < Game.width; x++){
             let line = "";
             for(let y = 0; y < Game.height; y++){
-                if(Game.board[x][y].items.length > 0){
+                if(Game.board[y][x].items.length > 0){
                     line += " I";
-                } else if(Game.board[x][y].trap.name){
+                } else if(Game.board[y][x].trap.name){
                     line += " T";
-                } else if(Game.board[x][y].type === "player"){
+                } else if(Game.board[y][x].type === "player"){
                     line += " P";
-                } else if(Game.board[x][y].type === "monster"){
+                } else if(Game.board[y][x].type === "monster"){
                     line += " M";
-                } else if(Game.board[x][y].type === "environmental"){
+                } else if(Game.board[y][x].type === "environmental"){
                     line += " E";
                 } else {
                     line += " .";
