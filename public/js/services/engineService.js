@@ -388,14 +388,44 @@ export default function engineService(socket){
 
     // combat options
     // available if an enemy is next to the player
+    // Game.melee is a function available to the user and monsters
     Game.melee = (source, target) => {
-        if(Game.)
-        socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
+        let x = source.x, y = source.y;
+        let rand   = Math.floor(Math.random() * 20) + 1;
+        let damage = 0;
+        let crit = (rand === 20) ? true : false;
+        let critMod = 2;
+        if(Game.board[x][y].id === Game.user.id){
+            if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
+            let critMod = Game.user.equipped.crit.critDamage;
+            for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
+                damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
+            }
+        }
+        if(Game.board[x][y].type === "monster"){
+            for(let i = 0; i < Game.monsters.length; i++){
+                if(Game.monsters[i].id === Game.board[x][y].id){
+                    Game.monsters[i].monster
+                }
+            }
+        }
+        socket.emit("melee", {source: source, target: target, roll: rand, damage: damage, crit: crit, critMod: critMod, room: room});
     }
 
     // available if enemies are within an unblocked radius
     Game.ranged = (source, target) => {
-
+        let x = source.x, y = source.y;
+        let rand   = Math.floor(Math.random() * 20) + 1;
+        let damage = 0
+        let crit = (rand === 20) ? true : false;
+        let critMod = 2;
+        if(Game.board[x][y].id === Game.user.id){
+            if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
+            let critMod = Game.user.equipped.crit.critDamage;
+            for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
+                damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
+            }
+        }
         socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
@@ -458,6 +488,7 @@ export default function engineService(socket){
                     actor: players[k].userChar                                    // Game.players[i].actor is a character
                     , location: dungeon.startingLocation[k]
                     , userName: players[k].userName
+                    , sprite: players[k].userChar.sprite
                     , equipped: {}
                     , id: rand
                     , ac: findAC(players[k].userChar)

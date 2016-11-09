@@ -9,8 +9,22 @@ const Monster = new mongoose.Schema({
     , size: {type: String, enum: ["tiny", "small", "medium", "large", "huge"], trim: true}
     , speed: {type: Number, required: true}
     , goldDrop: {type: Number, requried: true}
-    , melee: {type: Number, required: true}
-    , ranged: {type: Number, required: true}
+    , melee: {
+        toHit: {type: Number, required: true}
+        , damage: {
+            diceType: {type: Number, required: true}
+            , numDice: {type: Number, required: true}
+            , mod: {type: required: true}
+        }
+    }
+    , ranged: {
+        toHit: {type: Number, required: true}
+        , damage: {
+            diceType: {type: Number, required: true}
+            , numDice: {type: Number, required: true}
+            , mod: {type: required: true}
+        }
+    }
     , ac: {type: Number, required: true}
     , xp: {type: Number, required: true}
     , description: {type: String, required: true, trim: true}

@@ -47,6 +47,7 @@ export default function(socket, $stateParams, userService, $state) {
             , hp: lobby.userChar.hp
             , size: lobby.userChar.size
             , speed: lobby.userChar.speed
+            , ba: lobby.userChar.baseAttack[0]
         }
         lobby.userEnter();
     }
