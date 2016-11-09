@@ -444,6 +444,19 @@ export default function engineService(socket){
 
     // sacrifice accuracy for damage
     Game.fighterPowerAttack = (source, target1, target2) => {
+        let x = source.x, y = source.y;
+        let rand   = Math.floor(Math.random() * 20) + 1;
+        let damage = 0;
+        let crit = (rand === 20) ? true : false;
+        let critMod = 2;
+        if(Game.board[x][y].id === Game.user.id){
+            if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
+            let critMod = Game.user.equipped.crit.critDamage;
+            for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
+                damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
+            }
+            damage += (Game.user.actor.lvl * 3);
+        }
 
         socket.emit("fighterPowerAttack", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
