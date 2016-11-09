@@ -510,8 +510,6 @@ export default function engineService(socket){
         Game.width = dungeon.width;
         Game.height = dungeon.height;
 
-        let count = 0;
-
         for(let i = 0; i < dungeon.height; i++){
             Game.board.push([]);
             for(let j = 0; j < dungeon.width; j++){
@@ -616,9 +614,9 @@ export default function engineService(socket){
     // * * * PRINTBOARD
 
     function printBoard(){
-        for(let x = 0; x < Game.height; x++){
+        for(let y = 0; y < Game.height; y++){
             let line = "";
-            for(let y = 0; y < Game.width; y++){
+            for(let x = 0; x < Game.width; x++){
                 if(Game.board[y][x].item.items.length > 0){
                     line += " I";
                 } else if(Game.board[y][x].trap.name){

@@ -1,7 +1,6 @@
 import "pixi.js";
 
 export default function( $scope ) {
-<<<<<<< HEAD
 
     $scope.Dungeon = $scope.GV.pixiDungeon;
       // dummy data
