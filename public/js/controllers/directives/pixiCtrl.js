@@ -135,11 +135,11 @@ class Game {
     this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridWidth );
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
-    PIXI.loader.add( "./assets/GameImages/sprites.json" ).load( this.initView.bind( this ) );
+    PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
   }
 
   initView() {
-    this.id = PIXI.loader.resources[ "./assets/GameImages/sprites.json" ].textures;
+    this.id = PIXI.loader.resources[ "./assets/GameImages/sprite.json" ].textures;
 
     this.createFloor();
     this.placeActors( this.players );
