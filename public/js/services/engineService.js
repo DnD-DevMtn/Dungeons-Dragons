@@ -389,7 +389,7 @@ export default function engineService(socket){
     // combat options
     // available if an enemy is next to the player
     Game.melee = (source, target) => {
-
+        if(Game.)
         socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
@@ -522,7 +522,6 @@ export default function engineService(socket){
             let y = Game.monsters[i].location.y;
             Game.board[x][y].free = false;
             Game.board[x][y].type = "monster";
-            Game.board[x][y].name = Game.monsters[i].actor.name;
             Game.board[x][y].id   = Game.monsters[i].id
         }
     }
@@ -534,7 +533,6 @@ export default function engineService(socket){
             let y = Game.players[i].location.y;
             Game.board[x][y].free = false;
             Game.board[x][y].type = "player";
-            Game.board[x][y].name = Game.players[i].actor.name;
             Game.board[x][y].id   = Game.players[i].id
         }
     }

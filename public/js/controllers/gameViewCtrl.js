@@ -186,11 +186,57 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return melee", data => {
         let x = data.target.x, y = data.target.y;
-        let xx = data.source.x, yy = data.source.y;
+
+        // + + + PIXI DATA.ROLL (crit?) + + + \\
+
+        // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
+        
+        let id   = Game.board[x][y].id;
+        let type = Game.board[x][y].type;
+        if(type === "monster"){
+            for(let i = 0; i < Game.monsters.length; i++){
+                if(id === Game.monsters[i].id){
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+                        // + + + PIXI HIT + + + \\
+                        Game.monsters[i].monster.hp -= damage;
+                        if(Game.monsters[i].monster.hp <= 0){
+                            // + + + PIXI DEAD + + + \\
+                        }
+                    } else {
+                        // + + + PIXI MISS + + + \\
+                    }
+                }
+            }
+        }
 
     });
 
     socket.on("return fighterPowerAttack", data => {
+        let x = data.target.x, y = data.target.y;
+
+        // + + + PIXI POWER ATTACK + + + \\
+
+        // + + + PIXI DATA.ROLL (crit?) + + + \\
+
+        // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
+
+        let id   = Game.board[x][y].id;
+        let type = Game.board[x][y].type;
+        if(type === "monster"){
+            for(let i = 0; i < Game.monsters.length; i++){
+                if(id === Game.monsters[i].id){
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+                        // + + + PIXI HIT + + + \\
+                        Game.monsters[i].monster.hp -= damage;
+                        if(Game.monsters[i].monster.hp <= 0){
+                            // + + + PIXI DEAD + + + \\
+                        }
+                    } else {
+                        // + + + PIXI MISS + + + \\
+                    }
+                }
+            }
+        }
 
     });
 
