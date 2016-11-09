@@ -4,6 +4,7 @@ function characterBuilderCtrl($scope, characterService, $stateParams) {
     $scope.campaign = $stateParams.campaign;
 
     let activeSection = "race";
+    
     $scope.selectedRaceTitle = "Human";
     $scope.showMales = true;
     $scope.showFemales = false;
@@ -369,7 +370,7 @@ function characterBuilderCtrl($scope, characterService, $stateParams) {
         } else if(!$scope.selectedClass){
           alert("Please select a class");
         } else {
-          characterService.finalClass($scope.characterName, $scope.selectedClass, $scope.characterAlignment, $scope.selectedLevel);
+          characterService.finalClass($scope.characterName, $scope.selectedClass, $scope.characterAlignment, $scope.campaign.level);
           $('div.character-builder-class').animate({left : '-=4000'}, 500);
           $('div.character-builder-stats').animate({right : '+=4000'}, 500);
           activeSection = "stats";
