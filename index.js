@@ -71,7 +71,6 @@ io.on("connection", socket => {
                 , players: players
             };
             socket.join(room);
-            console.log(campaigns[room]);
             io.sockets.to(room).emit("joined", {party: campaigns[room], newPlayer: players[0]});
             return;
         }

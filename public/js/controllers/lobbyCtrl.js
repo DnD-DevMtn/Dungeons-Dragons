@@ -35,14 +35,7 @@ export default function(socket, $stateParams, userService, $state, inventoryServ
         socket.emit("join", {charId: lobby.userChar._id, userName: `${lobby.user.firstName} ${lobby.user.lastName}`, char: socketChar, room: lobby.gameId});
     }
 
-    if($stateParams.userChar.name === 'dm'){
-        // if($stateParams.userChar === "dm"){
-        //     socketChar.name = "dm";
-        //     lobby.dm.player = lobby.userChar._id;
-        //     lobby.dm.char   = "";
-        //     lobby.userEnter();
-        //     return;
-        // }
+    if(lobby.userChar.name === 'dm') {
         socketChar = lobby.userChar;
         lobby.userEnter();
     }
@@ -96,8 +89,6 @@ export default function(socket, $stateParams, userService, $state, inventoryServ
 
     socket.on("return start", party => {
         lobby.party = party;
-        console.log('userChar', lobby.userChar);
-        console.log('partyPlayers', lobby.userChar);
         $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.userChar, party: lobby.party.players, dungeon: dungeon})
     });
 

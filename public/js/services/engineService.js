@@ -756,11 +756,9 @@ export default function engineService(socket){
         return Math.floor((stat - 10) / 2);
     }
 
-    initiative = stateMod(dex);
+    //initiative = stateMod(dex);
 
-    function findAC(character){ debugger
-        console.log('character', character);
-
+    function findAC(character){ 
         return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 

@@ -5,10 +5,9 @@ export default function( $scope ) {
 
   // Actual class declaration
 
-  //if($scope.Dungeon.players) {
     var character = dataStructureBuffer( $scope.Dungeon );
     var p = new Game( $scope.Dungeon );
-  //}
+
 
   // Delete below up to stop point....
   window.addEventListener ( "keydown", downHandler, false );
