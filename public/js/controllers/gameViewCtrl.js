@@ -20,6 +20,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
         GV.pixiDungeon.players = Game.players;
         GV.pixiDungeon.user = Game.user;
+        checkTurn();
     }
 
     socket.on("return move", data => {
@@ -346,17 +347,20 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     function checkTurn(){
-        if(Game.players[Game.exploreTurn].id === Game.user.id){
+        if(Game.players[Game.exploreTurn].id === Game.user.id) {
             // + + + PIXI YOUR TURN BITCH + + + \\
+            console.log("IT'S YOUR TURN!");
             Game.moves = Game.user.actor.speed;
             Game.isTurn = true;
             Game.actionOptions();
         }
-        if(Game.dmTurn && Game.dmMode){
+        if(Game.dmTurn && Game.dmMode) {
             // Game.isTurn = true;
             // Game.monsterExplore = 0;
             // Game.monsters[Game.monsterExplore].speed
         }
+        console.log(`${Game.players[Game.exploreTurn].actor.name} turn`)
+
     }
 
 
