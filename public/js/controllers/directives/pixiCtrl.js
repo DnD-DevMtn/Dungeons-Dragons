@@ -4,8 +4,10 @@ export default function( $scope ) {
   $scope.Dungeon = $scope.GV.pixiDungeon;
 
   // Actual class declaration
-  var character = dataStructureBuffer( $scope.Dungeon );
-  var p = new Game( $scope.Dungeon );
+
+    var character = dataStructureBuffer( $scope.Dungeon );
+    var p = new Game( $scope.Dungeon );
+
 
   $scope.$on("send move", data => {
       p.move(data.character, data.target);

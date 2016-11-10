@@ -17,13 +17,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
     GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
 
     if($stateParams.dungeon) {
-      const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
-      GV.pixiDungeon.players = Game.players;
-      GV.pixiDungeon.user = Game.user;
-    }
-
-    if(GV.user.character.weapons) {
-        getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+        const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
+        GV.pixiDungeon.players = Game.players;
+        GV.pixiDungeon.user = Game.user;
     }
 
     socket.on("return move", data => {
@@ -330,33 +326,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
     }
 
-
-
-    function getInventory(weapons, gear, armor) {
-        inventoryService.getInventory(weapons, gear, armor)
-        .then(results => {
-            console.log(results);
-            GV.user.character.weapons = results.weapons;
-            GV.user.character.armor = results.armor;
-            GV.user.character.gear = results.gear;
-        });
-    }
-
-    function getInventory(weapons, gear, armor) {
-        inventoryService.getInventory(weapons, gear, armor)
-        .then(results => {
-            GV.user.character.weapons = results.weapons;
-            GV.user.character.armor = results.armor;
-            GV.user.character.gear = results.gear;
-        })
-    }
-
     GV.endTurn = () => {
         socket.emit("end turn", GV.gameId);
     }
 
     GV.nextMonster = () => {
-        if(Game.monsterExplore >= Game.monsters.length) 
+        if(Game.monsterExplore >= Game.monsters.length)
             return;
         else
             Game.monsterExplore++;

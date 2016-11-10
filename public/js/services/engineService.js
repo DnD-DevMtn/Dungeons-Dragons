@@ -758,10 +758,12 @@ export default function engineService(socket){
     }
 
     function statMod(stat){
-        return Math.floor((Game.user.baseStats[stat] - 10) / 2);
+        return Math.floor((stat - 10) / 2);
     }
 
-    function findAC(character){
+    //initiative = stateMod(dex);
+
+    function findAC(character){ 
         return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 

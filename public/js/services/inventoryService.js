@@ -1,7 +1,6 @@
 export default function($http) {
 
   this.getInventory = (weapons, gear, armor) => {
-    const inventory = {};
     const inventoryPromises = [];
     inventoryPromises.push(new Promise((resolve, reject) => {
         getWeapons(weapons).then(weapons => {
@@ -17,12 +16,12 @@ export default function($http) {
         resolve({
           type:"gear"
           , data: gear
-        });
+        })
       })
     }));
 
     inventoryPromises.push(new Promise((resolve, reject) => {
-      getArmor(armor).then(armor => {
+      getArmor(armor).then( armor => {
         resolve({
           type:"armor"
           , data: armor
@@ -32,6 +31,7 @@ export default function($http) {
 
     return Promise.all(inventoryPromises).then(results => {
       const invObj = {};
+      //consider doing a reduce
       results.forEach(entry => {
         invObj[entry.type] = entry.data;
       })
@@ -96,5 +96,5 @@ export default function($http) {
     });
 
   }
-  
+
 }
