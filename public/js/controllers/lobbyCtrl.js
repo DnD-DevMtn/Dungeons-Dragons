@@ -26,7 +26,6 @@ export default function(socket, $stateParams, userService, $state) {
     let socketChar = {}
 
     lobby.userEnter = function(){
-        console.log('enter', lobby.userChar._id);
         socket.emit("join", {charId: lobby.userChar._id, userName: `${lobby.user.firstName} ${lobby.user.lastName}`, char: socketChar, room: lobby.gameId});
     }
 
@@ -1576,4 +1575,4 @@ export default function(socket, $stateParams, userService, $state) {
 //     "__v" : 0
 // }
 //
-// }
+}

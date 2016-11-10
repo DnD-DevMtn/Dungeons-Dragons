@@ -15,7 +15,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
     GV.gameId = $stateParams.gameId;
 
     GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
-    console.log( "Here:", GV.dungeon );
 
     if($stateParams.dungeon) {
       const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
