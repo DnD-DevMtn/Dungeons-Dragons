@@ -18,21 +18,7 @@ module.exports = {
 
     , getDungeonById(req, res){
         Dungeon.findById(req.params.id)
-            .populate(
-                {
-                    path: "monsters.monster"
-                    , model: "Monster"
-                }, {
-                    path: "items.armor.item"
-                    , model: "Armor"
-                }, {
-                    path: "items.weapons.item"
-                    , model: "Weapon"
-                }, {
-                    path: "items.gear.item"
-                    , model: "Gear"
-                }
-            )
+            .populate( "monsters.monster items.armor.item items.weapons.item items.gear.item" )
             .exec((err, dungeon) => {
                 return (err) ? res.status(500).json(err) : res.status(200).json(dungeon);
             });
