@@ -1,7 +1,10 @@
 export default function($http, $state, createGameService, userService) {
   const create = this;
   create.postCampaign = (campaign) => {
-    userService.user.character = {name:"dm"};
+    userService.user.character = {
+      name:"dm"
+      , _id: "dm"
+    };
     campaign.dm = {
       name: `${userService.user.firstName } ${userService.user.lastName}`,
       facebookId: userService.user.facebookId
@@ -45,6 +48,7 @@ export default function($http, $state, createGameService, userService) {
   create.saveDungeon = function() {
     PIXI.loader.reset();
     createGameService.postDungeon( create.dungeonBuilder.dungeon ).then( response => {
+      console.log( "Dungeon Posted: ", response );
     } );
   }
 }
@@ -256,7 +260,7 @@ class DungeonBuilder {
         weapons: [],
         gear: []
       },
-      players: []
+      startingLocation: []
     };
   }
 

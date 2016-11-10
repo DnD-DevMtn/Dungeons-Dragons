@@ -4,21 +4,7 @@ module.exports = {
 
     getDungeons(req, res){
         Dungeon.find()
-            .populate(
-                {
-                    path: "monsters.monster"
-                    , model: "Monster"
-                }, {
-                    path: "items.armor.item"
-                    , model: "Armor"
-                }, {
-                    path: "items.weapons.item"
-                    , model: "Weapon"
-                }, {
-                    path: "items.gear.item"
-                    , model: "Gear"
-                }
-            )
+            .populate("Monster Armor Weapon Gear")
             .exec((err, dungeons) => {
                 return (err) ? res.status(500).json(err) : res.status(200).json(dungeons);
             });
