@@ -108,7 +108,7 @@ io.on("connection", socket => {
         io.sockets.to(room).emit("return start", campaigns[room]);
     });
 
-    socket.on("end turn" room => {
+    socket.on("end turn", room => {
         io.sockets.to(room).emit("return turn over");
     });
 
