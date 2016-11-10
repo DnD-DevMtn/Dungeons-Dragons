@@ -39,21 +39,6 @@ export default function(socket, $stateParams, userService, $state) {
             return;
         }
         socketChar = lobby.userChar;
-        // {
-        //     name: lobby.userChar.name
-        //     , race: lobby.userChar.race
-        //     , classType: lobby.userChar.classType
-        //     , sprite: lobby.userChar.sprite
-        //     , level: lobby.userChar.level
-        //     , alignment: lobby.userChar.alignment
-        //     , hp: lobby.userChar.hp
-        //     , size: lobby.userChar.size
-        //     , speed: lobby.userChar.speed
-        //        , ba: lobby.userChar.baseAttack[0]
-
-        //     , _id: lobby.userChar._id
-        //     ,
-        // }
         lobby.userEnter();
     }
 
