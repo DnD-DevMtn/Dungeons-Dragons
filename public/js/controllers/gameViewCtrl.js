@@ -23,13 +23,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     socket.on("return move", data => {
+        console.log("SOCKET RETURN MOVE", data);
         let source = data.source, target = data.target;
         if(Game.board[source.x][source.y].id === Game.user.id) {      // TODO in ctrl
             Game.user.location.x = target.x;
             Game.user.location.y = target.y;
-        } else {
-            updateActorPosition(source, target);
         }
+        updateActorPosition(source, target);
 
         let type = Game.board[source.x][source.y].type;       // save the reference variables
         let id   = Game.board[source.x][source.y].id;
@@ -283,17 +283,20 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return end turn", () => {
         if((Game.exploreTurn === Game.players.length - 1) && !Game.dmTurn) {
+            console.log("DM TURN", Game.dmTurn);
             Game.dmTurn = true;
         } else if((Game.exploreTurn === Game.players.length - 1) && Game.dmTurn) {
             Game.exploreTurn = 0;
         } else {
             Game.exploreTurn++;
         }
+        console.log("PLAYER'S TURN", Game.players[Game.exploreTurn].actor.name, Game.exploreTurn);
         checkTurn();
     });
 
 
     function updateActorPosition(source, target) {
+        console.log("FROM UPDATE ACTOR", source, target);
         let x = source.x, y = source.y;
         let actorType = Game.board[x][y].type;
         for(let i = 0; i < Game[actorType].length; i++) {
@@ -327,10 +330,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     GV.endTurn = () => {
+        console.log("END TURN");
         socket.emit("end turn", GV.gameId);
     }
 
     GV.nextMonster = () => {
+        console.log("NEXT MONSTER");
         if(Game.monsterExplore >= Game.monsters.length)
             return;
         else
@@ -348,9 +353,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
             Game.actionOptions();
         }
         if(Game.dmTurn && Game.dmMode){
-            Game.isTurn = true;
-            Game.monsterExplore = 0;
-
+            // Game.isTurn = true;
+            // Game.monsterExplore = 0;
+            // Game.monsters[Game.monsterExplore].speed
         }
     }
 
@@ -363,6 +368,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
             GV.keyUp = false;
             let character = (!Game.dmMode) ? Game.user : Game.getMonster();
+            console.log(event.keyCode);
             switch( event.keyCode ) {
                 case 37:
                     if ( Game.move( character.location, { x: character.location.x - 1, y: character.location.y } ) ) {
