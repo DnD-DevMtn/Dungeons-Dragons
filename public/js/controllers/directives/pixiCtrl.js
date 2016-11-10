@@ -9,7 +9,7 @@ export default function( $scope ) {
     var p = new Game( $scope.Dungeon );
 
 
-  $scope.$on("send move", data => {
+  $scope.$on("send move", (event, data) => {
       p.move(data.character, data.target);
   })
 
