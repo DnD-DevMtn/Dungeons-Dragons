@@ -30,11 +30,6 @@
         <h3>{{dice.result}}</h3>
     </div>
     <span
-      class="btn roll"
-      ng-click="dice.readyToRoll ? dice.roll20() : null">
-      roll
-    </span>
-    <span
       ng-if="dice.die === 'd3'"
       ng-class="{'ready' : dice.readyToRoll}"
       class="btn roll"
@@ -76,12 +71,11 @@
       ng-click="dice.readyToRoll ? dice.roll12() : null">
       roll
     </span>
+    <!-- changed from dice roll to end turn. Need to change css and stuff. -->
     <span
-      ng-if="dice.die === 'd20'"
-      ng-class="{'ready' : dice.readyToRoll}"
-      class="btn roll"
-      ng-click="dice.readyToRoll ? dice.roll20() : null">
-      roll
+      class="btn roll ready"
+      ng-click="dice.endTurn()">
+      end turn
     </span>
   </div>
 </section>
