@@ -8,9 +8,8 @@ export default function( $scope ) {
 
   if($scope.Dungeon.players) {
     var p = new Game( $scope.Dungeon );
+    var character = $scope.Dungeon.players[ 0 ];
   }
-
-  var character = $scope.Dungeon.players[ 0 ];
 
   // Delete below up to stop point....
   window.addEventListener ( "keydown", downHandler, false );
