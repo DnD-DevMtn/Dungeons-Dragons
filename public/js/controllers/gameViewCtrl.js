@@ -28,7 +28,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return move", data => {
         let source = data.source, target = data.target;
-        if(Game.board[source.x][source.y].id === Game.user.id){      // TODO in ctrl
+        if(Game.board[source.x][source.y].id === Game.user.id) {      // TODO in ctrl
             Game.user.location.x = target.x;
             Game.user.location.y = target.y;
         } else {
@@ -53,9 +53,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return bash", data => {
         let x = data.target.x, y = data.target.y;
 
-        if(success){
+        if(success) {
             Game.board[x][y].door.hp -= damage;
-            if(Game.board[x][y].door.hp <= 0){
+            if(Game.board[x][y].door.hp <= 0) {
                 Game.board[x][y].door.open = true;
             }
         }
@@ -88,12 +88,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.ROLL + + + \\
 
-        if(data.found.length === 0){
+        if(data.found.length === 0) {
             // + + + PIXI NOTHING FOUND + + + \\
             return;
         }
 
-        for(let i = 0; i < data.found.length; i++){
+        for(let i = 0; i < data.found.length; i++) {
             let x = data.found[i][0], y = data.found[i][1];
             Game.board[x][y].item.found = true;
             break;
@@ -106,12 +106,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.ROLL + + + \\
 
-        if(data.found.length === 0){
+        if(data.found.length === 0) {
             // + + + PIXI NOTHING FOUND + + + \\
             return;
         }
 
-        for(let i = 0; i < data.found.length; i++){
+        for(let i = 0; i < data.found.length; i++) {
             let x = data.found[i][0], y = data.found[i][1];
             Game.board[x][y].trap.found = true;
             break;
@@ -128,10 +128,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.SUCCESS success + + + \\
 
-        if(!data.success){
+        if(!data.success ){
             // + + + PIXI DATA.SUCCESS failed + + + \\
             // + + + PIXI DATA.DAMAGE + + + \\
-            if(Game.board[xx][yy].id === Game.user.id){
+            if(Game.board[xx][yy].id === Game.user.id) {
                 Game.user.hp -= data.damage;
             }
         }
@@ -145,7 +145,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.ROLL + + + \\
 
-        if(!success){
+        if(!success) {
             // + + + PIXI DATA.SUCCESS failed + + + \\
             return;
         }
@@ -159,13 +159,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let x = data.source.x, y = data.source.y;
 
         // + + + PIXI DATA.ITEM.NAME + + + \\
-        if(Game.board[x][y].id === Game.user.id){
+        if(Game.board[x][y].id === Game.user.id) {
             Game.user.items.push(data.item);
             Game.board[x][y].item = {};
             return;
         }
-        for(let i = 0; i < Game.players.length; i++){
-            if(Game.board[x][y].id === Game.players[i].id){
+        for(let i = 0; i < Game.players.length; i++) {
+            if(Game.board[x][y].id === Game.players[i].id) {
                 Game.players[i].newItems.push(data.item);
                 Game.board[x][y].item = {};
                 break;
@@ -178,13 +178,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let x = data.source.x, y = data.source.y;
 
         // + + + PIXI DATA.ITEM.NAME + + + \\
-        if(Game.board[x][y].id === Game.user.id){
+        if(Game.board[x][y].id === Game.user.id) {
             Game.board[x][y].item.items.push(data.item);
             // Game.user.items.splice(Game.user.items.indexOf(data.item), 1);   // TODO splice dropped item out of array of new Items;
             return;
         }
-        for(let i = 0; i < Game.players.length; i++){
-            if(Game.board[x][y].id === Game.players[i].id){
+        for(let i = 0; i < Game.players.length; i++) {
+            if(Game.board[x][y].id === Game.players[i].id) {
                 Game.board[x][y].item.items.push(data.item);
                 // Game.players[i].newItems.push(data.item);                    // TODO SAME AS ABOVE
                 break;
@@ -203,13 +203,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let id   = Game.board[x][y].id;
         let type = Game.board[x][y].type;
 
-        if(type === "monster"){
-            for(let i = 0; i < Game.monsters.length; i++){
-                if(id === Game.monsters[i].id){
-                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+        if(type === "monster") {
+            for(let i = 0; i < Game.monsters.length; i++) {
+                if(id === Game.monsters[i].id) {
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit) {
                         // + + + PIXI HIT + + + \\
                         Game.monsters[i].monster.hp -= damage;
-                        if(Game.monsters[i].monster.hp <= 0){
+                        if(Game.monsters[i].monster.hp <= 0) {
                             // + + + PIXI DEAD + + + \\
                         }
                     } else {
@@ -220,15 +220,15 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
 
         if(type === "player"){
-            if(Game.board[x][y].id === Game.user.id){
+            if(Game.board[x][y].id === Game.user.id) {
                 Game.user
             }
-            for(let i = 0; i < Game.players.length; i++){
-                if(id === Game.players[i].id){
-                    if(Game.players[i].monster.ac <= data.roll || data.crit){
+            for(let i = 0; i < Game.players.length; i++) {
+                if(id === Game.players[i].id) {
+                    if(Game.players[i].monster.ac <= data.roll || data.crit) {
                         // + + + PIXI HIT + + + \\
                         Game.players[i].monster.hp -= damage;
-                        if(Game.players[i].monster.hp <= 0){
+                        if(Game.players[i].monster.hp <= 0) {
                             // + + + PIXI DEAD + + + \\
                         }
                     } else {
@@ -252,12 +252,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let id   = Game.board[x][y].id;
         let type = Game.board[x][y].type;
         if(type === "monster"){
-            for(let i = 0; i < Game.monsters.length; i++){
-                if(id === Game.monsters[i].id){
-                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+            for(let i = 0; i < Game.monsters.length; i++) {
+                if(id === Game.monsters[i].id) {
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit) {
                         // + + + PIXI HIT + + + \\
                         Game.monsters[i].monster.hp -= damage;
-                        if(Game.monsters[i].monster.hp <= 0){
+                        if(Game.monsters[i].monster.hp <= 0) {
                             // + + + PIXI DEAD + + + \\
                         }
                     } else {
@@ -285,35 +285,42 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     });
 
-    socket.on("return endTurn", data => {
-
+    socket.on("return end turn", () => {
+        if((Game.exploreTurn === Game.players.length - 1) && !Game.dmTurn) {
+            Game.dmTurn = true;
+        } else if((Game.exploreTurn === Game.players.length - 1) && Game.dmTurn) {
+            Game.exploreTurn = 0;
+        } else {
+            Game.exploreTurn++;
+        }
+        checkTurn();
     });
 
 
-    function updateActorPosition(source, target){
+    function updateActorPosition(source, target) {
         let x = source.x, y = source.y;
         let actorType = Game.board[x][y].type;
-        for(let i = 0; i < Game[actorType].length; i++){
-            if(Game[actorType][i].id === Game.board[x][y].id){
+        for(let i = 0; i < Game[actorType].length; i++) {
+            if(Game[actorType][i].id === Game.board[x][y].id) {
                 Game[actorType][i].location.x = target.x;
                 Game[actorType][i].location.y = target.y;
             }
         }
     }
 
-    function printBoard(){
-        for(let x = 0; x < Game.width; x++){
+    function printBoard() {
+        for(let x = 0; x < Game.width; x++) {
             let line = "";
-            for(let y = 0; y < Game.height; y++){
-                if(Game.board[x][y].items.length > 0){
+            for(let y = 0; y < Game.height; y++) {
+                if(Game.board[x][y].items.length > 0) {
                     line += " I";
-                } else if(Game.board[x][y].trap.name){
+                } else if(Game.board[x][y].trap.name) {
                     line += " T";
-                } else if(Game.board[x][y].type === "player"){
+                } else if(Game.board[x][y].type === "player") {
                     line += " P";
-                } else if(Game.board[x][y].type === "monster"){
+                } else if(Game.board[x][y].type === "monster") {
                     line += " M";
-                } else if(Game.board[x][y].type === "environmental"){
+                } else if(Game.board[x][y].type === "environmental") {
                     line += " E";
                 } else {
                     line += " .";
@@ -343,6 +350,69 @@ export default function(engineService, userService, socket, $stateParams, $http,
             GV.user.character.armor = results.armor;
             GV.user.character.gear = results.gear;
         })
+    }
+
+    GV.endTurn = () => {
+        socket.emit("end turn", GV.gameId);
+    }
+
+    function checkTurn(){
+        if(Game.players[Game.exploreTurn].id === Game.user.id){
+            // + + + PIXI YOUR TURN BITCH + + + \\
+            Game.moves = Game.user.actor.speed;
+            Game.isTurn = true;
+            Game.actionOptions();
+        }
+        if(Game.dmTurn && Game.dmMode){
+            Game.isTurn = true;
+            Game.monsterExplore = 0;
+
+        }
+    }
+
+
+
+    window.addEventListener ( "keydown", downHandler, false );
+    window.addEventListener ( "keyup", upHandler, false );
+
+    function downHandler() {
+        if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
+            GV.keyUp = false;
+            let character = (!Game.dmMode) ? Game.user : Game.getMonster();
+            switch( event.keyCode ) {
+                case 37:
+                    if ( Game.move( character.location, { x: character.location.x - 1, y: character.location.y } ) ) {
+                        $scope.$broadcast("send move", { character: character, target: { x: character.location.x - 1, y: character.location.y } } );
+                        Game.actionOptions();
+                    }
+                    break;
+
+                case 38:
+                    if ( Game.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
+                        $scope.$broadcast("send move", { character: character, target: { x: character.location.x, y: character.location.y - 1 } } );
+                        Game.actionOptions();
+                    }
+                    break;
+
+                case 39:
+                    if ( Game.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
+                        $scope.$broadcast("send move", { character: character, target: { x: character.location.x + 1, y: character.location.y } } );
+                        Game.actionOptions();
+                    }
+                    break;
+
+                case 40:
+                    if ( Game.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
+                        $scope.$broadcast("send move", { character: character, target: { x: character.location.x, y: character.location.y + 1 } } );
+                        Game.actionOptions();
+                    }
+                    break;
+            }
+        }
+    }
+
+    function upHandler() {
+        GV.keyUp = true;
     }
 
 }

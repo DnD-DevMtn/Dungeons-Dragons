@@ -6,36 +6,6 @@ export default function engineService(socket){
     let user = {};
     let room;
 
-    const Dungeon = {
-        name: "this is a dungeon"
-        , height: 10
-        , width: 10
-        , monsters: [{
-
-        }]
-        , background: [{
-
-        }]
-        , items: [{
-
-        }]
-        , traps: [{
-
-        }]
-        , players: [{
-
-        }]
-        , doors: [{
-
-        }]
-        , environment: [{
-
-        }]
-        , startingLocation: [{
-
-        }]
-    }
-
     const trapExample = {
         name: "Spikes"
         , found:  false             // can only be disarmed if found
@@ -75,12 +45,16 @@ export default function engineService(socket){
         , environment: []
         , combatOrder: []
         , exploreTurn: 0
+        , monsterExplore: 0
         , combatTurn: 0
         , ids: []
-        , actions: ["draw", "sheath"]
+        , actions: []
         , gameState: "explore"
-        , turnOver: false
+        , isTurn: false
         , dmMode: false
+        , dmTurn: false
+        , actionTaken: false
+        , moves: 0
     }
 
     this.getGame = () => {
@@ -94,6 +68,11 @@ export default function engineService(socket){
 
     // explore options
     Game.actionOptions = () => {
+        if(Game.dmMode){
+
+
+            return;
+        }
         let source = Game.user.location;
 
         // Drop item is a universal action for all states
@@ -204,7 +183,7 @@ export default function engineService(socket){
                     , numDice: weapon.damage.small.numOfDice
                 }
             }
-            Game.turnOver = true;
+            Game.actionTaken = true;
             socket.emit("drawWeapon", {source: source, weapon: weapon, room: room});        // TODO
 
         } else {
@@ -274,7 +253,7 @@ export default function engineService(socket){
                 //     Game.board[y][x].door.open = true;
                 // }
             }
-            Game.turnOver = true;
+            Game.actionTaken = true;
             socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
                                 , target: target
                                 , roll: roll
@@ -310,7 +289,7 @@ export default function engineService(socket){
                 }
             }
         }
-        Game.turnOver = true;
+        Game.actionTaken = true;
         socket.emit("perception", {source: source, roll: rand, found: found, room: room});      // TODO socket.on perception comtroller side
     }
 
@@ -326,7 +305,7 @@ export default function engineService(socket){
             success = true;
             // Game.board[y][x].door.locked = false;        // TODO put on the on listener the on ctrl
         }
-        Game.turnOver = true;
+        Game.actionTaken = true;
         socket.emit("rogueLockpick", {source: source, target: target, roll: rand, success: success, room: room});
     }
 
@@ -346,7 +325,7 @@ export default function engineService(socket){
                 }
             }
         }
-        Game.turnOver = true;
+        Game.actionTaken = true;
         socket.emit("rogueTrapfind", {source: source, roll: rand, found: found, room: room});   // TODO socket.on rogueTrapFind controller side
     }
 
@@ -366,8 +345,7 @@ export default function engineService(socket){
                 damage /= 2;
             }
         }
-        // Game.board[y][x].trap.triggered = true;
-        // TODO SOCKETTYS
+        Game.actionTaken = true;
         socket.emit("rogueDisarmTrap", {source: Game.user.location, roll: rand, damage: damage, success: success, room: room});
     }
 
@@ -377,6 +355,7 @@ export default function engineService(socket){
         for(let i = 0; i < Game.board[y][x].item.items.length; i++){
             Game.user.items.push(Game.board[y][x].item.items[i]);
         }
+        Game.actionTaken = true;
         socket.emit("pickUpItem", {source: Game.user.location, item: item, room: room});
     }
 
@@ -411,6 +390,7 @@ export default function engineService(socket){
                 }
             }
         }
+        Game.actionTaken = true;
         socket.emit("melee", {source: source, target: target, roll: rand, damage: damage, crit: crit, critMod: critMod, room: room});
     }
 
@@ -438,6 +418,7 @@ export default function engineService(socket){
                 }
             }
         }
+        Game.actionTaken = true;
         socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
@@ -456,23 +437,26 @@ export default function engineService(socket){
             }
             damage += (Game.user.actor.lvl * 3);
         }
-
+        Game.actionTaken = true;
         socket.emit("fighterPowerAttack", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     // can hit an additional enemy if the first is killed
     Game.fighterCleave = (source, target) => {
 
+        Game.actionTaken = true;
         socket.emit("fighterCleave", {source: Game.user.location, target1: target1, target2: target2, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     Game.castSpell = (source, target) => {
 
+        Game.actionTaken = true;
         socket.emit("castSpell", {source: Game.user.location, target: target, spell: spell, roll: rand, room: room});
     }
 
     Game.rogueSneakAttack = (source, target) => {
 
+        Game.actionTaken = true;
         socket.emit("rogueSneakAttack", {source: Game.user.location, roll: rand, damage: damage, crit: crit, room: room})
     }
 
@@ -482,6 +466,14 @@ export default function engineService(socket){
             return false;
         }
         socket.emit("move", {source: Game.user.location, target: target, room: room});
+    }
+
+    Game.dmMoves = () => {
+
+    }
+
+    Game.getMonster = () => {
+        return Game.monsters[Game.monsterExplore];
     }
 
     // GAME FUNCTIONS * * *

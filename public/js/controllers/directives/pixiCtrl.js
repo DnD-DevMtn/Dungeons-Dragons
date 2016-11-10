@@ -9,44 +9,49 @@ export default function( $scope ) {
 
   var character = $scope.Dungeon.players[ 0 ];
 
+  $scope.$on("send move", data => {
+      p.move(data.character, data.target);
+  })
+
+
   // Delete below up to stop point....
-  window.addEventListener ( "keydown", downHandler, false );
-  window.addEventListener ( "keyup", upHandler, false );
-
-  function downHandler() {
-    if ( $scope.keyUp ) {
-      $scope.keyUp = false;
-      switch( event.keyCode ) {
-        case 37:
-          if ( p.move( character, { x: character.location.x - 1, y: character.location.y } ) ) {
-            character.location.x--;
-          }
-          break;
-
-        case 38:
-          if ( p.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
-            character.location.y--;
-          }
-          break;
-
-        case 39:
-          if ( p.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
-            character.location.x++;
-          }
-          break;
-
-        case 40:
-          if ( p.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
-            character.location.y++;
-          }
-          break;
-      }
-    }
-  }
-
-  function upHandler() {
-    $scope.keyUp = true;
-  }
+  // window.addEventListener ( "keydown", downHandler, false );
+  // window.addEventListener ( "keyup", upHandler, false );
+  //
+  // function downHandler() {
+  //   if ( $scope.keyUp ) {
+  //     $scope.keyUp = false;
+  //     switch( event.keyCode ) {
+  //       case 37:
+  //         if ( p.move( character, { x: character.location.x - 1, y: character.location.y } ) ) {
+  //           character.location.x--;
+  //         }
+  //         break;
+  //
+  //       case 38:
+  //         if ( p.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
+  //           character.location.y--;
+  //         }
+  //         break;
+  //
+  //       case 39:
+  //         if ( p.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
+  //           character.location.x++;
+  //         }
+  //         break;
+  //
+  //       case 40:
+  //         if ( p.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
+  //           character.location.y++;
+  //         }
+  //         break;
+  //     }
+  //   }
+  // }
+  //
+  // function upHandler() {
+  //   $scope.keyUp = true;
+  // }
     // Stop point...
 };
 
