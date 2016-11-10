@@ -491,10 +491,9 @@ export default function engineService(socket){
 
     // * * * MAIN INITS
 
-    this.initGame = function(dungeon, players, userCharacter, gameId){ // Players will already exist on the scope by the time the dungeon starts
+    this.initGame = function(dungeon, players, userCharacter, gameId){  // Players will already exist on the scope by the time the dungeon starts
                                                                       // so players array will not be tied to the Dungeon object.
-
-        for(let k = 0; k < players.length; k++){                      // game room needs to be passes with socket.emit functions
+        for(let k = 0; k < players.length; k++) {                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
 
             if(players[k].player === userCharacter._id){
@@ -598,6 +597,7 @@ export default function engineService(socket){
     function loadPlayers(){
         for(let i = 0; i < Game.players.length; i++){
             Game.players[i].id = generateId();
+            console.log(Game);
             let x = Game.players[i].location.x;
             let y = Game.players[i].location.y;
             Game.board[y][x].free = false;
