@@ -575,16 +575,21 @@ export default function engineService(socket){
     }
 
     function loadTraps(dungeon){
-        for(let i = 0; i < Game.traps.length; i++){
+        for(let i = 0; i < dungeon.traps.length; i++){
+            console.log('traps', dungeon.traps[i]);
+            console.log('settings', dungeon.traps[i].settings);
+            console.log('settings', dungeon.traps[i].settings.damage);
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
             Game.board[y][x].trap.findDC          = dungeon.traps[i].settings.findDC;
             Game.board[y][x].trap.disarmDC        = dungeon.traps[i].settings.disarmDC;
             Game.board[y][x].trap.found           = dungeon.traps[i].settings.found;
             Game.board[y][x].trap.triggered       = dungeon.traps[i].settings.triggered;
-            Game.board[y][x].trap.damage.diceType = dungeon.traps[i].settings.damage.diceType;
-            Game.board[y][x].trap.damage.diceNum  = dungeon.traps[i].settings.damage.diceNum;
-            Game.board[y][x].trap.damage.mod      = dungeon.traps[i].settings.damage.mod;
+            Game.board[y][x].trap.damage = {
+              diceType: dungeon.traps[i].settings.damage.diceType
+              , diceNum: dungeon.traps[i].settings.damage.diceNum
+              , mod: dungeon.traps[i].settings.damage.mod
+            }
         }
     }
 
