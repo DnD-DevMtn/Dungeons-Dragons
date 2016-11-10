@@ -466,10 +466,10 @@ export default function engineService(socket){
 
     // * * * MAIN INITS
 
-    this.initGame = function(dungeon, players, userCharacter, gameId){ debugger // Players will already exist on the scope by the time the dungeon starts
+    this.initGame = function(dungeon, players, userCharacter, gameId){  // Players will already exist on the scope by the time the dungeon starts
                                                                       // so players array will not be tied to the Dungeon object.
 
-        for(let k = 0; k < players.length; k++){                      // game room needs to be passes with socket.emit functions
+        for(let k = 0; k < players.length; k++) {                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
 
             if(players[k].player === userCharacter._id){
@@ -484,23 +484,19 @@ export default function engineService(socket){
                     Game.user.equipped = {};
                     Game.user.newItems = [];
                 }
-            } else {
-                if(players[k].char.name === 'dm') {
-                    Game.dmMode = true;
-                } else {
-                  Game.players.push({
-                      actor: players[k].char                                    // Game.players[i].actor is a character
-                      , location: dungeon.startingLocation[k]
-                      , userName: players[k].name
-                      , equipped: {}
-                      , id: rand
-                      , ac: findAC(players[k].char)
-                      , hp: players[k].char.hp
-                      , newItems: []
-                  });
-                }
             }
-            Game.exploreOrder.push(players);
+            if(players[k].char.name !== 'dm') {
+              Game.players.push({
+                  actor: players[k].char                                    // Game.players[i].actor is a character
+                  , location: dungeon.startingLocation[k]
+                  , userName: players[k].name
+                  , equipped: {}
+                  , id: rand
+                  , ac: findAC(players[k].char)
+                  , hp: players[k].char.hp
+                  , newItems: []
+              });
+            }
         }
 
         room = gameId;
@@ -571,6 +567,7 @@ export default function engineService(socket){
     function loadPlayers(){
         for(let i = 0; i < Game.players.length; i++){
             Game.players[i].id = generateId();
+            console.log(Game);
             let x = Game.players[i].location.x;
             let y = Game.players[i].location.y;
             Game.board[y][x].free = false;
