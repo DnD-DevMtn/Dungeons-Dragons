@@ -485,9 +485,8 @@ export default function engineService(socket){
                     Game.user.newItems = [];
                 }
             } else {
-                if(players[k].char.name === 'dm') {
-                    Game.dmMode = true;
-                } else {
+                if(players[k].char.name !== 'dm') {
+                  console.log(dungeon.startingLocation[k]);
                   Game.players.push({
                       actor: players[k].char                                    // Game.players[i].actor is a character
                       , location: dungeon.startingLocation[k]
@@ -569,6 +568,7 @@ export default function engineService(socket){
     function loadPlayers(){
         for(let i = 0; i < Game.players.length; i++){
             Game.players[i].id = generateId();
+            console.log(Game);
             let x = Game.players[i].location.x;
             let y = Game.players[i].location.y;
             Game.board[y][x].free = false;

@@ -119,7 +119,7 @@ export default function(socket, $stateParams, userService, $state) {
     "height" : 27,
     "width" : 27,
     "backgroundImage" : "BRICK",
-    "startingLocation" : [{x: 2, y:3, x:2, y:4}],
+    "startingLocation" : [{x: 4, y:3},{x:4, y:4},{x:4, y:5}],
     "traps" : [
         {
             "location" : {
