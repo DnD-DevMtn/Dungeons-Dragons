@@ -68,7 +68,7 @@ export default function engineService(socket){
 
     // explore options
     Game.actionOptions = () => {
-        if(Game.dmMode){
+        if(Game.dmMode && Game.gameState === "combat") {
 
 
             return;
@@ -99,40 +99,40 @@ export default function engineService(socket){
             , [source.x + 1, source.y]
         ];
 
-        if(Game.gameState === "explore"){
+        if(Game.gameState === "explore") {
             Game.actions.push("perception");
-            for(let i = 0; i < doorSqr.length; i++){
+            for(let i = 0; i < doorSqr.length; i++) {
                 let x = doorSqr[i][0], y = doorSqr[i][1];
-                if(Game.board[y][x].door.id){
-                    if(Game.board[y][x].door.open === false){
+                if(Game.board[y][x].door.id) {
+                    if(Game.board[y][x].door.open === false) {
                         Game.actions.push("openDoor");
-                        if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged"){
+                        if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                             Game.actions.push("bash");
                         }
-                        if(Game.user.actor.classType.name === "Rogue" && Game.board[y][x].door.locked === true){
+                        if(Game.user.actor.classType.name === "Rogue" && Game.board[y][x].door.locked === true) {
                             Game.actions.push("lockpick");
                         }
                     }
-                    if(Game.board[y][x].door.open === true){
+                    if(Game.board[y][x].door.open === true) {
                         Game.actions.push("closeDoor");
                     }
                 }
             }
         }
 
-        if(Game.gameState === "combat"){
-            if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged"){
-                for(let i = 0; i < adjacent.length; i++){
+        if(Game.gameState === "combat") {
+            if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
+                for(let i = 0; i < adjacent.length; i++) {
                     let x = adjacent[i][0], y = adjacent[i][1];
-                    if(Game.board[y][x].type === "monster"){
+                    if(Game.board[y][x].type === "monster") {
                         Game.actions.push("melee");
-                        if(Game.user.actor.classType.name === "Fighter"){
+                        if(Game.user.actor.classType.name === "Fighter") {
                             Game.actions.push("fighterPowerAttack");
-                            if(checkCleave(source)){
+                            if(checkCleave(source)) {
                                 Game.actions.push("cleave");
                             }
                         }
-                        if(Game.user.actor.classType.name === "Rogue" && checkSneak(x, y)){
+                        if(Game.user.actor.classType.name === "Rogue" && checkSneak(x, y)) {
                             // TODO
                             // Game.actions should actually store objects with names and targets
                             Game.actions.push("sneakAttack");
@@ -140,14 +140,14 @@ export default function engineService(socket){
                     }
                 }
             }
-            if(Game.user.equipped.name && Game.user.equipped.weaponType === "Ranged"){
+            if(Game.user.equipped.name && Game.user.equipped.weaponType === "Ranged") {
                 let radius = rangedRadius(Math.floor(Game.user.equipped.range / 10));
                 // TODO finish this function
             }
-            if(Game.user.actor.classType.name === "Sorcerer"){
+            if(Game.user.actor.classType.name === "Sorcerer") {
                 Game.actions.push("castSpell");
             }
-            if(Game.user.actor.classType.name === "Cleric"){
+            if(Game.user.actor.classType.name === "Cleric") {
                 Game.actions.push("castSpell");
             }
         }
@@ -184,6 +184,7 @@ export default function engineService(socket){
                 }
             }
             Game.actionTaken = true;
+            Game.moves = 0;
             socket.emit("drawWeapon", {source: source, weapon: weapon, room: room});        // TODO
 
         } else {
@@ -254,6 +255,7 @@ export default function engineService(socket){
                 // }
             }
             Game.actionTaken = true;
+            Game.moves = 0;
             socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
                                 , target: target
                                 , roll: roll
@@ -290,6 +292,7 @@ export default function engineService(socket){
             }
         }
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("perception", {source: source, roll: rand, found: found, room: room});      // TODO socket.on perception comtroller side
     }
 
@@ -326,6 +329,7 @@ export default function engineService(socket){
             }
         }
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("rogueTrapfind", {source: source, roll: rand, found: found, room: room});   // TODO socket.on rogueTrapFind controller side
     }
 
@@ -346,6 +350,7 @@ export default function engineService(socket){
             }
         }
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("rogueDisarmTrap", {source: Game.user.location, roll: rand, damage: damage, success: success, room: room});
     }
 
@@ -356,6 +361,7 @@ export default function engineService(socket){
             Game.user.items.push(Game.board[y][x].item.items[i]);
         }
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("pickUpItem", {source: Game.user.location, item: item, room: room});
     }
 
@@ -391,6 +397,7 @@ export default function engineService(socket){
             }
         }
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("melee", {source: source, target: target, roll: rand, damage: damage, crit: crit, critMod: critMod, room: room});
     }
 
@@ -419,6 +426,7 @@ export default function engineService(socket){
             }
         }
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
@@ -438,6 +446,7 @@ export default function engineService(socket){
             damage += (Game.user.actor.lvl * 3);
         }
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("fighterPowerAttack", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
@@ -445,18 +454,21 @@ export default function engineService(socket){
     Game.fighterCleave = (source, target) => {
 
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("fighterCleave", {source: Game.user.location, target1: target1, target2: target2, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     Game.castSpell = (source, target) => {
 
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("castSpell", {source: Game.user.location, target: target, spell: spell, roll: rand, room: room});
     }
 
     Game.rogueSneakAttack = (source, target) => {
 
         Game.actionTaken = true;
+        Game.moves = 0;
         socket.emit("rogueSneakAttack", {source: Game.user.location, roll: rand, damage: damage, crit: crit, room: room})
     }
 
@@ -465,6 +477,7 @@ export default function engineService(socket){
         if(!Game.board[target.x][target.y].free){
             return false;
         }
+        Game.moves--;
         socket.emit("move", {source: Game.user.location, target: target, room: room});
     }
 

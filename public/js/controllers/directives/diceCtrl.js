@@ -1,5 +1,7 @@
-export default function() {
+export default function($scope) {
   const dice = this;
+
+  dice.endTurn = $scope.GV.endTurn;
 
   dice.result;
 

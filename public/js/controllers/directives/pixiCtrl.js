@@ -4,14 +4,13 @@ export default function( $scope ) {
   $scope.Dungeon = $scope.GV.pixiDungeon;
 
   // Actual class declaration
-  dataStructureBuffer( $scope.Dungeon );
+  var character = dataStructureBuffer( $scope.Dungeon );
   var p = new Game( $scope.Dungeon );
-
-  var character = $scope.Dungeon.players[ 0 ];
 
   $scope.$on("send move", data => {
       p.move(data.character, data.target);
   })
+
 
 
   // Delete below up to stop point....
@@ -58,6 +57,14 @@ export default function( $scope ) {
 function dataStructureBuffer( dungeon ) {
   for ( let i = 0; i < dungeon.players.length; i++ )
     dungeon.players[ i ].image = dungeon.players[ i ].actor.sprite;
+
+  dungeon.mainPlayer = {
+    id: dungeon.players[ 0 ].id,
+    cameraGridWidth: 15,
+    cameraGridHeight: 15
+  };
+
+  return dungeon.players[ 0 ];
 }
 
 class Game {
@@ -78,6 +85,7 @@ class Game {
 
     this.animationCounter = 0;
 
+    this.mainPlayerId = Dungeon.mainPlayer.id;
     this.floor.gridWidth = Dungeon.width;
     this.floor.gridHeight = Dungeon.height;
     this.floor.tileImage = Dungeon.backgroundImage;
@@ -86,11 +94,11 @@ class Game {
     this.doors = Dungeon.doors;
     this.environment = Dungeon.environment;
 
-    this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridWidth );
+    this.renderer = PIXI.autoDetectRenderer( Dungeon.mainPlayer.cameraGridWidth * this.tileGridWidth,
+      Dungeon.mainPlayer.cameraGridHeight * this.tileGridHeight );
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
     PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
-
   }
 
   initView() {
@@ -105,6 +113,7 @@ class Game {
   }
 
   play() {
+    this.cameraFocus();
     this.animation();
 
     this.renderer.render( this.stage );
@@ -212,6 +221,12 @@ class Game {
     }
 
     this.animationCounter++;
+  }
+
+  cameraFocus() {
+    var x = this.actors[ this.mainPlayerId ].x - ( this.renderer.width - this.actors[ this.mainPlayerId ].width ) / 2;
+    var y = this.actors[ this.mainPlayerId ].y - ( this.renderer.height - this.actors[ this.mainPlayerId ].height ) / 2;
+    this.gameScene.position.set( -x, -y );
   }
 
   move( character, targetLocation ) {

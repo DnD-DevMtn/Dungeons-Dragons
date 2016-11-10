@@ -333,7 +333,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
 
     function getInventory(weapons, gear, armor) {
-        console.log('this fired');
         inventoryService.getInventory(weapons, gear, armor)
         .then(results => {
             console.log(results);
@@ -354,6 +353,16 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     GV.endTurn = () => {
         socket.emit("end turn", GV.gameId);
+    }
+
+    GV.nextMonster = () => {
+        if(Game.monsterExplore >= Game.monsters.length) 
+            return;
+        else
+            Game.monsterExplore++;
+
+
+        // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
     }
 
     function checkTurn(){
