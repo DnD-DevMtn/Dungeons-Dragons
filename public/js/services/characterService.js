@@ -10,11 +10,11 @@ function characterService($http, $state, userService) {
 
   const currentCharacter = {
     baseStats : {},
-    descprition : {}
+    description: {}
   };
 
   this.finalRace = (gender, race) => {
-    currentCharacter.descprition.sex = gender;
+    currentCharacter.description.sex = gender;
     currentCharacter.race = race;
   }
 
@@ -42,28 +42,44 @@ function characterService($http, $state, userService) {
       currentCharacter.weapons = ["581a5e0aaba7c616582a7afe"];
       currentCharacter.armor = ["581a653dfc9a0f0b2a47a842"];
       currentCharacter.gear = ["581a5a142709d90a714c18e5"];
-      currentCharacter.sprite = "FIGHTERM";
       currentCharacter.hp = (10 * currentCharacter.level) + (Math.floor(con - 10) / 2);
+      if(currentCharacter.description.sex === 'male') {
+        currentCharacter.sprite = "FIGHTERM";
+      } else {
+        currentCharacter.sprite = "FIGHTERF";
+      }
     } else if(currentCharacter.classType === "Rogue"){
       classId = "5818cff07e79500420928e5e";
       currentCharacter.weapons = ["5817d7626b784f1c14e36f5e", "581a47ef959c9233f0f9eaac", "581a5fff89e4592710b834dd"];
       currentCharacter.armor = ["581a51762709d90a714c18d0"];
       currentCharacter.gear = ["581a5a142709d90a714c18e5"];
-      currentCharacter.sprite = "ROGUEM";
       currentCharacter.hp = (6 * currentCharacter.level) + (Math.floor(con - 10) / 2);
+      if(currentCharacter.description.sex === 'male') {
+        currentCharacter.sprite = "ROGUEM";
+      } else {
+        currentCharacter.sprite = "ROGUEF";
+      }
     } else if(currentCharacter.classType === "Sorcerer"){
       classId = "581b56450be6891a5843f1c1";
       currentCharacter.weapons = ["581a54c43045432ae855bb55"];
       currentCharacter.armor = ["581a652cfc9a0f0b2a47a841"];
       currentCharacter.gear = ["581a5a142709d90a714c18e5"];
-      currentCharacter.sprite = "SORCERERM";
       currentCharacter.hp = (6 * currentCharacter.level) + (Math.floor(con - 10) / 2);
+      if(currentCharacter.description.sex === 'male') {
+        currentCharacter.sprite = "SORCERERM";
+      } else {
+        currentCharacter.sprite = "SORCERERF";
+      }
     } else if(currentCharacter.classType === "Cleric"){
       classId = "581b5cc00be6891a5843f1c2";
       currentCharacter.weapons = ["581a50f6c97475280cf88209"];
       currentCharacter.armor = ["581a6549fc9a0f0b2a47a844"];
       currentCharacter.gear = ["581a5a142709d90a714c18e5"];
-      currentCharacter.sprite = "CLERICM";
+      if(currentCharacter.description.sex === 'male') {
+        currentCharacter.sprite = "CLERICM";
+      } else {
+        currentCharacter.sprite = "CLERICF";
+      }
       currentCharacter.hp = (8 * currentCharacter.level) + (Math.floor(con - 10) / 2);
     }
     if(currentCharacter.race === "Dwarf"){
