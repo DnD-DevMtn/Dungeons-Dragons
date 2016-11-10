@@ -756,7 +756,8 @@ export default function engineService(socket){
         return Math.floor((Game.user.baseStats[stat] - 10) / 2);
     }
 
-    function findAC(character){
+    function findAC(character){ debugger
+        console.log('character', character);
         return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 

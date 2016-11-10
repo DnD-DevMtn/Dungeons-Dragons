@@ -16,14 +16,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
 
-    if($stateParams.dungeon) {
-      const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
-      GV.pixiDungeon.players = Game.players;
-      GV.pixiDungeon.user = Game.user;
-    }
-
-    if(GV.user.character.weapons) {
-        getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+    if(GV.userChar.weapons) {
+      getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
     }
 
     socket.on("return move", data => {
@@ -323,25 +317,17 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
     }
 
-
-
-    function getInventory(weapons, gear, armor) {
-        console.log('this fired');
-        inventoryService.getInventory(weapons, gear, armor)
-        .then(results => {
-            console.log(results);
-            GV.user.character.weapons = results.weapons;
-            GV.user.character.armor = results.armor;
-            GV.user.character.gear = results.gear;
-        });
-    }
-
     function getInventory(weapons, gear, armor) {
         inventoryService.getInventory(weapons, gear, armor)
         .then(results => {
-            GV.user.character.weapons = results.weapons;
-            GV.user.character.armor = results.armor;
-            GV.user.character.gear = results.gear;
+            GV.user.character.weapons = GV.userChar.weapons = results.weapons;
+            GV.user.character.armor = GV.userChar.weapons = results.armor;
+            GV.user.character.gear = GV.userChar.weapons = results.gear;
+            if($stateParams.dungeon) {
+              const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
+              GV.pixiDungeon.players = Game.players;
+              GV.pixiDungeon.user = Game.user;
+            }
         })
     }
 

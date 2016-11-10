@@ -5,7 +5,10 @@ export default function( $scope ) {
 
   // Actual class declaration
   dataStructureBuffer( $scope.Dungeon );
-  var p = new Game( $scope.Dungeon );
+
+  if($scope.Dungeon.players) {
+    var p = new Game( $scope.Dungeon );
+  }
 
   var character = $scope.Dungeon.players[ 0 ];
 
