@@ -114,73 +114,187 @@ export default function(socket, $stateParams, userService, $state) {
     ////////////
 
     const dungeon = {
-    "_id" : "5823a84ffdc72b0a20c82f84",
-    "name" : "sample00",
-    "height" : 27,
+    "_id" : "5823bb404841130c2bade956",
+    "name" : "gamma",
+    "height" : 26,
     "width" : 27,
     "backgroundImage" : "BRICK",
-    "startingLocation" : [{x: 15, y:25},{x:16, y:25},{x:17, y:25}],
+    "startingLocation" : [
+        {"x": 20, "y": 25},
+        {"x": 22, "y": 25},
+        {"x": 24, "y": 25},
+        {"x": 25, "y": 25}
+    ],
     "traps" : [
         {
             "location" : {
                 "x" : 7,
                 "y" : 13
+            },
+            "settings" : {
+                "findDC" : 5,
+                "disarmDC" : 5,
+                "found" : false,
+                "triggered" : false,
+                "damage" : {
+                    "diceType" : 8,
+                    "diceNum" : 5,
+                    "mod" : 3
+                }
             }
         },
         {
             "location" : {
-                "x" : 4,
+                "x" : 3,
                 "y" : 13
+            },
+            "settings" : {
+                "findDC" : 5,
+                "disarmDC" : 5,
+                "found" : false,
+                "triggered" : false,
+                "damage" : {
+                    "diceType" : 8,
+                    "diceNum" : 5,
+                    "mod" : 3
+                }
             }
         },
         {
             "location" : {
                 "x" : 3,
                 "y" : 11
+            },
+            "settings" : {
+                "findDC" : 5,
+                "disarmDC" : 5,
+                "found" : false,
+                "triggered" : false,
+                "damage" : {
+                    "diceType" : 8,
+                    "diceNum" : 5,
+                    "mod" : 3
+                }
             }
         },
         {
             "location" : {
-                "x" : 7,
+                "x" : 8,
                 "y" : 11
-            }
-        }
-    ],
-    "doors" : [
-        {
-            "location" : {
-                "x" : 22,
-                "y" : 22
+            },
+            "settings" : {
+                "findDC" : 5,
+                "disarmDC" : 5,
+                "found" : false,
+                "triggered" : false,
+                "damage" : {
+                    "diceType" : 8,
+                    "diceNum" : 5,
+                    "mod" : 3
+                }
             }
         },
         {
             "location" : {
                 "x" : 6,
-                "y" : 9
+                "y" : 11
+            },
+            "settings" : {
+                "findDC" : 5,
+                "disarmDC" : 5,
+                "found" : false,
+                "triggered" : false,
+                "damage" : {
+                    "diceType" : 8,
+                    "diceNum" : 5,
+                    "mod" : 3
+                }
             }
-        },
+        }
+    ],
+    "doors" : [
         {
+            "image" : "DOORSIDE",
             "location" : {
-                "x" : 9,
-                "y" : 10
+                "x" : 14,
+                "y" : 5
+            },
+            "settings" : {
+                "bashDC" : 3,
+                "hp" : 3,
+                "locked" : false,
+                "pickDC" : 3,
+                "open" : false
             }
         },
         {
+            "image" : "DOOR1",
+            "location" : {
+                "x" : 8,
+                "y" : 10
+            },
+            "settings" : {
+                "bashDC" : 3,
+                "hp" : 3,
+                "locked" : false,
+                "pickDC" : 3,
+                "open" : false
+            }
+        },
+        {
+            "image" : "DOORSIDE",
+            "location" : {
+                "x" : 6,
+                "y" : 9
+            },
+            "settings" : {
+                "bashDC" : 3,
+                "hp" : 3,
+                "locked" : false,
+                "pickDC" : 3,
+                "open" : false
+            }
+        },
+        {
+            "image" : "DOORSIDE",
+            "location" : {
+                "x" : 14,
+                "y" : 9
+            },
+            "settings" : {
+                "bashDC" : 3,
+                "hp" : 3,
+                "locked" : false,
+                "pickDC" : 3,
+                "open" : false
+            }
+        },
+        {
+            "image" : "DOOR1",
             "location" : {
                 "x" : 21,
-                "y" : 13
+                "y" : 14
+            },
+            "settings" : {
+                "bashDC" : 3,
+                "hp" : 3,
+                "locked" : false,
+                "pickDC" : 3,
+                "open" : false
             }
         },
         {
+            "image" : "DOOR1",
             "location" : {
-                "x" : 16,
-                "y" : 7
-            }
-        },
-        {
-            "location" : {
-                "x" : 16,
-                "y" : 4
+                "x" : 22,
+                "y" : 21
+            },
+            "settings" : {
+                "bashDC" : 3,
+                "hp" : 3,
+                "locked" : false,
+                "pickDC" : 3,
+                "open" : false
             }
         }
     ],
@@ -188,54 +302,126 @@ export default function(socket, $stateParams, userService, $state) {
         "gear" : [
             {
                 "location" : {
-                    "x" : 9,
-                    "y" : 18
+                    "x" : 5,
+                    "y" : 15
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 6
                 }
             },
             {
                 "location" : {
-                    "x" : 7,
-                    "y" : 20
+                    "x" : 11,
+                    "y" : 19
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 6
+                }
+            },
+            {
+                "location" : {
+                    "x" : 16,
+                    "y" : 19
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 6
                 }
             }
         ],
         "weapons" : [
             {
                 "location" : {
-                    "x" : 6,
-                    "y" : 18
+                    "x" : 11,
+                    "y" : 17
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 4
                 }
             },
             {
                 "location" : {
-                    "x" : 13,
+                    "x" : 4,
                     "y" : 17
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 4
+                }
+            },
+            {
+                "location" : {
+                    "x" : 14,
+                    "y" : 17
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 4
                 }
             },
             {
                 "location" : {
                     "x" : 7,
-                    "y" : 16
+                    "y" : 19
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 4
                 }
             },
             {
                 "location" : {
-                    "x" : 3,
-                    "y" : 8
+                    "x" : 10,
+                    "y" : 15
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 4
                 }
             }
         ],
         "armor" : [
             {
                 "location" : {
-                    "x" : 11,
-                    "y" : 18
+                    "x" : 7,
+                    "y" : 16
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 2
                 }
             },
             {
                 "location" : {
-                    "x" : 4,
-                    "y" : 16
+                    "x" : 9,
+                    "y" : 18
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 2
+                }
+            },
+            {
+                "location" : {
+                    "x" : 15,
+                    "y" : 15
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 2
+                }
+            },
+            {
+                "location" : {
+                    "x" : 13,
+                    "y" : 19
+                },
+                "settings" : {
+                    "found" : true,
+                    "findDC" : 2
                 }
             }
         ]
@@ -294,14 +480,14 @@ export default function(socket, $stateParams, userService, $state) {
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 10,
+                "x" : 11,
                 "y" : 3
             }
         },
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 11,
+                "x" : 10,
                 "y" : 3
             }
         },
@@ -315,13 +501,6 @@ export default function(socket, $stateParams, userService, $state) {
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 12,
-                "y" : 3
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
                 "x" : 15,
                 "y" : 3
             }
@@ -329,7 +508,14 @@ export default function(socket, $stateParams, userService, $state) {
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 14,
+                "x" : 12,
+                "y" : 3
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 16,
                 "y" : 3
             }
         },
@@ -383,16 +569,16 @@ export default function(socket, $stateParams, userService, $state) {
             }
         },
         {
-            "image" : "WALL1",
+            "image" : "WALL0",
             "location" : {
-                "x" : 24,
+                "x" : 2,
                 "y" : 3
             }
         },
         {
-            "image" : "WALL0",
+            "image" : "WALL1",
             "location" : {
-                "x" : 2,
+                "x" : 24,
                 "y" : 3
             }
         },
@@ -435,13 +621,6 @@ export default function(socket, $stateParams, userService, $state) {
             "image" : "WALL2",
             "location" : {
                 "x" : 2,
-                "y" : 12
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 2,
                 "y" : 11
             }
         },
@@ -449,7 +628,7 @@ export default function(socket, $stateParams, userService, $state) {
             "image" : "WALL2",
             "location" : {
                 "x" : 2,
-                "y" : 15
+                "y" : 12
             }
         },
         {
@@ -463,6 +642,13 @@ export default function(socket, $stateParams, userService, $state) {
             "image" : "WALL2",
             "location" : {
                 "x" : 2,
+                "y" : 15
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 2,
                 "y" : 16
             }
         },
@@ -470,14 +656,14 @@ export default function(socket, $stateParams, userService, $state) {
             "image" : "WALL2",
             "location" : {
                 "x" : 2,
-                "y" : 18
+                "y" : 17
             }
         },
         {
             "image" : "WALL2",
             "location" : {
                 "x" : 2,
-                "y" : 17
+                "y" : 18
             }
         },
         {
@@ -497,357 +683,196 @@ export default function(socket, $stateParams, userService, $state) {
         {
             "image" : "WALL2",
             "location" : {
-                "x" : 2,
-                "y" : 21
+                "x" : 24,
+                "y" : 4
             }
         },
         {
-            "image" : "WALL5",
+            "image" : "WALL2",
             "location" : {
-                "x" : 2,
-                "y" : 22
+                "x" : 24,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 7
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 8
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 12
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 15
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 16
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 17
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 18
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 19
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 24,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "WALL1",
+            "location" : {
+                "x" : 14,
+                "y" : 3
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 14,
+                "y" : 4
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 14,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "WALL1",
+            "location" : {
+                "x" : 14,
+                "y" : 7
             }
         },
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 3,
-                "y" : 22
+                "x" : 13,
+                "y" : 7
             }
         },
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 4,
-                "y" : 22
+                "x" : 12,
+                "y" : 7
             }
         },
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 5,
-                "y" : 22
+                "x" : 11,
+                "y" : 7
             }
         },
         {
-            "image" : "WALL3",
+            "image" : "WALL0",
             "location" : {
-                "x" : 6,
-                "y" : 22
+                "x" : 10,
+                "y" : 7
             }
         },
         {
-            "image" : "WALL3",
+            "image" : "WALL2",
             "location" : {
-                "x" : 7,
-                "y" : 22
+                "x" : 10,
+                "y" : 8
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 10,
+                "y" : 9
+            }
+        },
+        {
+            "image" : "WALL1",
+            "location" : {
+                "x" : 10,
+                "y" : 10
             }
         },
         {
             "image" : "WALL3",
             "location" : {
                 "x" : 9,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 8,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 10,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 12,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 11,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 14,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 13,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 16,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 18,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 17,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 19,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 20,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 21,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 23,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL7",
-            "location" : {
-                "x" : 24,
-                "y" : 22
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 21
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 20
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 19
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 18
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 17
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 16
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 14
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 11
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 12
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 9
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 8
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 7
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 6
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 24,
-                "y" : 4
-            }
-        },
-        {
-            "image" : "WALL0",
-            "location" : {
-                "x" : 2,
-                "y" : 6
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 3,
-                "y" : 6
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 4,
-                "y" : 6
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 5,
-                "y" : 6
-            }
-        },
-        {
-            "image" : "WALL1",
-            "location" : {
-                "x" : 6,
-                "y" : 6
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 6,
-                "y" : 7
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 6,
-                "y" : 8
-            }
-        },
-        {
-            "image" : "WALL6",
-            "location" : {
-                "x" : 6,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 5,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 4,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 3,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL0",
-            "location" : {
-                "x" : 2,
                 "y" : 10
             }
         },
@@ -859,154 +884,140 @@ export default function(socket, $stateParams, userService, $state) {
             }
         },
         {
-            "image" : "WALL3",
+            "image" : "WALL6",
             "location" : {
-                "x" : 8,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 10,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL1",
-            "location" : {
-                "x" : 11,
+                "x" : 6,
                 "y" : 10
             }
         },
         {
             "image" : "WALL2",
             "location" : {
-                "x" : 11,
-                "y" : 9
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 11,
+                "x" : 6,
                 "y" : 8
             }
         },
         {
             "image" : "WALL2",
             "location" : {
-                "x" : 11,
+                "x" : 6,
                 "y" : 7
             }
         },
         {
-            "image" : "WALL2",
+            "image" : "WALL1",
             "location" : {
-                "x" : 11,
+                "x" : 6,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 5,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 3,
+                "y" : 6
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 4,
                 "y" : 6
             }
         },
         {
             "image" : "WALL0",
             "location" : {
-                "x" : 11,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 12,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 13,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 14,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 15,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "WALL1",
-            "location" : {
-                "x" : 16,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "WALL1",
-            "location" : {
-                "x" : 16,
-                "y" : 3
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 16,
+                "x" : 2,
                 "y" : 6
             }
         },
         {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 5,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 4,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 3,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "WALL0",
+            "location" : {
+                "x" : 2,
+                "y" : 10
+            }
+        },
+        {
             "image" : "WALL2",
             "location" : {
-                "x" : 16,
+                "x" : 14,
                 "y" : 8
             }
         },
         {
             "image" : "WALL2",
             "location" : {
-                "x" : 16,
-                "y" : 9
+                "x" : 14,
+                "y" : 10
             }
         },
         {
             "image" : "WALL5",
             "location" : {
+                "x" : 14,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 15,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
                 "x" : 16,
-                "y" : 10
+                "y" : 11
             }
         },
         {
             "image" : "WALL3",
             "location" : {
                 "x" : 17,
-                "y" : 10
+                "y" : 11
             }
         },
         {
             "image" : "WALL3",
             "location" : {
                 "x" : 18,
-                "y" : 10
+                "y" : 11
             }
         },
         {
             "image" : "WALL1",
-            "location" : {
-                "x" : 19,
-                "y" : 10
-            }
-        },
-        {
-            "image" : "WALL2",
             "location" : {
                 "x" : 19,
                 "y" : 11
@@ -1020,65 +1031,128 @@ export default function(socket, $stateParams, userService, $state) {
             }
         },
         {
-            "image" : "WALL6",
+            "image" : "WALL2",
             "location" : {
                 "x" : 19,
                 "y" : 13
             }
         },
         {
+            "image" : "WALL6",
+            "location" : {
+                "x" : 19,
+                "y" : 14
+            }
+        },
+        {
             "image" : "WALL3",
             "location" : {
                 "x" : 20,
-                "y" : 13
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 23,
+                "y" : 14
             }
         },
         {
             "image" : "WALL3",
             "location" : {
                 "x" : 22,
-                "y" : 13
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 23,
-                "y" : 13
+                "y" : 14
             }
         },
         {
             "image" : "WALL1",
             "location" : {
                 "x" : 24,
-                "y" : 13
+                "y" : 14
             }
         },
         {
             "image" : "WALL3",
             "location" : {
                 "x" : 18,
-                "y" : 13
+                "y" : 14
             }
         },
         {
             "image" : "WALL3",
+            "location" : {
+                "x" : 16,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 15,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 14,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 13,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 12,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 11,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL5",
+            "location" : {
+                "x" : 10,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 10,
+                "y" : 13
+            }
+        },
+        {
+            "image" : "WALL1",
             "location" : {
                 "x" : 10,
                 "y" : 12
             }
         },
         {
-            "image" : "WALL3",
+            "image" : "WALL2",
             "location" : {
-                "x" : 9,
-                "y" : 12
+                "x" : 10,
+                "y" : 11
             }
         },
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 7,
+                "x" : 9,
                 "y" : 12
             }
         },
@@ -1092,155 +1166,29 @@ export default function(socket, $stateParams, userService, $state) {
         {
             "image" : "WALL3",
             "location" : {
+                "x" : 7,
+                "y" : 12
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
                 "x" : 6,
                 "y" : 12
             }
         },
         {
-            "image" : "WALL5",
+            "image" : "WALL3",
             "location" : {
                 "x" : 5,
                 "y" : 12
             }
         },
         {
-            "image" : "WALL2",
+            "image" : "WALL3",
             "location" : {
-                "x" : 11,
-                "y" : 11
-            }
-        },
-        {
-            "image" : "WALL1",
-            "location" : {
-                "x" : 11,
+                "x" : 4,
                 "y" : 12
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 11,
-                "y" : 13
-            }
-        },
-        {
-            "image" : "WALL0",
-            "location" : {
-                "x" : 17,
-                "y" : 13
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 11,
-                "y" : 14
-            }
-        },
-        {
-            "image" : "WALL5",
-            "location" : {
-                "x" : 11,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 12,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 13,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 14,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL3",
-            "location" : {
-                "x" : 16,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL7",
-            "location" : {
-                "x" : 17,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 17,
-                "y" : 14
-            }
-        },
-        {
-            "image" : "WALL0",
-            "location" : {
-                "x" : 15,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 15,
-                "y" : 16
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 15,
-                "y" : 17
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 15,
-                "y" : 18
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 15,
-                "y" : 19
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 15,
-                "y" : 20
-            }
-        },
-        {
-            "image" : "WALL2",
-            "location" : {
-                "x" : 15,
-                "y" : 21
-            }
-        },
-        {
-            "image" : "WALL6",
-            "location" : {
-                "x" : 15,
-                "y" : 22
             }
         },
         {
@@ -1274,14 +1222,14 @@ export default function(socket, $stateParams, userService, $state) {
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 8,
+                "x" : 7,
                 "y" : 14
             }
         },
         {
             "image" : "WALL3",
             "location" : {
-                "x" : 7,
+                "x" : 8,
                 "y" : 14
             }
         },
@@ -1290,113 +1238,337 @@ export default function(socket, $stateParams, userService, $state) {
             "location" : {
                 "x" : 2,
                 "y" : 14
+            }
+        },
+        {
+            "image" : "WALL1",
+            "location" : {
+                "x" : 17,
+                "y" : 14
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 17,
+                "y" : 15
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 17,
+                "y" : 16
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 17,
+                "y" : 18
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 17,
+                "y" : 17
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 17,
+                "y" : 19
+            }
+        },
+        {
+            "image" : "WALL2",
+            "location" : {
+                "x" : 17,
+                "y" : 20
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 12,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 13,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 14,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 15,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 16,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 10,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 11,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 9,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 8,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 7,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 6,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 5,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 4,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 3,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 18,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 19,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 20,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 21,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL3",
+            "location" : {
+                "x" : 23,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL7",
+            "location" : {
+                "x" : 24,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL6",
+            "location" : {
+                "x" : 17,
+                "y" : 21
+            }
+        },
+        {
+            "image" : "WALL5",
+            "location" : {
+                "x" : 2,
+                "y" : 21
             }
         },
         {
             "image" : "TREE0",
             "location" : {
                 "x" : 19,
-                "y" : 23
+                "y" : 22
             }
         },
         {
             "image" : "TREE1",
             "location" : {
                 "x" : 23,
-                "y" : 23
-            }
-        },
-        {
-            "image" : "ROCK",
-            "location" : {
-                "x" : 19,
-                "y" : 15
-            }
-        },
-        {
-            "image" : "TREE0",
-            "location" : {
-                "x" : 19,
-                "y" : 18
+                "y" : 22
             }
         }
     ],
     "monsters" : [
         {
-            "image" : "DARKKNIGHT",
+            "image" : "BLANCA",
             "location" : {
-                "x" : 22,
-                "y" : 5
-            }
-        },
-        {
-            "image" : "SHIVA",
-            "location" : {
-                "x" : 19,
-                "y" : 7
-            }
-        },
-        {
-            "image" : "JENOVA",
-            "location" : {
-                "x" : 9,
-                "y" : 6
-            }
-        },
-        {
-            "image" : "DARKMAGE",
-            "location" : {
-                "x" : 9,
-                "y" : 13
+                "x" : 13,
+                "y" : 16
             }
         },
         {
             "image" : "BLANCA",
             "location" : {
-                "x" : 9,
-                "y" : 15
+                "x" : 16,
+                "y" : 5
             }
         },
         {
             "image" : "GOLBEZ",
             "location" : {
                 "x" : 21,
+                "y" : 12
+            }
+        },
+        {
+            "image" : "DARKMAGE",
+            "location" : {
+                "x" : 9,
                 "y" : 14
             }
         },
         {
-            "image" : "GOLBEZ",
-            "location" : {
-                "x" : 18,
-                "y" : 19
-            }
-        },
-        {
-            "image" : "GOLBEZ",
+            "image" : "JENOVA",
             "location" : {
                 "x" : 8,
-                "y" : 4
+                "y" : 16
             }
         },
         {
-            "image" : "DARKKNIGHT",
+            "image" : "GOLBEZ",
             "location" : {
-                "x" : 5,
-                "y" : 8
-            }
-        },
-        {
-            "image" : "IFRIT",
-            "location" : {
-                "x" : 13,
-                "y" : 13
+                "x" : 6,
+                "y" : 18
             }
         },
         {
             "image" : "DRAGON",
             "location" : {
-                "x" : 13,
-                "y" : 9
+                "x" : 11,
+                "y" : 10
+            }
+        },
+        {
+            "image" : "IFRIT",
+            "location" : {
+                "x" : 11,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "DARKKNIGHT",
+            "location" : {
+                "x" : 8,
+                "y" : 7
+            }
+        },
+        {
+            "image" : "BLANCA",
+            "location" : {
+                "x" : 7,
+                "y" : 4
+            }
+        },
+        {
+            "image" : "BLANCA",
+            "location" : {
+                "x" : 21,
+                "y" : 5
+            }
+        },
+        {
+            "image" : "GOLBEZ",
+            "location" : {
+                "x" : 4,
+                "y" : 11
+            }
+        },
+        {
+            "image" : "SHIVA",
+            "location" : {
+                "x" : 20,
+                "y" : 8
+            }
+        },
+        {
+            "image" : "SHIVA",
+            "location" : {
+                "x" : 10,
+                "y" : 17
+            }
+        },
+        {
+            "image" : "SHIVA",
+            "location" : {
+                "x" : 4,
+                "y" : 19
+            }
+        },
+        {
+            "image" : "SHIVA",
+            "location" : {
+                "x" : 22,
+                "y" : 18
             }
         }
     ],

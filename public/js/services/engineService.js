@@ -532,7 +532,6 @@ export default function engineService(socket){
 
         Game.monsters    = dungeon.monsters;       // Monsters and environment objects already have locations
         Game.environment = dungeon.environment;
-        Game.doors       = dungeon.doors;
 
         Game.width = dungeon.width;
         Game.height = dungeon.height;
@@ -558,7 +557,7 @@ export default function engineService(socket){
         loadMonsters();
         loadPlayers();
         loadItems(dungeon);
-        loadDoors();
+        loadDoors(dungeon);
 
         printBoard();
 
@@ -579,7 +578,7 @@ export default function engineService(socket){
         for(let i = 0; i < Game.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
-            Game.board[y][x].trap = dungeon.traps[i].trap
+            Game.board[y][x].trap = dungeon.traps[i].trap.settings;
         }
     }
 
@@ -630,16 +629,15 @@ export default function engineService(socket){
         }
     }
 
-    function loadDoors(){
-        for(let i = 0; i < Game.doors.length; i++){
-            let x = Game.doors[i].location.x;
-            let y = Game.doors[i].location.y;
-            Game.board[y][x].door.name   = Game.doors[i].name;
-            Game.board[y][x].door.bashDC = Game.doors[i].bashDC;
-            Game.board[y][x].door.hp     = Game.doors[i].hp;
-            Game.board[y][x].door.locked = Game.doors[i].locked;
-            Game.board[y][x].door.pickDC = Game.doors[i].pickDC;
-            Game.board[y][x].door.open   = Game.doors[i].open;
+    function loadDoors(dungeon){ debugger
+        for(let i = 0; i < dungeon.doors.length; i++){
+            let x = dungeon.doors[i].location.x;
+            let y = dungeon.doors[i].location.y;
+            Game.board[y][x].door.bashDC = dungeon.doors[i].settings.bashDC;
+            Game.board[y][x].door.hp     = dungeon.doors[i].settings.hp;
+            Game.board[y][x].door.locked = dungeon.doors[i].settings.locked;
+            Game.board[y][x].door.pickDC = dungeon.doors[i].settings.pickDC;
+            Game.board[y][x].door.open   = dungeon.doors[i].settings.open;
         }
     }
 
@@ -655,7 +653,7 @@ export default function engineService(socket){
 
     // * * * PRINTBOARD
 
-    function printBoard(){
+    function printBoard(){ debugger
         for(let y = 0; y < Game.height; y++){
             let line = "";
             for(let x = 0; x < Game.width; x++){
@@ -663,7 +661,7 @@ export default function engineService(socket){
                     line += " I";
                 } else if(Game.board[y][x].trap.name) {
                     line += " T";
-                } else if(Game.board[y][x].door.name) {
+                } else if(Game.board[y][x].door.bashDC) {
                     line += " D";
                 } else if(Game.board[y][x].type === "player") {
                     line += " P";
