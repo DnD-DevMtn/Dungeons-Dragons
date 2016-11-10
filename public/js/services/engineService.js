@@ -73,7 +73,6 @@ export default function engineService(socket){
         , items: []
         , traps: []
         , environment: []
-        , exploreOrder: []
         , combatOrder: []
         , exploreTurn: 0
         , combatTurn: 0
@@ -404,8 +403,11 @@ export default function engineService(socket){
         }
         if(Game.board[y][x].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
-                if(Game.monsters[i].id === Game.board[y][x].id){
-                    Game.monsters[i].monster
+                if(Game.monsters[i].id === Game.board[x][y].id){
+                    for(let j = 0; j < Game.monsters[i].monster.melee.damage.numDice; j++){
+                        damage += (Math.floor(Math.random() * Game.monsters[i].monster.melee.damage.diceType) + 1);
+                    }
+                    damage += Game.monsters[i].monster.melee.damage.mod;
                 }
             }
         }
@@ -426,11 +428,34 @@ export default function engineService(socket){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
             }
         }
+        if(Game.board[x][y].type === "monster"){
+            for(let i = 0; i < Game.monsters.length; i++){
+                if(Game.monsters[i].id === Game.board[x][y].id){
+                    for(let j = 0; j < Game.monsters[i].monster.ranged.damage.numDice; j++){
+                        damage += (Math.floor(Math.random() * Game.monsters[i].monster.ranged.damage.diceType) + 1);
+                    }
+                    damage += Game.monsters[i].monster.ranged.damage.mod;
+                }
+            }
+        }
         socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
 
     // sacrifice accuracy for damage
     Game.fighterPowerAttack = (source, target1, target2) => {
+        let x = source.x, y = source.y;
+        let rand   = Math.floor(Math.random() * 20) + 1;
+        let damage = 0;
+        let crit = (rand === 20) ? true : false;
+        let critMod = 2;
+        if(Game.board[x][y].id === Game.user.id){
+            if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
+            let critMod = Game.user.equipped.crit.critDamage;
+            for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
+                damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
+            }
+            damage += (Game.user.actor.lvl * 3);
+        }
 
         socket.emit("fighterPowerAttack", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
     }
@@ -468,7 +493,6 @@ export default function engineService(socket){
 
     this.initGame = function(dungeon, players, userCharacter, gameId){  // Players will already exist on the scope by the time the dungeon starts
                                                                       // so players array will not be tied to the Dungeon object.
-
         for(let k = 0; k < players.length; k++) {                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
 
@@ -476,33 +500,40 @@ export default function engineService(socket){
                 if(players[k].char.name === 'dm') {
                     Game.dmMode = true;
                 } else {
-                    Game.user.actor = userCharacter;                     // Game.user is a character
+                    Game.user.actor    = userCharacter;                     // Game.user is a character
                     Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
-                    Game.user.id = rand;
-                    Game.user.ac = findAC(Game.user.actor);
-                    Game.user.hp = userCharacter.hp;
+                    Game.user.id       = rand;
+                    Game.user.ac       = findAC(Game.user.actor);
+                    Game.user.hp       = userCharacter.hp;
                     Game.user.equipped = {};
                     Game.user.newItems = [];
+                    Game.user.napTime  = false;
+                    Game.user.youDead  = false;
                 }
             }
-            if(players[k].char.name !== 'dm') {
-              Game.players.push({
-                  actor: players[k].char                                    // Game.players[i].actor is a character
-                  , location: dungeon.startingLocation[k]
-                  , userName: players[k].name
-                  , equipped: {}
-                  , id: rand
-                  , ac: findAC(players[k].char)
-                  , hp: players[k].char.hp
-                  , newItems: []
-              });
+            if(players[k].char.name !== "dm"){
+                Game.players.push({
+                    actor: players[k].char                                    // Game.players[i].actor is a character
+                    , location: dungeon.startingLocation[k]
+                    , userName: players[k].userName
+                    , sprite: players[k].char.sprite
+                    , equipped: {}
+                    , id: rand
+                    , ac: findAC(players[k].char)
+                    , hp: players[k].char.hp
+                    , newItems: []
+                    , napTime: false
+                    , youDead: false
+                });
             }
         }
 
         room = gameId;
 
-        Game.monsters = dungeon.monsters;       // Monsters and environment objects already have locations
+        Game.monsters    = dungeon.monsters;       // Monsters and environment objects already have locations
         Game.environment = dungeon.environment;
+        Game.doors       = dungeon.doors;
+
         Game.width = dungeon.width;
         Game.height = dungeon.height;
 
@@ -523,10 +554,11 @@ export default function engineService(socket){
             }
         }
         loadEnvironment();
-        loadTraps();
+        loadTraps(dungeon);
         loadMonsters();
         loadPlayers();
         loadItems(dungeon);
+        loadDoors();
 
         printBoard();
 
@@ -543,7 +575,7 @@ export default function engineService(socket){
         }
     }
 
-    function loadTraps(){
+    function loadTraps(dungeon){
         for(let i = 0; i < Game.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
@@ -598,6 +630,19 @@ export default function engineService(socket){
         }
     }
 
+    function loadDoors(){
+        for(let i = 0; i < Game.doors.length; i++){
+            let x = Game.doors[i].location.x;
+            let y = Game.doors[i].location.y;
+            Game.board[y][x].door.name   = Game.doors[i].name;
+            Game.board[y][x].door.bashDC = Game.doors[i].bashDC;
+            Game.board[y][x].door.hp     = Game.doors[i].hp;
+            Game.board[y][x].door.locked = Game.doors[i].locked;
+            Game.board[y][x].door.pickDC = Game.doors[i].pickDC;
+            Game.board[y][x].door.open   = Game.doors[i].open;
+        }
+    }
+
     function generateId(){
         while(true){
             let rand = Math.floor(Math.random() * 10000);
@@ -616,13 +661,15 @@ export default function engineService(socket){
             for(let x = 0; x < Game.width; x++){
                 if(Game.board[y][x].item.items.length > 0){
                     line += " I";
-                } else if(Game.board[y][x].trap.name){
+                } else if(Game.board[y][x].trap.name) {
                     line += " T";
-                } else if(Game.board[y][x].type === "player"){
+                } else if(Game.board[y][x].door.name) {
+                    line += " D";
+                } else if(Game.board[y][x].type === "player") {
                     line += " P";
-                } else if(Game.board[y][x].type === "monster"){
+                } else if(Game.board[y][x].type === "monster") {
                     line += " M";
-                } else if(Game.board[y][x].type === "environmental"){
+                } else if(Game.board[y][x].type === "environmental") {
                     line += " E";
                 } else {
                     line += " .";
