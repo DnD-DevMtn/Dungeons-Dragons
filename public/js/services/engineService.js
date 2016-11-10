@@ -73,11 +73,14 @@ export default function engineService(socket){
 
             return;
         }
-        let source = Game.user.location;
+        let source = {
+          x: Game.user.location.x
+          , y: Game.user.location.y
+        }
 
         // Drop item is a universal action for all states
         Game.actions = ["dropItem"];
-        if(Game.board[source.x][source.y].items.stuff.length > 0 && Game.board[source.x][source.y].items.found){
+        if(Game.board[source.x][source.y].item.items.length > 0 && Game.board[source.x][source.y].item.found){
             Game.actions.push("pickUpItem");
         }
 
@@ -151,6 +154,7 @@ export default function engineService(socket){
                 Game.actions.push("castSpell");
             }
         }
+        console.log(Game.actions);
     }
     // end Game.actionOptions()
 
@@ -478,7 +482,9 @@ export default function engineService(socket){
             return false;
         }
         Game.moves--;
-        socket.emit("move", {source: Game.user.location, target: target, room: room});
+        //socket.emit("move", {source: Game.user.location, target: target, room: room});
+
+        return true;
     }
 
     Game.dmMoves = () => {
@@ -501,12 +507,12 @@ export default function engineService(socket){
         for(let k = 0; k < players.length; k++) {                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
 
-            if(players[k].player === userCharacter._id){
+            if(players[k].player === userCharacter._id) {
                 if(players[k].char.name === 'dm') {
                     Game.dmMode = true;
                 } else {
                     Game.user.actor    = userCharacter;                     // Game.user is a character
-                    Game.user.location = dungeon.startingLocation[k];    // user exists as an object on service and in the array of players
+                    Game.user.location = dungeon.startingLocation[k].location;    // user exists as an object on service and in the array of players
                     Game.user.id       = rand;
                     Game.user.ac       = findAC(Game.user.actor);
                     Game.user.hp       = userCharacter.hp;
@@ -608,7 +614,6 @@ export default function engineService(socket){
 
     function loadPlayers(){
         for(let i = 0; i < Game.players.length; i++){
-            Game.players[i].id = generateId();
             console.log(Game);
             let x = Game.players[i].location.x;
             let y = Game.players[i].location.y;
@@ -623,22 +628,22 @@ export default function engineService(socket){
             let x = dungeon.items.armor[i].location.x;
             let y = dungeon.items.armor[i].location.y;
             Game.board[y][x].item.items.push(dungeon.items.armor[i].item);
-            Game.board[y][x].item.found  = dungeon.items.armor[i].found;
-            Game.board[y][x].item.findDC = dungeon.items.armor[i].findDC;
+            Game.board[y][x].item.found  = dungeon.items.armor[i].settings.found;
+            Game.board[y][x].item.findDC = dungeon.items.armor[i].settings.findDC;
         }
         for(let i = 0; i < dungeon.items.weapons.length; i++){
             let x = dungeon.items.weapons[i].location.x;
             let y = dungeon.items.weapons[i].location.y;
             Game.board[y][x].item.items.push(dungeon.items.weapons[i].item);
-            Game.board[y][x].item.found  = dungeon.items.weapons[i].found;
-            Game.board[y][x].item.findDC = dungeon.items.weapons[i].findDC;
+            Game.board[y][x].item.found  = dungeon.items.weapons[i].settings.found;
+            Game.board[y][x].item.findDC = dungeon.items.weapons[i].settings.findDC;
         }
         for(let i = 0; i < dungeon.items.gear.length; i++){
             let x = dungeon.items.gear[i].location.x;
             let y = dungeon.items.gear[i].location.y;
             Game.board[y][x].item.items.push(dungeon.items.gear[i].item);
-            Game.board[y][x].item.found  = dungeon.items.gear[i].found;
-            Game.board[y][x].item.findDC = dungeon.items.gear[i].findDC;
+            Game.board[y][x].item.found  = dungeon.items.gear[i].settings.found;
+            Game.board[y][x].item.findDC = dungeon.items.gear[i].settings.findDC;
         }
     }
 
@@ -763,7 +768,7 @@ export default function engineService(socket){
 
     //initiative = stateMod(dex);
 
-    function findAC(character){ 
+    function findAC(character){
         return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 
