@@ -18,7 +18,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     if($stateParams.dungeon) {
       const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
-      GV.pixiDungeon.players = Game.players
+      GV.pixiDungeon.players = Game.players;
+      GV.pixiDungeon.user = Game.user;
     }
 
     if(GV.user.character.weapons) {

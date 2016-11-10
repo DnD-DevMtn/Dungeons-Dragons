@@ -73,7 +73,6 @@ export default function engineService(socket){
         , items: []
         , traps: []
         , environment: []
-        , exploreOrder: []
         , combatOrder: []
         , exploreTurn: 0
         , combatTurn: 0
@@ -512,22 +511,22 @@ export default function engineService(socket){
                     Game.user.napTime  = false;
                     Game.user.youDead  = false;
                 }
-            } else {
+            }
+            if(players[k].char.name !== "dm"){
                 Game.players.push({
-                    actor: players[k].userChar                                    // Game.players[i].actor is a character
+                    actor: players[k].char                                    // Game.players[i].actor is a character
                     , location: dungeon.startingLocation[k]
                     , userName: players[k].userName
-                    , sprite: players[k].userChar.sprite
+                    , sprite: players[k].char.sprite
                     , equipped: {}
                     , id: rand
-                    , ac: findAC(players[k].userChar)
-                    , hp: players[k].userChar.hp
+                    , ac: findAC(players[k].char)
+                    , hp: players[k].char.hp
                     , newItems: []
                     , napTime: false
                     , youDead: false
                 });
             }
-            Game.exploreOrder.push(players);
         }
 
         room = gameId;
