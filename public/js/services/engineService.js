@@ -570,15 +570,23 @@ export default function engineService(socket){
             let y = Game.environment[i].location.y;
             Game.board[y][x].free = false;
             Game.board[y][x].type = "environmental";
-            Game.board[y][x].id = Game.environment[i].id;
+            Game.board[y][x].id   = Game.environment[i].id;
         }
     }
 
     function loadTraps(dungeon){
-        for(let i = 0; i < Game.traps.length; i++){
+        for(let i = 0; i < dungeon.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
-            Game.board[y][x].trap = dungeon.traps[i].trap.settings;
+            Game.board[y][x].trap.findDC          = dungeon.traps[i].settings.findDC;
+            Game.board[y][x].trap.disarmDC        = dungeon.traps[i].settings.disarmDC;
+            Game.board[y][x].trap.found           = dungeon.traps[i].settings.found;
+            Game.board[y][x].trap.triggered       = dungeon.traps[i].settings.triggered;
+            Game.board[y][x].trap.damage = {
+              diceType: dungeon.traps[i].settings.damage.diceType
+              , diceNum: dungeon.traps[i].settings.damage.diceNum
+              , mod: dungeon.traps[i].settings.damage.mod
+            }
         }
     }
 
@@ -610,26 +618,26 @@ export default function engineService(socket){
             let x = dungeon.items.armor[i].location.x;
             let y = dungeon.items.armor[i].location.y;
             Game.board[y][x].item.items.push(dungeon.items.armor[i].item);
-            Game.board[y][x].item.found = dungeon.items.armor[i].found;
+            Game.board[y][x].item.found  = dungeon.items.armor[i].found;
             Game.board[y][x].item.findDC = dungeon.items.armor[i].findDC;
         }
         for(let i = 0; i < dungeon.items.weapons.length; i++){
             let x = dungeon.items.weapons[i].location.x;
             let y = dungeon.items.weapons[i].location.y;
             Game.board[y][x].item.items.push(dungeon.items.weapons[i].item);
-            Game.board[y][x].item.found = dungeon.items.weapons[i].found;
+            Game.board[y][x].item.found  = dungeon.items.weapons[i].found;
             Game.board[y][x].item.findDC = dungeon.items.weapons[i].findDC;
         }
         for(let i = 0; i < dungeon.items.gear.length; i++){
             let x = dungeon.items.gear[i].location.x;
             let y = dungeon.items.gear[i].location.y;
             Game.board[y][x].item.items.push(dungeon.items.gear[i].item);
-            Game.board[y][x].item.found = dungeon.items.gear[i].found;
+            Game.board[y][x].item.found  = dungeon.items.gear[i].found;
             Game.board[y][x].item.findDC = dungeon.items.gear[i].findDC;
         }
     }
 
-    function loadDoors(dungeon){ debugger
+    function loadDoors(dungeon){
         for(let i = 0; i < dungeon.doors.length; i++){
             let x = dungeon.doors[i].location.x;
             let y = dungeon.doors[i].location.y;
@@ -653,13 +661,13 @@ export default function engineService(socket){
 
     // * * * PRINTBOARD
 
-    function printBoard(){ debugger
+    function printBoard(){
         for(let y = 0; y < Game.height; y++){
             let line = "";
             for(let x = 0; x < Game.width; x++){
                 if(Game.board[y][x].item.items.length > 0){
                     line += " I";
-                } else if(Game.board[y][x].trap.name) {
+                } else if(Game.board[y][x].trap.findDC) {
                     line += " T";
                 } else if(Game.board[y][x].door.bashDC) {
                     line += " D";
