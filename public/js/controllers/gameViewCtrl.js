@@ -16,8 +16,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
 
-    if(GV.userChar.weapons) {
-      getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+    if($stateParams.dungeon) {
+      setTimeout(() => {
+        const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
+        GV.pixiDungeon.players = Game.players;
+        GV.pixiDungeon.user = Game.user;
+      }, 1000);
     }
 
     socket.on("return move", data => {
@@ -315,20 +319,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
             }
             console.log(line);
         }
-    }
-
-    function getInventory(weapons, gear, armor) {
-        inventoryService.getInventory(weapons, gear, armor)
-        .then(results => {
-            GV.user.character.weapons = GV.userChar.weapons = results.weapons;
-            GV.user.character.armor = GV.userChar.weapons = results.armor;
-            GV.user.character.gear = GV.userChar.weapons = results.gear;
-            if($stateParams.dungeon) {
-              const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
-              GV.pixiDungeon.players = Game.players;
-              GV.pixiDungeon.user = Game.user;
-            }
-        })
     }
 
 }

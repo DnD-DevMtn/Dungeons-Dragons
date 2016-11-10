@@ -13,6 +13,11 @@ export default function(socket, $stateParams, userService, $state) {
         return item.dm === false;
     }
 
+    if(lobby.userChar.weapons) {
+        getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+    }
+
+
     if(lobby.userChar.name === "dm") {
       lobby.dm = {
         name: "dm"
@@ -107,8 +112,18 @@ export default function(socket, $stateParams, userService, $state) {
     socket.on("return start", party => {
         lobby.party = party;
         console.log('userChar', lobby.userChar);
+        console.log('partyPlayers', lobby.userChar);
         $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.userChar, party: lobby.party.players, dungeon: dungeon})
     });
+
+    function getInventory(weapons, gear, armor) {
+        inventoryService.getInventory(weapons, gear, armor)
+        .then(results => {
+            lobby.userChar.weapons = results.weapons;
+            lobby.userChar.armor = results.armor;
+            lobby.userChar.gear = results.gear;
+        })
+    }
 
 
     ////////////

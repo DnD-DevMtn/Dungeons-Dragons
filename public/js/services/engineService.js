@@ -758,6 +758,7 @@ export default function engineService(socket){
 
     function findAC(character){ debugger
         console.log('character', character);
+
         return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 

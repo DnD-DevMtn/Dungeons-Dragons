@@ -16,17 +16,12 @@ export default function($http) {
         resolve({
           type:"gear"
           , data: gear
-        }).catch( err => {
-          resolve({})
         })
       })
     }));
 
     inventoryPromises.push(new Promise((resolve, reject) => {
-      getArmor(armor).then( (armor, err) => {
-        if ( err ) {
-          reject( err );
-        }
+      getArmor(armor).then( armor => {
         resolve({
           type:"armor"
           , data: armor
