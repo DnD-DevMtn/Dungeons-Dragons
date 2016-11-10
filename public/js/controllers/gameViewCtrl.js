@@ -353,7 +353,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         if(Game.dmTurn && Game.dmMode){
             Game.isTurn = true;
             Game.monsterExplore = 0;
-
         }
     }
 
