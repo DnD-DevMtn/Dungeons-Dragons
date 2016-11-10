@@ -64,6 +64,7 @@ export default function( $scope ) {
     // };
 
     // Actual class declaration
+    console.log($scope.Dungeon);
     var p = new Game( $scope.Dungeon );
     var character = $scope.Dungeon.players[ 0 ];
 
@@ -130,7 +131,7 @@ class Game {
     this.floor.gridWidth = Dungeon.width;
     this.floor.gridHeight = Dungeon.height;
     this.floor.tileImage = Dungeon.backgroundImage;
-    this.players = Dungeon.players;
+    this.players = this.gameUtil.createPlayers(Dungeon.players);
     this.monsters = Dungeon.monsters;
     this.doors = Dungeon.doors;
     this.environment = Dungeon.environment;
@@ -139,6 +140,7 @@ class Game {
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
     PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
+
   }
 
   initView() {
@@ -386,5 +388,19 @@ class Game_Util {
     }
 
     return true;
+  }
+
+  createPlayers(players) {
+    const playersArr = [];
+    for(let i = 0; i < players.length; i++) {
+      playersArr.push({
+        image: players[i].actor.sprite
+        , location: {
+          x: players[i].location.x,
+          y: players[i].location.y
+        }
+      })
+    }
+    return playersArr;
   }
 }
