@@ -576,9 +576,6 @@ export default function engineService(socket){
 
     function loadTraps(dungeon){
         for(let i = 0; i < dungeon.traps.length; i++){
-            console.log('traps', dungeon.traps[i]);
-            console.log('settings', dungeon.traps[i].settings);
-            console.log('settings', dungeon.traps[i].settings.damage);
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
             Game.board[y][x].trap.findDC          = dungeon.traps[i].settings.findDC;
