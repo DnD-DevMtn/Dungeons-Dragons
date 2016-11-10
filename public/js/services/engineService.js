@@ -662,13 +662,15 @@ export default function engineService(socket){
             for(let x = 0; x < Game.width; x++){
                 if(Game.board[y][x].item.items.length > 0){
                     line += " I";
-                } else if(Game.board[y][x].trap.name){
+                } else if(Game.board[y][x].trap.name) {
                     line += " T";
-                } else if(Game.board[y][x].type === "player"){
+                } else if(Game.board[y][x].door.name) {
+                    line += " D";
+                } else if(Game.board[y][x].type === "player") {
                     line += " P";
-                } else if(Game.board[y][x].type === "monster"){
+                } else if(Game.board[y][x].type === "monster") {
                     line += " M";
-                } else if(Game.board[y][x].type === "environmental"){
+                } else if(Game.board[y][x].type === "environmental") {
                     line += " E";
                 } else {
                     line += " .";
