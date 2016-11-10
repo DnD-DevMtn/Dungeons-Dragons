@@ -531,11 +531,11 @@ export default function engineService(socket){
 
         room = gameId;
 
-        Game.monsters = dungeon.monsters;       // Monsters and environment objects already have locations
+        Game.monsters    = dungeon.monsters;       // Monsters and environment objects already have locations
         Game.environment = dungeon.environment;
-        Game.board = new Array(dungeon.height);
-        for(let i = 0; i < dungeon.height; i++){
+        Game.doors       = dungeon.doors;
 
+        for(let i = 0; i < dungeon.height; i++){
             Game.board.push([]);
             for(let j = 0; j < dungeon.width; j++){
                 let square = {
@@ -552,10 +552,11 @@ export default function engineService(socket){
             }
         }
         loadEnvironment();
-        loadTraps();
+        loadTraps(dungeon);
         loadMonsters();
         loadPlayers();
-        loadItems();
+        loadItems(dungeon);
+        loadDoors();
 
         printBoard();
     }
@@ -570,7 +571,7 @@ export default function engineService(socket){
         }
     }
 
-    function loadTraps(){
+    function loadTraps(dungeon){
         for(let i = 0; i < Game.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
@@ -600,7 +601,7 @@ export default function engineService(socket){
         }
     }
 
-    function loadItems(){
+    function loadItems(dungeon){
         for(let i = 0; i < dungeon.items.armor.length; i++){
             let x = dungeon.items.armor[i].location.x;
             let y = dungeon.items.armor[i].location.y;
@@ -621,6 +622,19 @@ export default function engineService(socket){
             Game.board[y][x].item.items.push(dungeon.items.gear[i].item);
             Game.board[y][x].item.found = dungeon.items.gear[i].found;
             Game.board[y][x].item.findDC = dungeon.items.gear[i].findDC;
+        }
+    }
+
+    function loadDoors(){
+        for(let i = 0; i < Game.doors.length; i++){
+            let x = Game.doors[i].location.x;
+            let y = Game.doors[i].location.y;
+            Game.board[y][x].door.name   = Game.doors[i].name;
+            Game.board[y][x].door.bashDC = Game.doors[i].bashDC;
+            Game.board[y][x].door.hp     = Game.doors[i].hp;
+            Game.board[y][x].door.locked = Game.doors[i].locked;
+            Game.board[y][x].door.pickDC = Game.doors[i].pickDC;
+            Game.board[y][x].door.open   = Game.doors[i].open;
         }
     }
 
