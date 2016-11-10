@@ -73,7 +73,15 @@ export default function engineService(socket){
 
             return;
         }
-        let source = Game.user.location;
+        let source = {
+          x: Game.user.location.x
+          , y: Game.user.location.y
+        }
+        console.log(source);
+        console.log(Game.user.location);
+        console.log(Game.user.location.x);
+        console.log(Game.user.location.y);
+        console.log(Game.user);
 
         // Drop item is a universal action for all states
         Game.actions = ["dropItem"];
@@ -501,7 +509,7 @@ export default function engineService(socket){
         for(let k = 0; k < players.length; k++) {                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
 
-            if(players[k].player === userCharacter._id){
+            if(players[k].player === userCharacter._id) {
                 if(players[k].char.name === 'dm') {
                     Game.dmMode = true;
                 } else {
@@ -608,7 +616,6 @@ export default function engineService(socket){
 
     function loadPlayers(){
         for(let i = 0; i < Game.players.length; i++){
-            Game.players[i].id = generateId();
             console.log(Game);
             let x = Game.players[i].location.x;
             let y = Game.players[i].location.y;
@@ -763,7 +770,7 @@ export default function engineService(socket){
 
     //initiative = stateMod(dex);
 
-    function findAC(character){ 
+    function findAC(character){
         return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 
