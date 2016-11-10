@@ -659,8 +659,6 @@ export default function engineService(socket){
     function printBoard(){
         for(let y = 0; y < Game.height; y++){
             let line = "";
-            for(let y = 0; y < Game.height; y++){
-                if(Game.board[y][x].items.length > 0){
             for(let x = 0; x < Game.width; x++){
                 if(Game.board[y][x].item.items.length > 0){
                     line += " I";
