@@ -6,10 +6,8 @@ export default function( $scope ) {
   // Actual class declaration
 
   //if($scope.Dungeon.players) {
-  setTimeout(() => {
     var character = dataStructureBuffer( $scope.Dungeon );
     var p = new Game( $scope.Dungeon );
-  }, 2000);
   //}
 
   // Delete below up to stop point....

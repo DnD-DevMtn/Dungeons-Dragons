@@ -1,4 +1,4 @@
-export default function(socket, $stateParams, userService, $state) {
+export default function(socket, $stateParams, userService, $state, inventoryService) {
 
     const lobby = this;
 
@@ -14,7 +14,7 @@ export default function(socket, $stateParams, userService, $state) {
     }
 
     if(lobby.userChar.weapons) {
-        getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+        getInventory(lobby.userChar.weapons, lobby.userChar.gear, lobby.userChar.armor);
     }
 
 
@@ -35,30 +35,15 @@ export default function(socket, $stateParams, userService, $state) {
         socket.emit("join", {charId: lobby.userChar._id, userName: `${lobby.user.firstName} ${lobby.user.lastName}`, char: socketChar, room: lobby.gameId});
     }
 
-    if($stateParams.userChar){
-        if($stateParams.userChar === "dm"){
-            socketChar.name = "dm";
-            lobby.dm.player = lobby.userChar._id;
-            lobby.dm.char   = "";
-            lobby.userEnter();
-            return;
-        }
-        socketChar = lobby.userChar;
-        // {
-        //     name: lobby.userChar.name
-        //     , race: lobby.userChar.race
-        //     , classType: lobby.userChar.classType
-        //     , sprite: lobby.userChar.sprite
-        //     , level: lobby.userChar.level
-        //     , alignment: lobby.userChar.alignment
-        //     , hp: lobby.userChar.hp
-        //     , size: lobby.userChar.size
-        //     , speed: lobby.userChar.speed
-        //        , ba: lobby.userChar.baseAttack[0]
-
-        //     , _id: lobby.userChar._id
-        //     ,
+    if($stateParams.userChar.name === 'dm'){
+        // if($stateParams.userChar === "dm"){
+        //     socketChar.name = "dm";
+        //     lobby.dm.player = lobby.userChar._id;
+        //     lobby.dm.char   = "";
+        //     lobby.userEnter();
+        //     return;
         // }
+        socketChar = lobby.userChar;
         lobby.userEnter();
     }
 
@@ -122,6 +107,9 @@ export default function(socket, $stateParams, userService, $state) {
             lobby.userChar.weapons = results.weapons;
             lobby.userChar.armor = results.armor;
             lobby.userChar.gear = results.gear;
+
+            socketChar = lobby.userChar;
+            lobby.userEnter();
         })
     }
 
