@@ -1,117 +1,62 @@
 import "pixi.js";
 
 export default function( $scope ) {
+  $scope.Dungeon = $scope.GV.pixiDungeon;
 
-    $scope.Dungeon = $scope.GV.pixiDungeon;
-      // dummy data
-    // $scope.Dungeon = {
-    //   width: 20,
-    //   height: 20,
-    //   backgroundImage: "GRS2ROC03",
-    //   players: [ {
-    //     id: 101,
-    //     image: "STARLORD",
-    //     location: { x: 10, y: 10 }
-    //   } ],
-    //   monsters: [ {
-    //     id: 103,
-    //     image: "DRAGON",
-    //     location: { x: 13, y: 13 }
-    //   } ],
-    //   doors: [ {
-    //     id: 721,
-    //     image: "DOOR",
-    //     location: { x: 5, y: 5 },
-    //     settings: {
-    //       bashDC: 3,
-    //       hp: 3,
-    //       locked: true,
-    //       pickDC: 4
-    //     }
-    //   } ],
-    //   environment: [ {
-    //     id: 115,
-    //     image: "TREE00",
-    //     location: { x: 5, y: 13 }
-    //   } ],
-    //   traps: [ {
-    //     id: 990,
-    //     image: "TRAP",
-    //     location: { x: 9, y: 6 },
-    //     settings: {
-    //       damage: {
-    //         diceNum: 3,
-    //         diceType: 3,
-    //         mod: 3
-    //       },
-    //       disarmDC: 3,
-    //       findDC: 4,
-    //       found: true,
-    //       triggered: false
-    //     }
-    //   } ],
-    //   items: {
-    //     weapons: [ {
-    //       id: 875,
-    //       image: "WEAPON",
-    //       location: { x: 11, y: 4 },
-    //       settings: {
-    //         findDC: 4,
-    //         found: false
-    //       }
-    //     } ]
-    //   }
-    // };
+  // Actual class declaration
+  dataStructureBuffer( $scope.Dungeon );
+  var p = new Game( $scope.Dungeon );
 
-    // Actual class declaration
-    console.log($scope.Dungeon);
-    var p = new Game( $scope.Dungeon );
-    var character = $scope.Dungeon.players[ 0 ];
+  var character = $scope.Dungeon.players[ 0 ];
 
-    // Delete below up to stop point....
-    window.addEventListener ( "keydown", downHandler, false );
-    window.addEventListener ( "keyup", upHandler, false );
+  // Delete below up to stop point....
+  window.addEventListener ( "keydown", downHandler, false );
+  window.addEventListener ( "keyup", upHandler, false );
 
-    function downHandler() {
-      if ( $scope.keyUp ) {
-        $scope.keyUp = false;
-        switch( event.keyCode ) {
-          case 37:
-            if ( p.move( character, { x: character.location.x - 1, y: character.location.y } ) ) {
-              character.location.x--;
-            }
-            break;
+  function downHandler() {
+    if ( $scope.keyUp ) {
+      $scope.keyUp = false;
+      switch( event.keyCode ) {
+        case 37:
+          if ( p.move( character, { x: character.location.x - 1, y: character.location.y } ) ) {
+            character.location.x--;
+          }
+          break;
 
-          case 38:
-            if ( p.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
-              character.location.y--;
-            }
-            break;
+        case 38:
+          if ( p.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
+            character.location.y--;
+          }
+          break;
 
-          case 39:
-            if ( p.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
-              character.location.x++;
-            }
-            break;
+        case 39:
+          if ( p.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
+            character.location.x++;
+          }
+          break;
 
-          case 40:
-            if ( p.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
-              character.location.y++;
-            }
-            break;
-        }
+        case 40:
+          if ( p.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
+            character.location.y++;
+          }
+          break;
       }
     }
+  }
 
-    function upHandler() {
-      $scope.keyUp = true;
-    }
+  function upHandler() {
+    $scope.keyUp = true;
+  }
     // Stop point...
-  };
+};
+
+function dataStructureBuffer( dungeon ) {
+  for ( let i = 0; i < dungeon.players.length; i++ )
+    dungeon.players[ i ].image = dungeon.players[ i ].actor.sprite;
+}
 
 class Game {
   constructor( Dungeon ) {
-    console.log(Dungeon);
     this.gameUtil = new Game_Util();
 
     this.stage = new PIXI.Container();
@@ -131,7 +76,7 @@ class Game {
     this.floor.gridWidth = Dungeon.width;
     this.floor.gridHeight = Dungeon.height;
     this.floor.tileImage = Dungeon.backgroundImage;
-    this.players = this.gameUtil.createPlayers(Dungeon.players);
+    this.players = Dungeon.players;
     this.monsters = Dungeon.monsters;
     this.doors = Dungeon.doors;
     this.environment = Dungeon.environment;
@@ -388,19 +333,5 @@ class Game_Util {
     }
 
     return true;
-  }
-
-  createPlayers(players) {
-    const playersArr = [];
-    for(let i = 0; i < players.length; i++) {
-      playersArr.push({
-        image: players[i].actor.sprite
-        , location: {
-          x: players[i].location.x,
-          y: players[i].location.y
-        }
-      })
-    }
-    return playersArr;
   }
 }
