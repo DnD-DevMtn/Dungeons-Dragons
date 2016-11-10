@@ -125,17 +125,17 @@ export default function engineService(socket){
             Game.actions.push("perception");
             for(let i = 0; i < doorSqr.length; i++){
                 let x = doorSqr[i][0], y = doorSqr[i][1];
-                if(Game.board[x][y].door.id){
-                    if(Game.board[x][y].door.open === false){
+                if(Game.board[y][x].door.id){
+                    if(Game.board[y][x].door.open === false){
                         Game.actions.push("openDoor");
                         if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged"){
                             Game.actions.push("bash");
                         }
-                        if(Game.user.actor.classType.name === "Rogue" && Game.board[x][y].door.locked === true){
+                        if(Game.user.actor.classType.name === "Rogue" && Game.board[y][x].door.locked === true){
                             Game.actions.push("lockpick");
                         }
                     }
-                    if(Game.board[x][y].door.open === true){
+                    if(Game.board[y][x].door.open === true){
                         Game.actions.push("closeDoor");
                     }
                 }
@@ -146,7 +146,7 @@ export default function engineService(socket){
             if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged"){
                 for(let i = 0; i < adjacent.length; i++){
                     let x = adjacent[i][0], y = adjacent[i][1];
-                    if(Game.board[x][y].type === "monster"){
+                    if(Game.board[y][x].type === "monster"){
                         Game.actions.push("melee");
                         if(Game.user.actor.classType.name === "Fighter"){
                             Game.actions.push("fighterPowerAttack");
@@ -253,7 +253,7 @@ export default function engineService(socket){
         if(checkUser(source)){
             let strMod  = statMod(Game.user.actor.baseStats.str);
             let roll    = dice.roll20();                                        // TODO DICEROLL
-            let success = (roll + strMod) >= Game.board[x][y].door.bashDC;
+            let success = (roll + strMod) >= Game.board[y][x].door.bashDC;
             let crit    = false;
             if(roll >= Game.user.equippped.crit.critRange){
                 success = true;
@@ -270,9 +270,9 @@ export default function engineService(socket){
                 if(crit){
                     damage *= 2;
                 }
-                // Game.board[x][y].door.hp -= damage;  // TODO in ctrl
-                // if(Game.board[x][y].door.hp <= 0){
-                //     Game.board[x][y].door.open = true;
+                // Game.board[y][x].door.hp -= damage;  // TODO in ctrl
+                // if(Game.board[y][x].door.hp <= 0){
+                //     Game.board[y][x].door.open = true;
                 // }
             }
             Game.turnOver = true;
@@ -304,10 +304,10 @@ export default function engineService(socket){
         let wis    = statMod(Game.user.actor.bastStats.wis);
         for(let i = 0; i < ranged.length; i++){
             let x = ranged[i][0], y = ranged[i][1];
-            if(Game.board[x][y].item.items.length > 0){
-                if(rand === 20 || ((rand + wis) >= Game.board[x][y].item.findDC)){
+            if(Game.board[y][x].item.items.length > 0){
+                if(rand === 20 || ((rand + wis) >= Game.board[y][x].item.findDC)){
                     found.push([x, y]);              // pushes the coordinates on found items to be emitted by socket
-                    // Game.board[x][y].item.found = true;      // TODO ctrl on listener
+                    // Game.board[y][x].item.found = true;      // TODO ctrl on listener
                 }
             }
         }
@@ -318,14 +318,14 @@ export default function engineService(socket){
     // available if player is a rogue and next to a door that is locked
     Game.rogueLockpick = (source, target) => {
         let x       = target.x, y = target.y;
-        let dc      = Game.board[x][y].door.pickDC;
+        let dc      = Game.board[y][x].door.pickDC;
         let rand    = Math.floor(Math.random() * 20) + 1;                       // TODO DICEROLL
         let int     = statMod(Game.user.actor.baseStats.int);
         let lvl     = Game.user.actor.totalLvl;
         let success = false;
         if(rand === 20 || ((rand + int + lvl) >= dc)){
             success = true;
-            // Game.board[x][y].door.locked = false;        // TODO put on the on listener the on ctrl
+            // Game.board[y][x].door.locked = false;        // TODO put on the on listener the on ctrl
         }
         Game.turnOver = true;
         socket.emit("rogueLockpick", {source: source, target: target, roll: rand, success: success, room: room});
@@ -340,10 +340,10 @@ export default function engineService(socket){
         let found = [];
         for(let i = 0; i < ranged.length; i++){
             let x = ranged[i][0], y = ranged[i][1];
-            if(Game.board[x][y].trap.name){
-                if(roll === 20 || ((rand + wis + lvl) >= Game.board[x][y].trap.findDC)){
+            if(Game.board[y][x].trap.name){
+                if(roll === 20 || ((rand + wis + lvl) >= Game.board[y][x].trap.findDC)){
                     found.push([x, y]);
-                    // Game.board[x][y].trap.found = true; // TODO put on the on listener in the ctrl
+                    // Game.board[y][x].trap.found = true; // TODO put on the on listener in the ctrl
                 }
             }
         }
@@ -359,15 +359,15 @@ export default function engineService(socket){
         let rand    = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
         let damage  = 0;
         let success = true;
-        if(rand !== 20 || (int + lvl + rand) < Game.board[x][y].trap.disarmDC){
+        if(rand !== 20 || (int + lvl + rand) < Game.board[y][x].trap.disarmDC){
             success = false;
-            for(let i = 0; i < Game.board[x][y].trap.damage.numDice; i++){
-                damage += (Math.floor(Math.random() * Game.board[x][y].trap.damage.diceType) + 1); // TODO DICEROLL
-                damage += Game.board[x][y].trap.damage.mod;
+            for(let i = 0; i < Game.board[y][x].trap.damage.numDice; i++){
+                damage += (Math.floor(Math.random() * Game.board[y][x].trap.damage.diceType) + 1); // TODO DICEROLL
+                damage += Game.board[y][x].trap.damage.mod;
                 damage /= 2;
             }
         }
-        // Game.board[x][y].trap.triggered = true;
+        // Game.board[y][x].trap.triggered = true;
         // TODO SOCKETTYS
         socket.emit("rogueDisarmTrap", {source: Game.user.location, roll: rand, damage: damage, success: success, room: room});
     }
@@ -375,8 +375,8 @@ export default function engineService(socket){
     // available if item on square is found through successful perception and character is on the square
     Game.pickUpItem = (source) => {
         let x = Game.user.location.x, y = Game.user.location.y;
-        for(let i = 0; i < Game.board[x][y].item.items.length; i++){
-            Game.user.items.push(Game.board[x][y].item.items[i]);
+        for(let i = 0; i < Game.board[y][x].item.items.length; i++){
+            Game.user.items.push(Game.board[y][x].item.items[i]);
         }
         socket.emit("pickUpItem", {source: Game.user.location, item: item, room: room});
     }
@@ -395,16 +395,16 @@ export default function engineService(socket){
         let damage = 0;
         let crit = (rand === 20) ? true : false;
         let critMod = 2;
-        if(Game.board[x][y].id === Game.user.id){
+        if(Game.board[y][x].id === Game.user.id){
             if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
             let critMod = Game.user.equipped.crit.critDamage;
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
             }
         }
-        if(Game.board[x][y].type === "monster"){
+        if(Game.board[y][x].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
-                if(Game.monsters[i].id === Game.board[x][y].id){
+                if(Game.monsters[i].id === Game.board[y][x].id){
                     Game.monsters[i].monster
                 }
             }
@@ -419,7 +419,7 @@ export default function engineService(socket){
         let damage = 0
         let crit = (rand === 20) ? true : false;
         let critMod = 2;
-        if(Game.board[x][y].id === Game.user.id){
+        if(Game.board[y][x].id === Game.user.id){
             if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
             let critMod = Game.user.equipped.crit.critDamage;
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
@@ -466,13 +466,14 @@ export default function engineService(socket){
 
     // * * * MAIN INITS
 
-    this.initGame = function(dungeon, players, userCharacter, gameId){  // Players will already exist on the scope by the time the dungeon starts
+    this.initGame = function(dungeon, players, userCharacter, gameId){ debugger // Players will already exist on the scope by the time the dungeon starts
                                                                       // so players array will not be tied to the Dungeon object.
+
         for(let k = 0; k < players.length; k++){                      // game room needs to be passes with socket.emit functions
             let rand = generateId();
 
-            if(players[k]._id === userCharacter._id){
-                if(players[k].dm){
+            if(players[k].player === userCharacter._id){
+                if(players[k].char.name === 'dm') {
                     Game.dmMode = true;
                 } else {
                     Game.user.actor = userCharacter;                     // Game.user is a character
@@ -484,17 +485,20 @@ export default function engineService(socket){
                     Game.user.newItems = [];
                 }
             } else {
-                Game.players.push({
-                    actor: players[k].userChar                                    // Game.players[i].actor is a character
-                    , location: dungeon.startingLocation[k]
-                    , userName: players[k].userName
-                    , sprite: players[k].userChar.sprite
-                    , equipped: {}
-                    , id: rand
-                    , ac: findAC(players[k].userChar)
-                    , hp: players[k].userChar.hp
-                    , newItems: []
-                });
+                if(players[k].char.name === 'dm') {
+                    Game.dmMode = true;
+                } else {
+                  Game.players.push({
+                      actor: players[k].char                                    // Game.players[i].actor is a character
+                      , location: dungeon.startingLocation[k]
+                      , userName: players[k].name
+                      , equipped: {}
+                      , id: rand
+                      , ac: findAC(players[k].char)
+                      , hp: players[k].char.hp
+                      , newItems: []
+                  });
+                }
             }
             Game.exploreOrder.push(players);
         }
@@ -503,7 +507,10 @@ export default function engineService(socket){
 
         Game.monsters = dungeon.monsters;       // Monsters and environment objects already have locations
         Game.environment = dungeon.environment;
-        Game.board = new Array(dungeon.height);
+
+        Game.width = dungeon.width;
+        Game.height = dungeon.height;
+
         for(let i = 0; i < dungeon.height; i++){
 
             Game.board.push([]);
@@ -518,25 +525,27 @@ export default function engineService(socket){
                     , type: ""                  // Types are monster, player, or environment
                     , id: ""                    // Unique ids point to the element in the array of one of the three types
                 }
-                Game.board[y].push(square);
+                Game.board[i].push(square);
             }
         }
         loadEnvironment();
         loadTraps();
         loadMonsters();
         loadPlayers();
-        loadItems();
+        loadItems(dungeon);
 
         printBoard();
+
+        return Game;
     }
 
     function loadEnvironment(){
         for(let i = 0; i < Game.environment.length; i++){
             let x = Game.environment[i].location.x;
             let y = Game.environment[i].location.y;
-            Game.board[x][y].free = false;
-            Game.board[x][y].type = "environmental";
-            Game.board[x][y].id = Game.environment[i].id;
+            Game.board[y][x].free = false;
+            Game.board[y][x].type = "environmental";
+            Game.board[y][x].id = Game.environment[i].id;
         }
     }
 
@@ -544,7 +553,7 @@ export default function engineService(socket){
         for(let i = 0; i < Game.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
-            Game.board[x][y].trap = dungeon.traps[i].trap
+            Game.board[y][x].trap = dungeon.traps[i].trap
         }
     }
 
@@ -553,9 +562,9 @@ export default function engineService(socket){
             Game.monsters[i].id = generateId();
             let x = Game.monsters[i].location.x;
             let y = Game.monsters[i].location.y;
-            Game.board[x][y].free = false;
-            Game.board[x][y].type = "monster";
-            Game.board[x][y].id   = Game.monsters[i].id
+            Game.board[y][x].free = false;
+            Game.board[y][x].type = "monster";
+            Game.board[y][x].id   = Game.monsters[i].id
         }
     }
 
@@ -564,33 +573,33 @@ export default function engineService(socket){
             Game.players[i].id = generateId();
             let x = Game.players[i].location.x;
             let y = Game.players[i].location.y;
-            Game.board[x][y].free = false;
-            Game.board[x][y].type = "player";
-            Game.board[x][y].id   = Game.players[i].id
+            Game.board[y][x].free = false;
+            Game.board[y][x].type = "player";
+            Game.board[y][x].id   = Game.players[i].id
         }
     }
 
-    function loadItems(){
+    function loadItems(dungeon){
         for(let i = 0; i < dungeon.items.armor.length; i++){
             let x = dungeon.items.armor[i].location.x;
             let y = dungeon.items.armor[i].location.y;
-            Game.board[x][y].item.items.push(dungeon.items.armor[i].item);
-            Game.board[x][y].item.found = dungeon.items.armor[i].found;
-            Game.board[x][y].item.findDC = dungeon.items.armor[i].findDC;
+            Game.board[y][x].item.items.push(dungeon.items.armor[i].item);
+            Game.board[y][x].item.found = dungeon.items.armor[i].found;
+            Game.board[y][x].item.findDC = dungeon.items.armor[i].findDC;
         }
         for(let i = 0; i < dungeon.items.weapons.length; i++){
             let x = dungeon.items.weapons[i].location.x;
             let y = dungeon.items.weapons[i].location.y;
-            Game.board[x][y].item.items.push(dungeon.items.weapons[i].item);
-            Game.board[x][y].item.found = dungeon.items.weapons[i].found;
-            Game.board[x][y].item.findDC = dungeon.items.weapons[i].findDC;
+            Game.board[y][x].item.items.push(dungeon.items.weapons[i].item);
+            Game.board[y][x].item.found = dungeon.items.weapons[i].found;
+            Game.board[y][x].item.findDC = dungeon.items.weapons[i].findDC;
         }
         for(let i = 0; i < dungeon.items.gear.length; i++){
             let x = dungeon.items.gear[i].location.x;
             let y = dungeon.items.gear[i].location.y;
-            Game.board[x][y].item.items.push(dungeon.items.gear[i].item);
-            Game.board[x][y].item.found = dungeon.items.gear[i].found;
-            Game.board[x][y].item.findDC = dungeon.items.gear[i].findDC;
+            Game.board[y][x].item.items.push(dungeon.items.gear[i].item);
+            Game.board[y][x].item.found = dungeon.items.gear[i].found;
+            Game.board[y][x].item.findDC = dungeon.items.gear[i].findDC;
         }
     }
 
@@ -607,18 +616,18 @@ export default function engineService(socket){
     // * * * PRINTBOARD
 
     function printBoard(){
-        for(let x = 0; x < Game.width; x++){
+        for(let y = 0; y < Game.height; y++){
             let line = "";
-            for(let y = 0; y < Game.height; y++){
-                if(Game.board[x][y].items.length > 0){
+            for(let x = 0; x < Game.width; x++){
+                if(Game.board[y][x].item.items.length > 0){
                     line += " I";
-                } else if(Game.board[x][y].trap.name){
+                } else if(Game.board[y][x].trap.name){
                     line += " T";
-                } else if(Game.board[x][y].type === "player"){
+                } else if(Game.board[y][x].type === "player"){
                     line += " P";
-                } else if(Game.board[x][y].type === "monster"){
+                } else if(Game.board[y][x].type === "monster"){
                     line += " M";
-                } else if(Game.board[x][y].type === "environmental"){
+                } else if(Game.board[y][x].type === "environmental"){
                     line += " E";
                 } else {
                     line += " .";
@@ -641,7 +650,7 @@ export default function engineService(socket){
         let adjacent = findAdjacent(target);
         for(let i = 0; i < adjacent.length; i++){
             let x = adjacent[i][0], y = adjacent[i][1];
-            if(Game.board[x][y].type === "player"){
+            if(Game.board[y][x].type === "player"){
                 count++;
             }
         }
@@ -654,7 +663,7 @@ export default function engineService(socket){
         let adjacent = findAdjacent(source);
         for(let i = 0; i < adjacent.length; i++){
             let x = adjacent[i][0], y = adjacent[i][1];
-            if(Game.board[x][y].type === "monster"){
+            if(Game.board[y][x].type === "monster"){
                 count++;
             }
         }
@@ -700,7 +709,7 @@ export default function engineService(socket){
     }
 
     function findAC(character){
-        return (10 + statMod(character.baseStats.dex) + character.armor[0].bonus);
+        return (10 + Math.floor((character.baseStats.dex - 10) / 2) + character.armor[0].bonus);
     }
 
     const dice = {};
