@@ -3,15 +3,23 @@ This is the parent ctrl of everything game related. It should talk to the Pixi
 engine, the game Engine, and the gameInfo Ctrls.
  */
 
-export default function(engineService, userService, socket, $stateParams, $http, inventoryService) {
+export default function(engineService, userService, socket, $stateParams, $http, inventoryService, $scope) {
     const GV = this;
-
 
     GV.user = userService.user;
 
     GV.party = $stateParams.party;
 
-    console.log(GV.user);
+    GV.userChar = $stateParams.userChar;
+
+    GV.gameId = $stateParams.gameId;
+
+    GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
+
+    if($stateParams.dungeon) {
+      const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
+      GV.pixiDungeon.players = Game.players
+    }
 
     if(GV.user.character.weapons) {
         getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
@@ -87,6 +95,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         for(let i = 0; i < data.found.length; i++){
             let x = data.found[i][0], y = data.found[i][1];
             Game.board[x][y].item.found = true;
+            break;
         }
 
         // + + + PIXI FOUND ANIMATION + + + \\
@@ -104,6 +113,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         for(let i = 0; i < data.found.length; i++){
             let x = data.found[i][0], y = data.found[i][1];
             Game.board[x][y].trap.found = true;
+            break;
         }
 
         // + + + PIXI FOUND ANIMATION + + + \\
@@ -183,10 +193,58 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return melee", data => {
+        let x = data.target.x, y = data.target.y;
+
+        // + + + PIXI DATA.ROLL (crit?) + + + \\
+
+        // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
+        
+        let id   = Game.board[x][y].id;
+        let type = Game.board[x][y].type;
+        if(type === "monster"){
+            for(let i = 0; i < Game.monsters.length; i++){
+                if(id === Game.monsters[i].id){
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+                        // + + + PIXI HIT + + + \\
+                        Game.monsters[i].monster.hp -= damage;
+                        if(Game.monsters[i].monster.hp <= 0){
+                            // + + + PIXI DEAD + + + \\
+                        }
+                    } else {
+                        // + + + PIXI MISS + + + \\
+                    }
+                }
+            }
+        }
 
     });
 
     socket.on("return fighterPowerAttack", data => {
+        let x = data.target.x, y = data.target.y;
+
+        // + + + PIXI POWER ATTACK + + + \\
+
+        // + + + PIXI DATA.ROLL (crit?) + + + \\
+
+        // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
+
+        let id   = Game.board[x][y].id;
+        let type = Game.board[x][y].type;
+        if(type === "monster"){
+            for(let i = 0; i < Game.monsters.length; i++){
+                if(id === Game.monsters[i].id){
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+                        // + + + PIXI HIT + + + \\
+                        Game.monsters[i].monster.hp -= damage;
+                        if(Game.monsters[i].monster.hp <= 0){
+                            // + + + PIXI DEAD + + + \\
+                        }
+                    } else {
+                        // + + + PIXI MISS + + + \\
+                    }
+                }
+            }
+        }
 
     });
 

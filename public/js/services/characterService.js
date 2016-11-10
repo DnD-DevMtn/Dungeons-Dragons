@@ -81,10 +81,15 @@ function characterService($http, $state, userService) {
     }
     getBaseAttack(classId, currentCharacter.level).then(baseAttack => {
       currentCharacter.baseAttack = baseAttack;
-      $http.put(`/api/users/${currentUser}`, currentCharacter);
       $http.put(`/api/campaigns/join/${room}`, {facebookId: userService.user.facebookId, character: currentCharacter});
-      userService.user.character = currentCharacter;
-      $state.go("lobby", {campaign: campaign, gameId: room, userChar: currentCharacter})
+      $http.put(`/api/users/${currentUser}`, currentCharacter).then(user => {
+        $http.get(`/api/users/${user.data._id}`).then(updatedUser => {
+          const finalCharacter = userService.user.character = updatedUser.data.characters[updatedUser.data.characters.length - 1];
+          $state.go("lobby", {campaign: campaign, gameId: room, userChar: finalCharacter})
+        });
+      })
+        //userService.user.character = currentCharacter;
+      //$state.go("lobby", {campaign: campaign, gameId: room, userChar: currentCharacter})
     });
   }
 

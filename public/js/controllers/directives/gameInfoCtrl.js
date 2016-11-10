@@ -20,14 +20,13 @@ export default function($scope) {
     const explorePanel = angular.element(document.querySelector('.explore-panel'));
     const combatPanel = angular.element(document.querySelector('.combat-panel'));
 
-
-
     //Initialize all panels to page one
     UT.page = 1;
     UT.rightAvailable = true;
 
     charIcon.on('click', () => {
       resetPanel();
+
       if(charIcon.hasClass('active')) {
         charPanel.removeClass('active');
         charIcon.removeClass('active');
@@ -39,7 +38,8 @@ export default function($scope) {
     })
 
     inventoryIcon.on('click', () => {
-      resetPanel();
+        resetPanel();
+
         if(inventoryIcon.hasClass('active')) {
           inventoryPanel.removeClass('active');
           inventoryIcon.removeClass('active');
@@ -52,6 +52,7 @@ export default function($scope) {
 
     partyIcon.on('click', () => {
         resetPanel();
+
         if(partyIcon.hasClass('active')) {
           partyPanel.removeClass('active');
           partyIcon.removeClass('active');
@@ -60,10 +61,12 @@ export default function($scope) {
           partyPanel.addClass('active');
           partyIcon.addClass('active');
         }
+
     })
 
     spellsIcon.on('click', () => {
         resetPanel();
+
         if(spellsIcon.hasClass('active')) {
           spellsPanel.removeClass('active');
           spellsIcon.removeClass('active');
@@ -72,13 +75,14 @@ export default function($scope) {
           spellsPanel.addClass('active');
           spellsIcon.addClass('active');
         }
-        UT.page = 1;
+
     })
 
     UT.showExplore = () => {
       UT.page = 1;
       UT.rightAvailable = true;
       UT.leftAvailable = false;
+
       if(exploreIcon.hasClass('active')) {
         explorePanel.removeClass('active');
         exploreIcon.removeClass('active');
@@ -87,6 +91,7 @@ export default function($scope) {
         explorePanel.addClass('active');
         exploreIcon.addClass('active');
       }
+
       UT.page = 1;
     }
 
@@ -94,6 +99,7 @@ export default function($scope) {
       UT.page = 1;
       UT.rightAvailable = true;
       UT.leftAvailable = false;
+
       if(combatIcon.hasClass('active')) {
         combatPanel.removeClass('active');
         combatIcon.removeClass('active');
@@ -102,10 +108,12 @@ export default function($scope) {
         combatPanel.addClass('active');
         combatIcon.addClass('active');
       }
+
       UT.page = 1;
     }
 
     UT.switchPage = (pages, direction) => {
+
       if(direction === "right") {
         if(UT.page < pages) {
           UT.page++;
@@ -115,6 +123,7 @@ export default function($scope) {
           }
         }
       }
+
       if(direction === "left") {
         UT.page--;
         UT.rightAvailable = true;
@@ -122,6 +131,7 @@ export default function($scope) {
           UT.leftAvailable = false;
         }
       }
+
     }
 
     function resetPanel() {

@@ -59,7 +59,7 @@ io.on("connection", socket => {
 
         if(!(room in campaigns)){
             let players = [{
-                    player: data.userId
+                    player: data.charId
                     , userName: data.userName
                     , char: data.char
                     , status: "pending"
@@ -80,7 +80,7 @@ io.on("connection", socket => {
         } else {
             socket.join(room);
             let newPlayer = {
-                player: data.userId
+                player: data.charId
                 , userName: data.userName
                 , char: data.char
                 , status: "pending"
@@ -94,7 +94,7 @@ io.on("connection", socket => {
     socket.on("send ready", data => {
         const room = data.room;
         for(let i = 0; i < campaigns[room].players.length; i++){
-            if(campaigns[room].players[i].player === data.userId){
+            if(campaigns[room].players[i].player === data.charId){
                 campaigns[room].players[i].status = "ready";
             }
         }
