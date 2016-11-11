@@ -437,6 +437,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
       for(var i = 0; i < Game.monsters.length; i++) {
         if(data.id === Game.monsters[i].id) {
             Game.monsterExplore = i;
+            return;
         }
       }
     })

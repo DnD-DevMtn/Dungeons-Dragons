@@ -22,9 +22,6 @@ export default function($scope) {
     const combatPanel = angular.element(document.querySelector('.combat-panel'));
     const monstersPanel = angular.element(document.querySelector('.monsters-panel'));
 
-    console.log(monstersIcon);
-    console.log(monstersPanel);
-
     //Initialize all panels to page one
     UT.page = 1;
     UT.rightAvailable = true;
