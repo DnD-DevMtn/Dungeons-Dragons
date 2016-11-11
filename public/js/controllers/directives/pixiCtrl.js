@@ -10,7 +10,8 @@ export default function( $scope ) {
 
 
   $scope.$on("send move", (event, data) => {
-      p.move(data.character, data.target);
+    console.log( data );
+    p.move(data.character, data.target);
   })
 
 
