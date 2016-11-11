@@ -11,6 +11,7 @@ export default function($scope) {
     const spellsIcon = angular.element(document.querySelector('.spells-icon svg'));
     const exploreIcon = angular.element(document.querySelector('.explore-icon svg'));
     const combatIcon = angular.element(document.querySelector('.combat-icon svg'));
+    const monstersIcon = angular.element(document.querySelector('.monsters-icon svg'));
 
     //Panels
     const charPanel = angular.element(document.querySelector('.char-panel'));
@@ -19,6 +20,7 @@ export default function($scope) {
     const spellsPanel = angular.element(document.querySelector('.spells-panel'));
     const explorePanel = angular.element(document.querySelector('.explore-panel'));
     const combatPanel = angular.element(document.querySelector('.combat-panel'));
+    const monstersPanel = angular.element(document.querySelector('.monsters-panel'));
 
     //Initialize all panels to page one
     UT.page = 1;
@@ -74,6 +76,20 @@ export default function($scope) {
           angular.element(document.querySelectorAll('.active')).removeClass('active');
           spellsPanel.addClass('active');
           spellsIcon.addClass('active');
+        }
+
+    })
+
+    monstersIcon.on('click', () => {
+        resetPanel();
+
+        if(monstersIcon.hasClass('active')) {
+          monstersPanel.removeClass('active');
+          monstersIcon.removeClass('active');
+        } else {
+          angular.element(document.querySelectorAll('.active')).removeClass('active');
+          monstersPanel.addClass('active');
+          monstersIcon.addClass('active');
         }
 
     })

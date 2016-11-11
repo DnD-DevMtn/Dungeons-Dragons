@@ -6,7 +6,7 @@ export default function( $scope ) {
   // Actual class declaration
 
     var character = dataStructureBuffer( $scope.Dungeon );
-    var p = new Game( $scope.Dungeon );
+    var p = new Game( $scope.Dungeon, $scope );
 
 
   $scope.$on("send move", (event, data) => {
@@ -71,7 +71,7 @@ function dataStructureBuffer( dungeon ) {
 }
 
 class Game {
-  constructor( Dungeon ) {
+  constructor( Dungeon, $scope ) {
     this.gameUtil = new Game_Util();
 
     this.stage = new PIXI.Container();
@@ -100,15 +100,15 @@ class Game {
       Dungeon.mainPlayer.cameraGridHeight * this.tileGridHeight );
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
-    PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
+    PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this, $scope ) );
   }
 
-  initView() {
+  initView($scope) {
     this.id = PIXI.loader.resources[ "./assets/GameImages/sprite.json" ].textures;
 
     this.createFloor();
-    this.placeActors( this.players );
-    this.placeActors( this.monsters );
+    this.placeActors( this.players, $scope );
+    this.placeActors( this.monsters, $scope );
     this.placeProps( this.doors );
     this.placeProps( this.environment );
     this.play();
@@ -176,13 +176,17 @@ class Game {
     }
   }
 
-  placeActors( characters ) {
+  placeActors( characters, $scope ) {
+    console.log(characters);
+
     var actor;
 
     for ( let i = 0; i < characters.length; i++ ) {
       actor = new PIXI.Sprite( this.id[ `${ characters[ i ].image }30.png` ] );
+      actor.interactive = true;
       actor.image = characters[ i ].image;
       actor.direction = 3; // left: 0, top: 1, right: 2, bottom: 3
+      actor.id = characters[i].id;
       // actor.coordinate = { x: characters[ i ].location.x, y: characters[ i ].location.y };
       this.gameUtil.setGridWidthHeight( actor, this.tileGridWidth, this.tileGridHeight );
       actor.coordinate = this.gameUtil.gridCoordinate( actor, characters[ i ] );
@@ -193,6 +197,10 @@ class Game {
       this.actors[ characters[ i ].id ] = actor;
       this.gameScene.addChild( actor );
       this.gameUtil.orderProps( this.gameScene.children );
+
+      actor.mousedown = function( data ) {
+        $scope.$emit('monster clicked', {id: this.id, location:this.coordinate});
+      }
     }
   }
 
@@ -253,6 +261,7 @@ class Game {
     }
 
     actor.gridOccupation = this.gameUtil.gridOccupation( actor );
+
     this.gameUtil.addObstacle( actor, this.obstacles );
     this.gameUtil.setPositionFromGrid( actor, this.tileGridWidth, this.tileGridHeight );
     this.gameUtil.orderProps( this.gameScene.children );

@@ -478,21 +478,19 @@ export default function engineService(socket){
 
     // checks if target square is available and returns a boolean
     Game.move = (source, target, character) => {
+        console.log('character inside of move', character);
+        
         if(!Game.board[target.y][target.x].free){
             return false;
         }
         Game.moves--;
-        socket.emit("move", {source: Game.user.location, target: target, room: room, character: character});
+        socket.emit("move", {source: source, target: target, room: room, character: character});
 
         return true;
     }
 
     Game.dmMoves = () => {
 
-    }
-
-    Game.getMonster = () => {
-        return Game.monsters[Game.monsterExplore];
     }
 
     // GAME FUNCTIONS * * *
@@ -589,10 +587,10 @@ export default function engineService(socket){
         for(let i = 0; i < dungeon.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
-            Game.board[y][x].trap.findDC          = dungeon.traps[i].settings.findDC;
-            Game.board[y][x].trap.disarmDC        = dungeon.traps[i].settings.disarmDC;
-            Game.board[y][x].trap.found           = dungeon.traps[i].settings.found;
-            Game.board[y][x].trap.triggered       = dungeon.traps[i].settings.triggered;
+            Game.board[y][x].trap.findDC    = dungeon.traps[i].settings.findDC;
+            Game.board[y][x].trap.disarmDC  = dungeon.traps[i].settings.disarmDC;
+            Game.board[y][x].trap.found     = dungeon.traps[i].settings.found;
+            Game.board[y][x].trap.triggered = dungeon.traps[i].settings.triggered;
             Game.board[y][x].trap.damage = {
               diceType: dungeon.traps[i].settings.damage.diceType
               , diceNum: dungeon.traps[i].settings.damage.diceNum
