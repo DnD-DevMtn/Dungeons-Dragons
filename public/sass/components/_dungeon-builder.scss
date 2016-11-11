@@ -1,0 +1,42 @@
+div.options-wrapper {
+  width: 300px;
+  height: 100vh;
+  position: absolute;
+  right: 0;
+  overflow: scroll;
+  background-color: #1e091c;
+  padding: 20px;
+}
+
+div.options-wrapper div.info {
+  margin-bottom: 20px;
+}
+
+div.options-wrapper div.info input {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 10px;
+}
+
+div.options-wrapper div.info button {
+  margin-bottom: 20px;
+}
+
+div.options-wrapper div.size {
+  margin-bottom: 20px;
+}
+
+div.options-wrapper div.size input {
+  display: inline-block;
+  width: 50px;
+  height: 40px;
+  padding: 5px;
+}
+
+div.options-wrapper div.size button {
+  display: block;
+}
+
+div.game-wrapper {
+  width: calc(100% - 300px);
+}
