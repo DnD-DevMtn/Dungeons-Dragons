@@ -18,6 +18,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     let Game;
 
+    let currentMonsterClicked = {};
+
     if($stateParams.dungeon) {
         Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
         GV.pixiDungeon.players = Game.players;
@@ -301,6 +303,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
         checkTurn();
     });
 
+    socket.on("return start combat", order => {
+        Game.gameStatus = "combat";
+        order.forEach( combatant => {
+            Game.combatOrder.push(combatant.actor);
+        } );
+    });
+
 
     function updateActorPosition(source, target) {
         console.log("FROM UPDATE ACTOR", source, target);
@@ -342,15 +351,20 @@ export default function(engineService, userService, socket, $stateParams, $http,
         socket.emit("end turn", GV.gameId);
     }
 
-    GV.nextMonster = () => {
-        console.log("NEXT MONSTER");
-        if(Game.monsterExplore >= Game.monsters.length)
-            return;
-        else
-            Game.monsterExplore++;
+    // GV.nextMonster = () => {
+    //     console.log("NEXT MONSTER");
+    //     if(Game.monsterExplore >= Game.monsters.length)
+    //         return;
+    //     else
+    //         Game.monsterExplore++;
+    //
+    //
+    //     // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
+    // }
 
-
-        // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
+    GV.startCombat = () => {
+        const combatOrder = getCombatOrder();
+        socket.emit("start combat", {room: GV.gameId, order: combatOrder});
     }
 
     function checkTurn(){
@@ -372,8 +386,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
       }
     }
 
-
-
     window.addEventListener ( "keydown", downHandler, false );
     window.addEventListener ( "keyup", upHandler, false );
 
@@ -382,7 +394,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
             GV.keyUp = false;
             let character = (!Game.dmMode) ? Game.user : Game.getMonster();
-            console.log(event.keyCode);
             if(!Game.dmMode){
                 switch( event.keyCode ) {
                     case 37:
@@ -413,25 +424,25 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 console.log( "It's DM's turn!", monsterExplore, Game.monsters );
                 switch( event.keyCode ) {
                     case 37:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x - 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
 
                     case 38:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y - 1 }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
 
                     case 39:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x + 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
 
                     case 40:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y + 1 }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
@@ -443,5 +454,40 @@ export default function(engineService, userService, socket, $stateParams, $http,
     function upHandler() {
         GV.keyUp = true;
     }
+
+
+    function getCombatOrder() {
+        let order = []
+        Game.players.forEach( player => {
+            let roll = rollInit(player.actor.baseStats.dex);
+            order.push({actor: player.id, initiative: roll});
+        } );
+        Game.monsters.forEach( monster => {
+            let roll = rollMonsterInit(monster.initiative);
+            order.push({actor: monster.id, initiative: roll});
+        } );
+        return order.sort( (a, b) => {
+            return a.initiative - b.initiative;
+        } );
+    }
+
+    function rollInit(dex) {
+        const dexMod = Math.floor((dex - 10) / 2);
+        return Math.ceil(Math.random() * 20) + dexMod;
+    }
+
+    function rollMonsterInit(initMod) {
+        return Math.ciel(Math.random() * 20) + initMod;
+    }
+
+    $scope.$on('monster clicked', (event, data) => {
+      for(var i = 0; i < Game.monsters.length; i++) {
+        if(data.id === Game.monsters[i].id) {
+            Game.monsterExplore = i;
+            return;
+        }
+      }
+    })
+
 
 }
