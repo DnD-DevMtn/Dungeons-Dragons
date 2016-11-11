@@ -290,6 +290,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return end turn", () => {
+      console.log(Game.dmTurn);
       if ( Game.dmTurn ) {
         Game.exploreTurn = 0;
         Game.dmTurm = false;

@@ -154,7 +154,7 @@ export default function engineService(socket){
                 Game.actions.push("castSpell");
             }
         }
-        console.log("Game.actions: ", Game.actions);
+        console.log(Game.actions);
     }
     // end Game.actionOptions()
 
@@ -479,7 +479,6 @@ export default function engineService(socket){
     // checks if target square is available and returns a boolean
     Game.move = (source, target, character) => {
         console.log('character inside of move', character);
-        
         if(!Game.board[target.y][target.x].free){
             return false;
         }
@@ -491,6 +490,10 @@ export default function engineService(socket){
 
     Game.dmMoves = () => {
 
+    }
+
+    Game.getMonster = () => {
+        return Game.monsters[Game.monsterExplore];
     }
 
     // GAME FUNCTIONS * * *
@@ -587,10 +590,10 @@ export default function engineService(socket){
         for(let i = 0; i < dungeon.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
-            Game.board[y][x].trap.findDC    = dungeon.traps[i].settings.findDC;
-            Game.board[y][x].trap.disarmDC  = dungeon.traps[i].settings.disarmDC;
-            Game.board[y][x].trap.found     = dungeon.traps[i].settings.found;
-            Game.board[y][x].trap.triggered = dungeon.traps[i].settings.triggered;
+            Game.board[y][x].trap.findDC          = dungeon.traps[i].settings.findDC;
+            Game.board[y][x].trap.disarmDC        = dungeon.traps[i].settings.disarmDC;
+            Game.board[y][x].trap.found           = dungeon.traps[i].settings.found;
+            Game.board[y][x].trap.triggered       = dungeon.traps[i].settings.triggered;
             Game.board[y][x].trap.damage = {
               diceType: dungeon.traps[i].settings.damage.diceType
               , diceNum: dungeon.traps[i].settings.damage.diceNum
