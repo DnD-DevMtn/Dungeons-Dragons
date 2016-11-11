@@ -303,6 +303,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
         checkTurn();
     });
 
+    socket.on("return start combat", order => {
+        Game.gameStatus = "combat";
+        order.forEach( combatant => {
+            Game.combatOrder.push(combatant.actor);
+        } );
+    });
+
 
     function updateActorPosition(source, target) {
         console.log("FROM UPDATE ACTOR", source, target);
@@ -354,6 +361,11 @@ export default function(engineService, userService, socket, $stateParams, $http,
     //
     //     // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
     // }
+
+    GV.startCombat = () => {
+        const combatOrder = getCombatOrder();
+        socket.emit("start combat", {room: GV.gameId, order: combatOrder});
+    }
 
     function checkTurn(){
         if(Game.players[Game.exploreTurn].id === Game.user.id) {
@@ -433,6 +445,31 @@ export default function(engineService, userService, socket, $stateParams, $http,
         GV.keyUp = true;
     }
 
+
+    function getCombatOrder() {
+        let order = []
+        Game.players.forEach( player => {
+            let roll = rollInit(player.actor.baseStats.dex);
+            order.push({actor: player.id, initiative: roll});
+        } );
+        Game.monsters.forEach( monster => {
+            let roll = rollMonsterInit(monster.initiative);
+            order.push({actor: monster.id, initiative: roll});
+        } );
+        return order.sort( (a, b) => {
+            return a.initiative - b.initiative;
+        } );
+    }
+
+    function rollInit(dex) {
+        const dexMod = Math.floor((dex - 10) / 2);
+        return Math.ceil(Math.random() * 20) + dexMod;
+    }
+
+    function rollMonsterInit(initMod) {
+        return Math.ciel(Math.random() * 20) + initMod;
+    }
+
     $scope.$on('monster clicked', (event, data) => {
       for(var i = 0; i < Game.monsters.length; i++) {
         if(data.id === Game.monsters[i].id) {
@@ -441,5 +478,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
       }
     })
+
 
 }
