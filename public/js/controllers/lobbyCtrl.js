@@ -90,7 +90,7 @@ export default function(socket, $stateParams, userService, $state, inventoryServ
 
     socket.on("return start", party => {
         lobby.party = party;
-        userService.getDungeonById( "5824cfbfd966fd065b624315" ).then( response => {
+        userService.getDungeonById( "58262dcbbd28e506ed6f384f" ).then( response => {
           const dungeon = response.data;
           if(lobby.userChar.name === "dm") {
             dungeon.monsters.forEach(monster => {

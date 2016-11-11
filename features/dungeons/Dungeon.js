@@ -6,7 +6,7 @@ const Dungeon = new mongoose.Schema({
     , width: {type: Number, required: true}
     , monsters: [{
         _id: false
-        , monster: {type: mongoose.Schema.Types.ObjectId, ref: "Monster"}
+        , settings: {type: mongoose.Schema.Types.ObjectId, ref: "Monster"}
         , image: String
         , location: {
             x: Number
