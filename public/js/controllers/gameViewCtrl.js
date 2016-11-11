@@ -421,7 +421,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         break;
                 }
             } else {
-                console.log( "It's DM's turn!", monsterExplore, Game.monsters );
+                console.log( "It's DM's turn!", Game.monsterExplore, Game.monsters );
                 switch( event.keyCode ) {
                     case 37:
                         if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x - 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
