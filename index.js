@@ -101,12 +101,16 @@ io.on("connection", socket => {
         io.sockets.to(room).emit("return ready", campaigns[room]);
     });
 
+    socket.on("monsterid", data => {
+        io.sockets.to(data.room).emit("return monsterid", data);
+    });
+
     socket.on("send start", room => {
         io.sockets.to(room).emit("return start", campaigns[room]);
     });
 
     socket.on("end turn", room => {
-        io.sockets.to(room).emit("return turn over");
+        io.sockets.to(room).emit("return end turn");
     });
 
     socket.on("move", data => {
