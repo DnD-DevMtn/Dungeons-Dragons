@@ -69,9 +69,14 @@ export default function engineService(socket){
     // explore options
     Game.actionOptions = () => {
         if(Game.dmMode && Game.gameState === "combat") {
+          let source = {
+            x: Game.monsters[ Game.monsterExplore ].location.x,
+            y: Game.monsters[ Game.monsterExplore ].location.y
+          }
 
-
-            return;
+          return;
+        } else if ( Game.dmMode && Game.gameState === "explore" ){
+          return;
         }
         let source = {
           x: Game.user.location.x
@@ -479,7 +484,7 @@ export default function engineService(socket){
     // checks if target square is available and returns a boolean
     Game.move = (source, target, character) => {
         console.log('character inside of move', character);
-        
+
         if(!Game.board[target.y][target.x].free){
             return false;
         }

@@ -291,8 +291,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return end turn", () => {
       if ( Game.dmTurn ) {
+        console.log( "dmTurn is true!" );
         Game.exploreTurn = 0;
-        Game.dmTurm = false;
+        Game.dmTurn = false;
       } else {
         Game.exploreTurn++;
 
@@ -315,6 +316,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         console.log("FROM UPDATE ACTOR", source, target);
         let x = source.x, y = source.y;
         let actorType = Game.board[y][x].type + 's';
+        console.log( "Game.board[y][x]", Game.board[y][x], y, x );
         for(let i = 0; i < Game[actorType].length; i++) {
             if(Game[actorType][i].id === Game.board[y][x].id) {
                 Game[actorType][i].location.x = target.x;
