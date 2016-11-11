@@ -18,7 +18,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     let Game;
 
-    let currentMonsterClicked;
+    let currentMonsterClicked = {};
 
     if($stateParams.dungeon) {
         Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
@@ -344,16 +344,16 @@ export default function(engineService, userService, socket, $stateParams, $http,
         socket.emit("end turn", GV.gameId);
     }
 
-    GV.nextMonster = () => {
-        console.log("NEXT MONSTER");
-        if(Game.monsterExplore >= Game.monsters.length)
-            return;
-        else
-            Game.monsterExplore++;
-
-
-        // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
-    }
+    // GV.nextMonster = () => {
+    //     console.log("NEXT MONSTER");
+    //     if(Game.monsterExplore >= Game.monsters.length)
+    //         return;
+    //     else
+    //         Game.monsterExplore++;
+    //
+    //
+    //     // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
+    // }
 
     function checkTurn(){
         if(Game.players[Game.exploreTurn].id === Game.user.id) {
@@ -371,8 +371,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         console.log(`${Game.players[Game.exploreTurn].actor.name} turn`)
 
     }
-
-
 
     window.addEventListener ( "keydown", downHandler, false );
     window.addEventListener ( "keyup", upHandler, false );
@@ -407,22 +405,22 @@ export default function(engineService, userService, socket, $stateParams, $http,
             } else {
                 switch( event.keyCode ) {
                     case 37:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x - 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 38:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y - 1 }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 39:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x + 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 40:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y + 1 }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
@@ -436,8 +434,11 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     $scope.$on('monster clicked', (event, data) => {
-      currentMonsterClicked = data;
-      console.log(currentMonsterClicked);
+      for(var i = 0; i < Game.monsters.length; i++) {
+        if(data.id === Game.monsters[i].id) {
+            Game.monsterExplore = i;
+        }
+      }
     })
 
 }
