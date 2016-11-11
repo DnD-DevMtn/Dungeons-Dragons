@@ -366,8 +366,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
         if(Game.dmTurn && Game.dmMode) {
             Game.isTurn = true;
-            Game.monsterExplore = 0;
-            Game.moves = Game.monsters[Game.monsterExplore].speed
+            Game.monsters.forEach( monster => {
+                monster.canMove = true;
+            } );
         }
         console.log(`${Game.players[Game.exploreTurn].actor.name} turn`)
 
@@ -461,12 +462,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     $scope.$on('monster clicked', (event, data) => {
         for(var i = 0; i < Game.monsters.length; i++) {
-            if(data.id === Game.monsters[i].id) {
+            if((data.id === Game.monsters[i].id) && Game.monsters[i].canMove) {
                 Game.monsterExplore = i;
+                Game.moves = Game.monsters[i].settings.speed;
+                Game.monsters[i].canMove = false;
                 return;
             }
         }
-    })
+    });
 
 
 }
