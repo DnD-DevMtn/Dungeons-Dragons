@@ -10,7 +10,6 @@ export default function( $scope ) {
 
 
   $scope.$on("send move", (event, data) => {
-    console.log( data );
     p.move(data.character, data.target);
   })
 
@@ -96,8 +95,11 @@ class Game {
     this.doors = Dungeon.doors;
     this.environment = Dungeon.environment;
 
-    this.renderer = PIXI.autoDetectRenderer( Dungeon.mainPlayer.cameraGridWidth * this.tileGridWidth,
-      Dungeon.mainPlayer.cameraGridHeight * this.tileGridHeight );
+    // this.renderer = PIXI.autoDetectRenderer( Dungeon.mainPlayer.cameraGridWidth * this.tileGridWidth,
+    //   Dungeon.mainPlayer.cameraGridHeight * this.tileGridHeight );
+    // Full map view
+    this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridHeight  )
+
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
     PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
@@ -115,7 +117,7 @@ class Game {
   }
 
   play() {
-    this.cameraFocus();
+    // this.cameraFocus();
     this.animation();
 
     this.renderer.render( this.stage );
@@ -232,13 +234,8 @@ class Game {
   }
 
   move( character, targetLocation ) {
-
-    console.log('character in pixi', character);
-
     var result = false;
     var actor = this.actors[ character.id ];
-
-    console.log('actor, character.id, this.actors', actor, character.id, this.actors)
 
     var targetOccupation = this.gameUtil.gridOccupation( {
       coordinate: targetLocation, gridWidth: actor.gridWidth, gridHeight: actor.gridHeight

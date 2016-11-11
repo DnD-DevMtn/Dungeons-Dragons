@@ -154,7 +154,7 @@ export default function engineService(socket){
                 Game.actions.push("castSpell");
             }
         }
-        console.log(Game.actions);
+        console.log("Game.actions: ", Game.actions);
     }
     // end Game.actionOptions()
 

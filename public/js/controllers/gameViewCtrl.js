@@ -28,7 +28,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return move", data => {
         console.log("SOCKET RETURN MOVE", data);
         let source = data.source, target = data.target;
-        console.log(Game.user.location);
         if(Game.board[source.y][source.x].id === Game.user.id) {      // TODO in ctrl
 
             Game.user.location.x = target.x;
@@ -289,15 +288,16 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return end turn", () => {
-        if((Game.exploreTurn === Game.players.length - 1) && !Game.dmTurn) {
-            console.log("DM TURN", Game.dmTurn);
-            Game.dmTurn = true;
-        } else if((Game.exploreTurn === Game.players.length - 1) && Game.dmTurn) {
-            Game.exploreTurn = 0;
-        } else {
-            Game.exploreTurn++;
+      if ( Game.dmTurn ) {
+        Game.exploreTurn = 0;
+        Game.dmTurm = false;
+      } else {
+        Game.exploreTurn++;
+
+        if ( Game.players.length <= Game.exploreTurn ) {
+          Game.dmTurn = true;
         }
-        console.log("PLAYER'S TURN", Game.players[Game.exploreTurn].actor.name, Game.exploreTurn);
+      }
         checkTurn();
     });
 
@@ -354,20 +354,22 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     function checkTurn(){
-        if(Game.players[Game.exploreTurn].id === Game.user.id) {
-            // + + + PIXI YOUR TURN BITCH + + + \\
-            console.log("IT'S YOUR TURN!");
-            Game.moves = Game.user.actor.speed;
-            Game.isTurn = true;
-            Game.actionOptions();
+      console.log( Game.dmTurn, Game.dmMode );
+      if ( Game.dmTurn ) {
+        if ( Game.dmMode ) {
+          Game.isTurn = true;
+          Game.monsterExplore = 0;
+          Game.moves = Game.monsters[Game.monsterExplore].settings.speed;
+          console.log( Game.isTurn, Game.monsterExplore, Game.moves, Game.monsters[Game.monsterExplore] );
         }
-        if(Game.dmTurn && Game.dmMode) {
-            // Game.isTurn = true;
-            // Game.monsterExplore = 0;
-            // Game.monsters[Game.monsterExplore].speed
+      } else {
+        if ( Game.players[ Game.exploreTurn ].id === Game.user.id ) {
+          console.log("IT'S YOUR TURN!");
+          Game.moves = Game.user.actor.speed;
+          Game.isTurn = true;
+          Game.actionOptions();
         }
-        console.log(`${Game.players[Game.exploreTurn].actor.name} turn`)
-
+      }
     }
 
 
@@ -376,6 +378,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     window.addEventListener ( "keyup", upHandler, false );
 
     function downHandler() {
+      console.log( GV.keyup, Game.isTurn, Game.moves );
         if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
             GV.keyUp = false;
             let character = (!Game.dmMode) ? Game.user : Game.getMonster();
@@ -407,6 +410,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         break;
                 }
             } else {
+                console.log( "It's DM's turn!", monsterExplore, Game.monsters );
                 switch( event.keyCode ) {
                     case 37:
                         if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
