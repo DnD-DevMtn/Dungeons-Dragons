@@ -98,13 +98,10 @@ io.on("connection", socket => {
                 campaigns[room].players[i].status = "ready";
             }
         }
-        console.log("FROM READY", campaigns[room]);
         io.sockets.to(room).emit("return ready", campaigns[room]);
     });
 
     socket.on("send start", room => {
-        campaigns[room].status = "inProgress";
-        console.log("FROM READY", campaigns[room]);
         io.sockets.to(room).emit("return start", campaigns[room]);
     });
 

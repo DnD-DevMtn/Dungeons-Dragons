@@ -221,11 +221,11 @@ export default function engineService(socket){
     // available if a door is next to the user, ie. directly above, beneath, left or right
     // door opens if not locked
     Game.openDoor = (source, target) => {
-        if(Game.board[target.x][target.y].door.locked){
+        if(Game.board[target.y][target.x].door.locked){
             socket.emit("openDoor", {source: source, target: target, success: false, room: room});   // TODO openDoor: back and front(controller)
             return false;
         }
-        Game.board[target.x][target.y].door.open = true;
+        Game.board[target.y][target.x].door.open = true;
         socket.emit("openDoor", {source: source, target: target, success: true, room: room});       // TODO openDoor: back and front(controller)
         return true;
     }
@@ -273,7 +273,7 @@ export default function engineService(socket){
 
     // available if a door is next to the user, ie. directly above, beneath, left or right
     Game.closeDoor = (source, target) => {
-        // Game.board[target.x][target.y].door.open = false;    // TODO ctrl
+        // Game.board[target.y][target.x].door.open = false;    // TODO ctrl
         socket.emit("closeDoor", {source: source, target: target, room: room}); // TODO socket.on("closeDoor") controller side
     }
 
@@ -478,11 +478,11 @@ export default function engineService(socket){
 
     // checks if target square is available and returns a boolean
     Game.move = (source, target) => {
-        if(!Game.board[target.x][target.y].free){
+        if(!Game.board[target.y][target.x].free){
             return false;
         }
         Game.moves--;
-        //socket.emit("move", {source: Game.user.location, target: target, room: room});
+        socket.emit("move", {source: Game.user.location, target: target, room: room});
 
         return true;
     }
@@ -730,14 +730,14 @@ export default function engineService(socket){
 
     function findAdjacent(source){
         return [
-              [source.x - 1, source.y - 1]
-            , [source.x - 1, source.y    ]
-            , [source.x - 1, source.y + 1]
-            , [source.x    , source.y - 1]
-            , [source.x    , source.y + 1]
-            , [source.x + 1, source.y - 1]
-            , [source.x + 1, source.y    ]
-            , [source.x + 1, source.y + 1]
+              [source.y - 1, source.x - 1]
+            , [source.y - 1, source.x    ]
+            , [source.y - 1, source.x + 1]
+            , [source.y    , source.x - 1]
+            , [source.y    , source.x + 1]
+            , [source.y + 1, source.x - 1]
+            , [source.y + 1, source.x    ]
+            , [source.y + 1, source.x + 1]
         ];
     }
 
