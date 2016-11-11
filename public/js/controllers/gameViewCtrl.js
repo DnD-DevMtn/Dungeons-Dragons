@@ -351,17 +351,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         socket.emit("end turn", GV.gameId);
     }
 
-    // GV.nextMonster = () => {
-    //     console.log("NEXT MONSTER");
-    //     if(Game.monsterExplore >= Game.monsters.length)
-    //         return;
-    //     else
-    //         Game.monsterExplore++;
-    //
-    //
-    //     // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
-    // }
-
     GV.startCombat = () => {
         const combatOrder = getCombatOrder();
         socket.emit("start combat", {room: GV.gameId, order: combatOrder});
@@ -376,9 +365,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
             Game.actionOptions();
         }
         if(Game.dmTurn && Game.dmMode) {
-            // Game.isTurn = true;
-            // Game.monsterExplore = 0;
-            // Game.monsters[Game.monsterExplore].speed
+            Game.isTurn = true;
+            Game.monsterExplore = 0;
+            Game.moves = Game.monsters[Game.monsterExplore].speed
         }
         console.log(`${Game.players[Game.exploreTurn].actor.name} turn`)
 
@@ -447,7 +436,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
 
     function getCombatOrder() {
-        let order = []
+        let order = [];
         Game.players.forEach( player => {
             let roll = rollInit(player.actor.baseStats.dex);
             order.push({actor: player.id, initiative: roll});
@@ -471,12 +460,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     $scope.$on('monster clicked', (event, data) => {
-      for(var i = 0; i < Game.monsters.length; i++) {
-        if(data.id === Game.monsters[i].id) {
-            Game.monsterExplore = i;
-            return;
+        for(var i = 0; i < Game.monsters.length; i++) {
+            if(data.id === Game.monsters[i].id) {
+                Game.monsterExplore = i;
+                return;
+            }
         }
-      }
     })
 
 
