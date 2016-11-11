@@ -478,11 +478,12 @@ export default function engineService(socket){
 
     // checks if target square is available and returns a boolean
     Game.move = (source, target, character) => {
+        console.log('character inside of move', character);
         if(!Game.board[target.y][target.x].free){
             return false;
         }
         Game.moves--;
-        socket.emit("move", {source: Game.user.location, target: target, room: room, character: character});
+        socket.emit("move", {source: character.location, target: target, room: room, character: character});
 
         return true;
     }

@@ -18,6 +18,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     let Game;
 
+    let currentMonsterClicked;
+
     if($stateParams.dungeon) {
         Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
         GV.pixiDungeon.players = Game.players;
@@ -379,7 +381,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
             GV.keyUp = false;
             let character = (!Game.dmMode) ? Game.user : Game.getMonster();
-            console.log(event.keyCode);
             if(!Game.dmMode){
                 switch( event.keyCode ) {
                     case 37:
@@ -433,5 +434,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
     function upHandler() {
         GV.keyUp = true;
     }
+
+    $scope.$on('monster clicked', (event, data) => {
+      currentMonsterClicked = data;
+      console.log(currentMonsterClicked);
+    })
 
 }
