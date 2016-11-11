@@ -34,6 +34,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
             Game.user.location.x = target.x;
             Game.user.location.y = target.y;
         }
+        $scope.$broadcast("send move", {character: data.character, target: data.target});
+
         updateActorPosition(source, target);
 
         let type = Game.board[source.y][source.x].type;       // save the reference variables
@@ -381,26 +383,22 @@ export default function(engineService, userService, socket, $stateParams, $http,
             if(!Game.dmMode){
                 switch( event.keyCode ) {
                     case 37:
-                        if ( Game.move( Game.user.location, { x: Game.user.location.x - 1, y: Game.user.location.y } ) ) {
-                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x - 1, y: Game.user.location.y } } );
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x - 1, y: Game.user.location.y }, Game.user ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 38:
-                        if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y - 1 } ) ) {
-                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x, y: Game.user.location.y - 1 } } );
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y - 1 }, Game.user ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 39:
-                        if ( Game.move( Game.user.location, { x: Game.user.location.x + 1, y: Game.user.location.y } ) ) {
-                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x + 1, y: Game.user.location.y } } );
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x + 1, y: Game.user.location.y }, Game.user ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 40:
-                        if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y + 1 } ) ) {
-                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x, y: Game.user.location.y + 1 } } );
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y + 1 }, Game.user ) ) {
                             Game.actionOptions();
                         }
                         break;
@@ -408,26 +406,22 @@ export default function(engineService, userService, socket, $stateParams, $http,
             } else {
                 switch( event.keyCode ) {
                     case 37:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y } ) ) {
-                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y } } );
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 38:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 } ) ) {
-                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 } } );
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 }, Game.monsters[monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 39:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y } ) ) {
-                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y } } );
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
                     case 40:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 } ) ) {
-                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 } } );
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 }, Game.monsters[monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;

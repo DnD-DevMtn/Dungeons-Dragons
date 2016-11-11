@@ -477,12 +477,12 @@ export default function engineService(socket){
     }
 
     // checks if target square is available and returns a boolean
-    Game.move = (source, target) => {
+    Game.move = (source, target, character) => {
         if(!Game.board[target.y][target.x].free){
             return false;
         }
         Game.moves--;
-        socket.emit("move", {source: Game.user.location, target: target, room: room});
+        socket.emit("move", {source: Game.user.location, target: target, room: room, character: character});
 
         return true;
     }
@@ -505,7 +505,7 @@ export default function engineService(socket){
     this.initGame = function(dungeon, players, userCharacter, gameId){  // Players will already exist on the scope by the time the dungeon starts
                                                                        // so players array will not be tied to the Dungeon object.
         for(let k = 0; k < players.length; k++) {                      // game room needs to be passes with socket.emit functions
-            let rand = generateId();
+            //let rand = generateId();
 
             if(players[k].player === userCharacter._id) {
                 if(players[k].char.name === 'dm') {
@@ -513,7 +513,7 @@ export default function engineService(socket){
                 } else {
                     Game.user.actor    = userCharacter;                     // Game.user is a character
                     Game.user.location = dungeon.startingLocation[k].location;    // user exists as an object on service and in the array of players
-                    Game.user.id       = rand;
+                    Game.user.id       = players[k].char._id;
                     Game.user.ac       = findAC(Game.user.actor);
                     Game.user.hp       = userCharacter.hp;
                     Game.user.equipped = {};
@@ -529,7 +529,7 @@ export default function engineService(socket){
                     , userName: players[k].userName
                     , sprite: players[k].char.sprite
                     , equipped: {}
-                    , id: rand
+                    , id: players[k].char._id
                     , ac: findAC(players[k].char)
                     , hp: players[k].char.hp
                     , newItems: []
@@ -603,7 +603,7 @@ export default function engineService(socket){
 
     function loadMonsters(){
         for(let i = 0; i < Game.monsters.length; i++){
-            Game.monsters[i].id = generateId();
+            //Game.monsters[i].id = generateId();
             let x = Game.monsters[i].location.x;
             let y = Game.monsters[i].location.y;
             Game.board[y][x].free = false;

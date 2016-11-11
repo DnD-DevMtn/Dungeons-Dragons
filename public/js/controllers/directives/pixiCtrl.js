@@ -86,7 +86,6 @@ class Game {
     this.obstacles = [];
 
     this.animationCounter = 0;
-
     this.mainPlayerId = Dungeon.mainPlayer.id;
     this.floor.gridWidth = Dungeon.width;
     this.floor.gridHeight = Dungeon.height;
@@ -232,8 +231,13 @@ class Game {
   }
 
   move( character, targetLocation ) {
+
+    console.log('character in pixi', character);
+
     var result = false;
     var actor = this.actors[ character.id ];
+
+    console.log('actor, character.id, this.actors', actor, character.id, this.actors)
 
     var targetOccupation = this.gameUtil.gridOccupation( {
       coordinate: targetLocation, gridWidth: actor.gridWidth, gridHeight: actor.gridHeight
