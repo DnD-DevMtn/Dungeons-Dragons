@@ -372,9 +372,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
       if ( Game.dmTurn ) {
         if ( Game.dmMode ) {
           Game.isTurn = true;
-          Game.monsterExplore = 0;
-          Game.moves = Game.monsters[Game.monsterExplore].settings.speed;
-          console.log( Game.isTurn, Game.monsterExplore, Game.moves, Game.monsters[Game.monsterExplore] );
+          console.log("IT'S THE DM'S TURN");
         }
       } else {
         if ( Game.players[ Game.exploreTurn ].id === Game.user.id ) {
@@ -393,7 +391,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
       console.log( GV.keyup, Game.isTurn, Game.moves );
         if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
             GV.keyUp = false;
-            let character = (!Game.dmMode) ? Game.user : Game.getMonster();
+            //let character = (!Game.dmMode) ? Game.user : Game.getMonster();
             if(!Game.dmMode){
                 switch( event.keyCode ) {
                     case 37:
@@ -484,6 +482,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
       for(var i = 0; i < Game.monsters.length; i++) {
         if(data.id === Game.monsters[i].id) {
             Game.monsterExplore = i;
+            Game.moves = Game.monsters[Game.monsterExplore].settings.speed;
+            console.log(Game.moves, Game.monsterExplore, Game.monsters[Game.monsterExplore] );
             return;
         }
       }
