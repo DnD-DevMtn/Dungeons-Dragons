@@ -192,6 +192,10 @@ class Game {
       this.actors[ characters[ i ].id ] = actor;
       this.gameScene.addChild( actor );
       this.gameUtil.orderProps( this.gameScene.children );
+
+      actor.mousedown = function( data ) {
+        console.log(data);
+      }.bind( this );
     }
   }
 
