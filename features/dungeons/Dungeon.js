@@ -79,6 +79,7 @@ const Dungeon = new mongoose.Schema({
             , pickDC: Number
             , open: Boolean
         }
+        , image: String
         , location: {
             x: Number
             , y: Number
@@ -105,8 +106,10 @@ const Dungeon = new mongoose.Schema({
     }]
     , startingLocation: [{
         _id: false
-        , x: Number
-        , y: Number
+        , location: {
+          x: Number
+          , y: Number
+        }
     }]
 });
 

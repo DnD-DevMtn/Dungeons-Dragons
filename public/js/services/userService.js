@@ -16,4 +16,8 @@ export default function($http) {
             return response.data;
         });
   }
+
+  userService.getDungeonById = _id => {
+    return $http.get( `/api/dungeons/${ _id }` );
+  }
 }

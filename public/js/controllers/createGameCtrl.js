@@ -48,7 +48,8 @@ export default function($http, $state, createGameService, userService) {
   create.saveDungeon = function() {
     PIXI.loader.reset();
     createGameService.postDungeon( create.dungeonBuilder.dungeon ).then( response => {
-      console.log( "Dungeon Posted: ", response );
+      window.alert( "Dungeon Posted." );
+      // console.log( "Dungeon Posted: ", response );
     } );
   }
 }
@@ -279,6 +280,8 @@ class DungeonBuilder {
       this.dungeon.items[ property.type ].push( dungeonProp );
     else
       this.dungeon[ property.type ].push( dungeonProp );
+
+    // console.log( this.dungeon );
   }
 
   deleteDungeonProp( sprite ) {

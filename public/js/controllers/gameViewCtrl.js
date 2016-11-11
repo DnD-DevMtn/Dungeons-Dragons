@@ -16,34 +16,36 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
 
-    if($stateParams.dungeon) {
-      const Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
-      GV.pixiDungeon.players = Game.players
-    }
+    let Game;
 
-    if(GV.user.character.weapons) {
-        getInventory(GV.user.character.weapons, GV.user.character.gear, GV.user.character.armor);
+    if($stateParams.dungeon) {
+        Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
+        GV.pixiDungeon.players = Game.players;
+        GV.pixiDungeon.user = Game.user;
+        checkTurn();
     }
 
     socket.on("return move", data => {
+        console.log("SOCKET RETURN MOVE", data);
         let source = data.source, target = data.target;
-        if(Game.board[source.x][source.y].id === Game.user.id){      // TODO in ctrl
+        console.log(Game.user.location);
+        if(Game.board[source.y][source.x].id === Game.user.id) {      // TODO in ctrl
+
             Game.user.location.x = target.x;
             Game.user.location.y = target.y;
-        } else {
-            updateActorPosition(source, target);
         }
+        updateActorPosition(source, target);
 
-        let type = Game.board[source.x][source.y].type;       // save the reference variables
-        let id   = Game.board[source.x][source.y].id;
+        let type = Game.board[source.y][source.x].type;       // save the reference variables
+        let id   = Game.board[source.y][source.x].id;
 
-        Game.board[source.x][source.y].type = "";             // set source square props to empty
-        Game.board[source.x][source.y].id   = "";
-        Game.board[source.x][source.y].free = true;
+        Game.board[source.y][source.x].type = "";             // set source square props to empty
+        Game.board[source.y][source.x].id   = "";
+        Game.board[source.y][source.x].free = true;
 
-        Game.board[target.x][target.y].type = type;           // set target square props to actor
-        Game.board[target.x][target.y].id   = id;
-        Game.board[target.x][target.y].free = false;
+        Game.board[target.y][target.x].type = type;           // set target square props to actor
+        Game.board[target.y][target.x].id   = id;
+        Game.board[target.y][target.x].free = false;
 
         // + + + PIXI MOVE + + + \\
         printBoard();
@@ -52,10 +54,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return bash", data => {
         let x = data.target.x, y = data.target.y;
 
-        if(success){
-            Game.board[x][y].door.hp -= damage;
-            if(Game.board[x][y].door.hp <= 0){
-                Game.board[x][y].door.open = true;
+        if(success) {
+            Game.board[y][x].door.hp -= damage;
+            if(Game.board[y][x].door.hp <= 0) {
+                Game.board[y][x].door.open = true;
             }
         }
 
@@ -71,14 +73,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return openDoor", data => {
         let x = data.target.x, y = data.target.y;
-        Game.board[x][y].door.open = false;
+        Game.board[y][x].door.open = false;
 
         // + + + PIXI OPEN DOOR + + + \\
     });
 
     socket.on("return closeDoor", data => {
         let x = data.target.x, y = data.target.y;
-        Game.board[x][y].door.open = false;
+        Game.board[y][x].door.open = false;
 
         // + + + PIXI CLOSE DOOR + + + \\
     });
@@ -87,14 +89,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.ROLL + + + \\
 
-        if(data.found.length === 0){
+        if(data.found.length === 0) {
             // + + + PIXI NOTHING FOUND + + + \\
             return;
         }
 
-        for(let i = 0; i < data.found.length; i++){
+        for(let i = 0; i < data.found.length; i++) {
             let x = data.found[i][0], y = data.found[i][1];
-            Game.board[x][y].item.found = true;
+            Game.board[y][x].item.found = true;
             break;
         }
 
@@ -105,14 +107,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.ROLL + + + \\
 
-        if(data.found.length === 0){
+        if(data.found.length === 0) {
             // + + + PIXI NOTHING FOUND + + + \\
             return;
         }
 
-        for(let i = 0; i < data.found.length; i++){
+        for(let i = 0; i < data.found.length; i++) {
             let x = data.found[i][0], y = data.found[i][1];
-            Game.board[x][y].trap.found = true;
+            Game.board[y][x].trap.found = true;
             break;
         }
 
@@ -127,15 +129,15 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.SUCCESS success + + + \\
 
-        if(!data.success){
+        if(!data.success ){
             // + + + PIXI DATA.SUCCESS failed + + + \\
             // + + + PIXI DATA.DAMAGE + + + \\
-            if(Game.board[xx][yy].id === Game.user.id){
+            if(Game.board[xx][yy].id === Game.user.id) {
                 Game.user.hp -= data.damage;
             }
         }
 
-        Game.board[x][y].trap.triggered = true;
+        Game.board[y][x].trap.triggered = true;
 
     });
 
@@ -144,13 +146,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI DATA.ROLL + + + \\
 
-        if(!success){
+        if(!success) {
             // + + + PIXI DATA.SUCCESS failed + + + \\
             return;
         }
 
         // + + + PIXI DATA.SUCCESS success + + + \\
-        Game.board[x][y].door.locked = false;
+        Game.board[y][x].door.locked = false;
 
     });
 
@@ -158,15 +160,15 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let x = data.source.x, y = data.source.y;
 
         // + + + PIXI DATA.ITEM.NAME + + + \\
-        if(Game.board[x][y].id === Game.user.id){
+        if(Game.board[y][x].id === Game.user.id) {
             Game.user.items.push(data.item);
-            Game.board[x][y].item = {};
+            Game.board[y][x].item = {};
             return;
         }
-        for(let i = 0; i < Game.players.length; i++){
-            if(Game.board[x][y].id === Game.players[i].id){
+        for(let i = 0; i < Game.players.length; i++) {
+            if(Game.board[y][x].id === Game.players[i].id) {
                 Game.players[i].newItems.push(data.item);
-                Game.board[x][y].item = {};
+                Game.board[y][x].item = {};
                 break;
             }
         }
@@ -177,14 +179,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let x = data.source.x, y = data.source.y;
 
         // + + + PIXI DATA.ITEM.NAME + + + \\
-        if(Game.board[x][y].id === Game.user.id){
-            Game.board[x][y].item.items.push(data.item);
+        if(Game.board[y][x].id === Game.user.id) {
+            Game.board[y][x].item.items.push(data.item);
             // Game.user.items.splice(Game.user.items.indexOf(data.item), 1);   // TODO splice dropped item out of array of new Items;
             return;
         }
-        for(let i = 0; i < Game.players.length; i++){
-            if(Game.board[x][y].id === Game.players[i].id){
-                Game.board[x][y].item.items.push(data.item);
+        for(let i = 0; i < Game.players.length; i++) {
+            if(Game.board[y][x].id === Game.players[i].id) {
+                Game.board[y][x].item.items.push(data.item);
                 // Game.players[i].newItems.push(data.item);                    // TODO SAME AS ABOVE
                 break;
             }
@@ -198,16 +200,36 @@ export default function(engineService, userService, socket, $stateParams, $http,
         // + + + PIXI DATA.ROLL (crit?) + + + \\
 
         // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
-        
-        let id   = Game.board[x][y].id;
-        let type = Game.board[x][y].type;
-        if(type === "monster"){
-            for(let i = 0; i < Game.monsters.length; i++){
-                if(id === Game.monsters[i].id){
-                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+
+        let id   = Game.board[y][x].id;
+        let type = Game.board[y][x].type;
+
+        if(type === "monster") {
+            for(let i = 0; i < Game.monsters.length; i++) {
+                if(id === Game.monsters[i].id) {
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit) {
                         // + + + PIXI HIT + + + \\
                         Game.monsters[i].monster.hp -= damage;
-                        if(Game.monsters[i].monster.hp <= 0){
+                        if(Game.monsters[i].monster.hp <= 0) {
+                            // + + + PIXI DEAD + + + \\
+                        }
+                    } else {
+                        // + + + PIXI MISS + + + \\
+                    }
+                }
+            }
+        }
+
+        if(type === "player"){
+            if(Game.board[y][x].id === Game.user.id) {
+                Game.user
+            }
+            for(let i = 0; i < Game.players.length; i++) {
+                if(id === Game.players[i].id) {
+                    if(Game.players[i].monster.ac <= data.roll || data.crit) {
+                        // + + + PIXI HIT + + + \\
+                        Game.players[i].monster.hp -= damage;
+                        if(Game.players[i].monster.hp <= 0) {
                             // + + + PIXI DEAD + + + \\
                         }
                     } else {
@@ -228,15 +250,15 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
 
-        let id   = Game.board[x][y].id;
-        let type = Game.board[x][y].type;
+        let id   = Game.board[y][x].id;
+        let type = Game.board[y][x].type;
         if(type === "monster"){
-            for(let i = 0; i < Game.monsters.length; i++){
-                if(id === Game.monsters[i].id){
-                    if(Game.monsters[i].monster.ac <= data.roll || data.crit){
+            for(let i = 0; i < Game.monsters.length; i++) {
+                if(id === Game.monsters[i].id) {
+                    if(Game.monsters[i].monster.ac <= data.roll || data.crit) {
                         // + + + PIXI HIT + + + \\
                         Game.monsters[i].monster.hp -= damage;
-                        if(Game.monsters[i].monster.hp <= 0){
+                        if(Game.monsters[i].monster.hp <= 0) {
                             // + + + PIXI DEAD + + + \\
                         }
                     } else {
@@ -264,35 +286,45 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     });
 
-    socket.on("return endTurn", data => {
-
+    socket.on("return end turn", () => {
+        if((Game.exploreTurn === Game.players.length - 1) && !Game.dmTurn) {
+            console.log("DM TURN", Game.dmTurn);
+            Game.dmTurn = true;
+        } else if((Game.exploreTurn === Game.players.length - 1) && Game.dmTurn) {
+            Game.exploreTurn = 0;
+        } else {
+            Game.exploreTurn++;
+        }
+        console.log("PLAYER'S TURN", Game.players[Game.exploreTurn].actor.name, Game.exploreTurn);
+        checkTurn();
     });
 
 
-    function updateActorPosition(source, target){
+    function updateActorPosition(source, target) {
+        console.log("FROM UPDATE ACTOR", source, target);
         let x = source.x, y = source.y;
-        let actorType = Game.board[x][y].type;
-        for(let i = 0; i < Game[actorType].length; i++){
-            if(Game[actorType][i].id === Game.board[x][y].id){
+        let actorType = Game.board[y][x].type + 's';
+        for(let i = 0; i < Game[actorType].length; i++) {
+            if(Game[actorType][i].id === Game.board[y][x].id) {
                 Game[actorType][i].location.x = target.x;
                 Game[actorType][i].location.y = target.y;
             }
         }
     }
 
-    function printBoard(){
-        for(let x = 0; x < Game.width; x++){
+    function printBoard() {
+        for(let y = 0;  y < Game.height; y++) {
             let line = "";
-            for(let y = 0; y < Game.height; y++){
-                if(Game.board[x][y].items.length > 0){
+            for(let x = 0; x < Game.width; x++) {
+                if(Game.board[y][x].item.items.length > 0) {
                     line += " I";
-                } else if(Game.board[x][y].trap.name){
+                } else if(Game.board[y][x].trap.name) {
                     line += " T";
-                } else if(Game.board[x][y].type === "player"){
+                } else if(Game.board[y][x].type === "player") {
                     line += " P";
-                } else if(Game.board[x][y].type === "monster"){
+                } else if(Game.board[y][x].type === "monster") {
                     line += " M";
-                } else if(Game.board[x][y].type === "environmental"){
+                } else if(Game.board[y][x].type === "environmental") {
                     line += " E";
                 } else {
                     line += " .";
@@ -300,28 +332,112 @@ export default function(engineService, userService, socket, $stateParams, $http,
             }
             console.log(line);
         }
+      console.log('moves left', Game.moves);
+    }
+
+    GV.endTurn = () => {
+        console.log("END TURN");
+        socket.emit("end turn", GV.gameId);
+    }
+
+    GV.nextMonster = () => {
+        console.log("NEXT MONSTER");
+        if(Game.monsterExplore >= Game.monsters.length)
+            return;
+        else
+            Game.monsterExplore++;
+
+
+        // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
+    }
+
+    function checkTurn(){
+        if(Game.players[Game.exploreTurn].id === Game.user.id) {
+            // + + + PIXI YOUR TURN BITCH + + + \\
+            console.log("IT'S YOUR TURN!");
+            Game.moves = Game.user.actor.speed;
+            Game.isTurn = true;
+            Game.actionOptions();
+        }
+        if(Game.dmTurn && Game.dmMode) {
+            // Game.isTurn = true;
+            // Game.monsterExplore = 0;
+            // Game.monsters[Game.monsterExplore].speed
+        }
+        console.log(`${Game.players[Game.exploreTurn].actor.name} turn`)
+
     }
 
 
 
-    function getInventory(weapons, gear, armor) {
-        console.log('this fired');
-        inventoryService.getInventory(weapons, gear, armor)
-        .then(results => {
-            console.log(results);
-            GV.user.character.weapons = results.weapons;
-            GV.user.character.armor = results.armor;
-            GV.user.character.gear = results.gear;
-        });
+    window.addEventListener ( "keydown", downHandler, false );
+    window.addEventListener ( "keyup", upHandler, false );
+
+    function downHandler() {
+        if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
+            GV.keyUp = false;
+            let character = (!Game.dmMode) ? Game.user : Game.getMonster();
+            console.log(event.keyCode);
+            if(!Game.dmMode){
+                switch( event.keyCode ) {
+                    case 37:
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x - 1, y: Game.user.location.y } ) ) {
+                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x - 1, y: Game.user.location.y } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                    case 38:
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y - 1 } ) ) {
+                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x, y: Game.user.location.y - 1 } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                    case 39:
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x + 1, y: Game.user.location.y } ) ) {
+                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x + 1, y: Game.user.location.y } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                    case 40:
+                        if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y + 1 } ) ) {
+                            $scope.$broadcast("send move", { character: Game.user, target: { x: Game.user.location.x, y: Game.user.location.y + 1 } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                }
+            } else {
+                switch( event.keyCode ) {
+                    case 37:
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y } ) ) {
+                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                    case 38:
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 } ) ) {
+                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                    case 39:
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y } ) ) {
+                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                    case 40:
+                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 } ) ) {
+                            $scope.$broadcast("send move", { character: Game.monsters[monsterExplore], target: { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 } } );
+                            Game.actionOptions();
+                        }
+                        break;
+                }
+            }
+        }
     }
 
-    function getInventory(weapons, gear, armor) {
-        inventoryService.getInventory(weapons, gear, armor)
-        .then(results => {
-            GV.user.character.weapons = results.weapons;
-            GV.user.character.armor = results.armor;
-            GV.user.character.gear = results.gear;
-        })
+    function upHandler() {
+        GV.keyUp = true;
     }
 
 }

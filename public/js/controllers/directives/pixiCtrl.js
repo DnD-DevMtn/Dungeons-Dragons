@@ -1,116 +1,76 @@
 import "pixi.js";
 
 export default function( $scope ) {
+  $scope.Dungeon = $scope.GV.pixiDungeon;
 
-    $scope.Dungeon = $scope.GV.pixiDungeon;
-      // dummy data
-    // $scope.Dungeon = {
-    //   width: 20,
-    //   height: 20,
-    //   backgroundImage: "GRS2ROC03",
-    //   players: [ {
-    //     id: 101,
-    //     image: "STARLORD",
-    //     location: { x: 10, y: 10 }
-    //   } ],
-    //   monsters: [ {
-    //     id: 103,
-    //     image: "DRAGON",
-    //     location: { x: 13, y: 13 }
-    //   } ],
-    //   doors: [ {
-    //     id: 721,
-    //     image: "DOOR",
-    //     location: { x: 5, y: 5 },
-    //     settings: {
-    //       bashDC: 3,
-    //       hp: 3,
-    //       locked: true,
-    //       pickDC: 4
-    //     }
-    //   } ],
-    //   environment: [ {
-    //     id: 115,
-    //     image: "TREE00",
-    //     location: { x: 5, y: 13 }
-    //   } ],
-    //   traps: [ {
-    //     id: 990,
-    //     image: "TRAP",
-    //     location: { x: 9, y: 6 },
-    //     settings: {
-    //       damage: {
-    //         diceNum: 3,
-    //         diceType: 3,
-    //         mod: 3
-    //       },
-    //       disarmDC: 3,
-    //       findDC: 4,
-    //       found: true,
-    //       triggered: false
-    //     }
-    //   } ],
-    //   items: {
-    //     weapons: [ {
-    //       id: 875,
-    //       image: "WEAPON",
-    //       location: { x: 11, y: 4 },
-    //       settings: {
-    //         findDC: 4,
-    //         found: false
-    //       }
-    //     } ]
-    //   }
-    // };
+  // Actual class declaration
 
-    // Actual class declaration
+    var character = dataStructureBuffer( $scope.Dungeon );
     var p = new Game( $scope.Dungeon );
-    var character = $scope.Dungeon.players[ 0 ];
 
-    // Delete below up to stop point....
-    window.addEventListener ( "keydown", downHandler, false );
-    window.addEventListener ( "keyup", upHandler, false );
 
-    function downHandler() {
-      if ( $scope.keyUp ) {
-        $scope.keyUp = false;
-        switch( event.keyCode ) {
-          case 37:
-            if ( p.move( character, { x: character.location.x - 1, y: character.location.y } ) ) {
-              character.location.x--;
-            }
-            break;
+  $scope.$on("send move", (event, data) => {
+      p.move(data.character, data.target);
+  })
 
-          case 38:
-            if ( p.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
-              character.location.y--;
-            }
-            break;
 
-          case 39:
-            if ( p.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
-              character.location.x++;
-            }
-            break;
 
-          case 40:
-            if ( p.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
-              character.location.y++;
-            }
-            break;
-        }
-      }
-    }
-
-    function upHandler() {
-      $scope.keyUp = true;
-    }
+  // Delete below up to stop point....
+  // window.addEventListener ( "keydown", downHandler, false );
+  // window.addEventListener ( "keyup", upHandler, false );
+  //
+  // function downHandler() {
+  //   if ( $scope.keyUp ) {
+  //     $scope.keyUp = false;
+  //     switch( event.keyCode ) {
+  //       case 37:
+  //         if ( p.move( character, { x: character.location.x - 1, y: character.location.y } ) ) {
+  //           character.location.x--;
+  //         }
+  //         break;
+  //
+  //       case 38:
+  //         if ( p.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
+  //           character.location.y--;
+  //         }
+  //         break;
+  //
+  //       case 39:
+  //         if ( p.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
+  //           character.location.x++;
+  //         }
+  //         break;
+  //
+  //       case 40:
+  //         if ( p.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
+  //           character.location.y++;
+  //         }
+  //         break;
+  //     }
+  //   }
+  // }
+  //
+  // function upHandler() {
+  //   $scope.keyUp = true;
+  // }
     // Stop point...
+};
+
+function dataStructureBuffer( dungeon ) {
+  for ( let i = 0; i < dungeon.players.length; i++ )
+    dungeon.players[ i ].image = dungeon.players[ i ].actor.sprite;
+
+  dungeon.mainPlayer = {
+    id: dungeon.players[ 0 ].id,
+    cameraGridWidth: 15,
+    cameraGridHeight: 15
   };
+
+  return dungeon.players[ 0 ];
+}
 
 class Game {
   constructor( Dungeon ) {
-    console.log(Dungeon);
     this.gameUtil = new Game_Util();
 
     this.stage = new PIXI.Container();
@@ -127,6 +87,7 @@ class Game {
 
     this.animationCounter = 0;
 
+    this.mainPlayerId = Dungeon.mainPlayer.id;
     this.floor.gridWidth = Dungeon.width;
     this.floor.gridHeight = Dungeon.height;
     this.floor.tileImage = Dungeon.backgroundImage;
@@ -135,7 +96,8 @@ class Game {
     this.doors = Dungeon.doors;
     this.environment = Dungeon.environment;
 
-    this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridWidth );
+    this.renderer = PIXI.autoDetectRenderer( Dungeon.mainPlayer.cameraGridWidth * this.tileGridWidth,
+      Dungeon.mainPlayer.cameraGridHeight * this.tileGridHeight );
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
     PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
@@ -153,6 +115,7 @@ class Game {
   }
 
   play() {
+    this.cameraFocus();
     this.animation();
 
     this.renderer.render( this.stage );
@@ -260,6 +223,12 @@ class Game {
     }
 
     this.animationCounter++;
+  }
+
+  cameraFocus() {
+    var x = this.actors[ this.mainPlayerId ].x - ( this.renderer.width - this.actors[ this.mainPlayerId ].width ) / 2;
+    var y = this.actors[ this.mainPlayerId ].y - ( this.renderer.height - this.actors[ this.mainPlayerId ].height ) / 2;
+    this.gameScene.position.set( -x, -y );
   }
 
   move( character, targetLocation ) {
