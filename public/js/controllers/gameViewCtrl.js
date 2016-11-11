@@ -462,7 +462,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     function rollMonsterInit(initMod) {
-        return Math.ciel(Math.random() * 20) + initMod;
+        return Math.ceil(Math.random() * 20) + initMod;
     }
 
     $scope.$on('monster clicked', (event, data) => {
