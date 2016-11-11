@@ -1,5 +1,6 @@
 #game {
     position:relative;
+    overflow:hidden;
     #pixi-game-engine {
       z-index:-2;
       width:80%;
