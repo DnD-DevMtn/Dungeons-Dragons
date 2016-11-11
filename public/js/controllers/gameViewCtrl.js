@@ -371,7 +371,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
 
-
     window.addEventListener ( "keydown", downHandler, false );
     window.addEventListener ( "keyup", upHandler, false );
 

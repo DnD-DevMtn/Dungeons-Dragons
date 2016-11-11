@@ -482,7 +482,7 @@ export default function engineService(socket){
             return false;
         }
         Game.moves--;
-        socket.emit("move", {source: Game.user.location, target: target, room: room, character: character});
+        socket.emit("move", {source: source, target: target, room: room, character: character});
 
         return true;
     }
