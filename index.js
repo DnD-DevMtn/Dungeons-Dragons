@@ -110,7 +110,7 @@ io.on("connection", socket => {
     });
 
     socket.on("end turn", room => {
-        io.sockets.to(room).emit("return turn over");
+        io.sockets.to(room).emit("return end turn");
     });
 
     socket.on("move", data => {
