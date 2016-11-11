@@ -29,7 +29,11 @@ export default function($http, $state, createGameService, userService) {
     delete create.width;
     delete create.height;
 
-    create.dungeonBuilder = new DungeonBuilder( dungeon );
+    if(dungeon.tileImage){
+      create.dungeonBuilder = new DungeonBuilder( dungeon );
+    } else {
+      alert("Please select a tile");
+    }
   }
 
   create.imageSelected = function( image, type, settings ) {
