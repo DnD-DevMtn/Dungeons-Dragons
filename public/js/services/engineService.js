@@ -188,18 +188,19 @@ export default function engineService(socket){
                   , critDamage: weapon.crit.damageMultiplier
               }
           }
-          if(Game.user.size === "medium"){
+          if(Game.user.actor.size === "medium"){
               Game.user.equipped.damage = {
                   diceType: weapon.damage.medium.diceType
                   , numDice: weapon.damage.medium.numOfDice
               }
           }
-          if(Game.user.size === "small"){
+          if(Game.user.actor.size === "small"){
               Game.user.equipped.damage = {
                   diceType: weapon.damage.small.diceType
                   , numDice: weapon.damage.small.numOfDice
               }
           }
+          console.log(Game.user.equipped);
           Game.actionTaken = true;
           Game.moves = 0;
           socket.emit("drawWeapon", {source: Game.user.location, weapon: weapon, room: room});        // TODO
@@ -237,43 +238,42 @@ export default function engineService(socket){
 
     // break down a door if locked or stuck
     Game.bash = (source, target) => {
+         console.log('bash fired in Game');
         let x = target.x, y = target.y;
-        if(checkUser(source)){
-            let strMod  = statMod(Game.user.actor.baseStats.str);
-            let roll    = dice.roll20();                                        // TODO DICEROLL
-            let success = (roll + strMod) >= Game.board[y][x].door.bashDC;
-            let crit    = false;
-            if(roll >= Game.user.equippped.crit.critRange){
-                success = true;
-                crit    = true;
-            }
-            let damage  = 0;
-            if(success){
-                let die = Game.user.equipped.damage.diceType;
-                let numDice = Game.user.equipped.damage.numDice;                // TODO DICEROLL
-                for(let i = 0; i < numDice; i++){
-                    damage += (Math.floor(Math.random(Game.user.equipped.damage.diceType))) + 1;
-                }
-                damage += strMod;
-                if(crit){
-                    damage *= 2;
-                }
-                // Game.board[y][x].door.hp -= damage;  // TODO in ctrl
-                // if(Game.board[y][x].door.hp <= 0){
-                //     Game.board[y][x].door.open = true;
-                // }
-            }
-            Game.actionTaken = true;
-            Game.moves = 0;
-            socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
-                                , target: target
-                                , roll: roll
-                                , success: success
-                                , damage: damage
-                                , crit: crit
-                                , room: room
-                            });
+        let strMod  = statMod(Game.user.actor.baseStats.str);
+        let roll    = dice.roll20();                                        // TODO DICEROLL
+        let success = (roll + strMod) >= Game.board[y][x].door.bashDC;
+        let crit    = false;
+        if(roll >= Game.user.equipped.crit.critRange){
+            success = true;
+            crit    = true;
         }
+        let damage  = 0;
+        if(success){
+            let die = Game.user.equipped.damage.diceType;
+            let numDice = Game.user.equipped.damage.numDice;                // TODO DICEROLL
+            for(let i = 0; i < numDice; i++){
+                damage += (Math.floor(Math.random() * die)) + 1;
+            }
+            damage += strMod;
+            if(crit){
+                damage *= Game.user.equipped.crit.critDamage;
+            }
+            // Game.board[y][x].door.hp -= damage;  // TODO in ctrl
+            // if(Game.board[y][x].door.hp <= 0){
+            //     Game.board[y][x].door.open = true;
+            // }
+        }
+        Game.actionTaken = true;
+        Math.floor(Game.moves /= 2);
+        socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
+                            , target: target
+                            , roll: roll
+                            , success: success
+                            , damage: damage
+                            , crit: crit
+                            , room: room
+                        });
     }
 
     // available if a door is next to the user, ie. directly above, beneath, left or right

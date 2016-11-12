@@ -30,12 +30,27 @@ export default function(engineService, userService, socket, $stateParams, $http,
     GV.openDoor = () => {
       Game.openDoor(Game.user.location, Game.doorLocation);
     }
+
     GV.closeDoor = () => {
       Game.closeDoor(Game.user.location, Game.doorLocation);
     }
 
     GV.openInventory = () => {
       $scope.$broadcast('open inventory')
+    }
+
+    GV.bash = () => {
+      console.log('bash fired');
+      Game.bash(Game.user.location, Game.doorLocation);
+    }
+
+    GV.drawWeapon = (weapon) => {
+      //Game.drawWeapon(weapon);
+      socket.emit('draw weapon', {source: Game.user.location, weapon: weapon, room: GV.gameId});
+    }
+
+    GV.sheathWeapon = () => {
+      socket.emit('sheath weapon', {source: Game.user.location, room: GV.gameId});
     }
 
     socket.on("return move", data => {
@@ -80,20 +95,74 @@ export default function(engineService, userService, socket, $stateParams, $http,
         printBoard();
     });
 
+    socket.on("return draw weapon", data => {
+      let x = data.source.x, y = data.source.y;
+      if(Game.board[y][x].id === Game.user.id) {
+        Game.user.equipped = {
+            name: data.weapon.name
+            , weaponType: data.weapon.weaponType
+            , prof: data.weapon.proficiency
+            , range: data.weapon.range
+            , crit: {
+                critRange: data.weapon.crit.critRange
+                , critDamage: data.weapon.crit.damageMultiplier
+            }
+        }
+        if(Game.user.actor.size === "medium"){
+            Game.user.equipped.damage = {
+                diceType: data.weapon.damage.medium.diceType
+                , numDice: data.weapon.damage.medium.numOfDice
+            }
+        }
+        if(Game.user.actor.size === "small"){
+            Game.user.equipped.damage = {
+                diceType: data.weapon.damage.small.diceType
+                , numDice: data.weapon.damage.small.numOfDice
+            }
+        }
+        Game.actionTaken = true;
+        Math.floor(Game.moves /= 2);
+      }
+      for(let i = 0; i < Game.players.length; i++) {
+        if(Game.board[y][x].id === Game.players[i].id) {
+          Game.players[i].equipped.name = data.weapon.name;
+          break;
+        }
+      }
+      console.log('Game.user.equipped', Game.user.equipped);
+    });
+
+    socket.on("return sheath weapon", data => {
+        let x = data.source.x, y = data.source.y;
+        if(Game.board[y][x].id === Game.user.id) {
+          Game.user.equipped = {};
+        }
+        for(let i = 0; i < Game.players.length; i++) {
+          if(Game.board[y][x].id === Game.players[i].id) {
+            Game.players[i].equipped = {};
+            break;
+          }
+        }
+        console.log('Game.user.equipped', Game.user.equipped);
+    });
+
     socket.on("return bash", data => {
         let x = data.target.x, y = data.target.y;
 
-        if(success) {
-            Game.board[y][x].door.hp -= damage;
+        console.log('bash returned data', data);
+
+        if(data.success) {
+            Game.board[y][x].door.hp -= data.damage;
             if(Game.board[y][x].door.hp <= 0) {
                 Game.board[y][x].door.open = true;
+                Game.board[y][x].free = true;
             }
         }
 
         // + + + PIXI BASH ANIMATION DATA.SOURCE + + + \\
 
         // + + + PIXI DISPLAY DATA.ROLL + + + \\
-        if(crit){
+        if(data.crit){
             // + + + PIXI DISPLAY CRITICAL + + + \\
         }
 

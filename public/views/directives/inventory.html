@@ -11,6 +11,7 @@
         <li
           class="flex-content"
           ng-repeat="weapon in GV.userChar.weapons"
+          ng-click="UT.drawWeapon(weapon)"
         >
           {{weapon.name}}
         </li>

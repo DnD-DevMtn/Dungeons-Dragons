@@ -4,6 +4,10 @@ export default function($scope) {
     UT.combatMode = true;
     UT.exploreMode = true;
 
+    console.log($scope);
+
+    UT.drawWeapon = $scope.GV.drawWeapon;
+
     //Icons
     const charIcon = angular.element(document.querySelector('.char-icon svg'));
     const inventoryIcon = angular.element(document.querySelector('.inventory-icon svg'));
