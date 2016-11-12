@@ -181,5 +181,9 @@ io.on("connection", socket => {
         io.sockets.to(data.room).emit("return endTurn", data);
     });
 
+    socket.on("start combat", data => {
+        io.sockets.to(data.room).emit("return start combat", data.order);
+    });
+
 
 });

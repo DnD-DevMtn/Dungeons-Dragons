@@ -18,6 +18,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     let Game;
 
+    let currentMonsterClicked = {};
+
     if($stateParams.dungeon) {
         Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
         GV.pixiDungeon.players = Game.players;
@@ -28,7 +30,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return move", data => {
         console.log("SOCKET RETURN MOVE", data);
         let source = data.source, target = data.target;
-        console.log(Game.user.location);
         if(Game.board[source.y][source.x].id === Game.user.id) {      // TODO in ctrl
 
             Game.user.location.x = target.x;
@@ -76,6 +77,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return openDoor", data => {
         let x = data.target.x, y = data.target.y;
         Game.board[y][x].door.open = false;
+        Game.board[y][x].free = true;
 
         // + + + PIXI OPEN DOOR + + + \\
     });
@@ -83,6 +85,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return closeDoor", data => {
         let x = data.target.x, y = data.target.y;
         Game.board[y][x].door.open = false;
+        Game.board[y][x].free = false;
 
         // + + + PIXI CLOSE DOOR + + + \\
     });
@@ -289,16 +292,25 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return end turn", () => {
-        if((Game.exploreTurn === Game.players.length - 1) && !Game.dmTurn) {
-            console.log("DM TURN", Game.dmTurn);
-            Game.dmTurn = true;
-        } else if((Game.exploreTurn === Game.players.length - 1) && Game.dmTurn) {
-            Game.exploreTurn = 0;
-        } else {
-            Game.exploreTurn++;
+      if ( Game.dmTurn ) {
+        console.log( "dmTurn is true!" );
+        Game.exploreTurn = 0;
+        Game.dmTurn = false;
+      } else {
+        Game.exploreTurn++;
+
+        if ( Game.players.length <= Game.exploreTurn ) {
+          Game.dmTurn = true;
         }
-        console.log("PLAYER'S TURN", Game.players[Game.exploreTurn].actor.name, Game.exploreTurn);
+      }
         checkTurn();
+    });
+
+    socket.on("return start combat", order => {
+        Game.gameStatus = "combat";
+        order.forEach( combatant => {
+            Game.combatOrder.push(combatant.actor);
+        } );
     });
 
 
@@ -306,6 +318,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         console.log("FROM UPDATE ACTOR", source, target);
         let x = source.x, y = source.y;
         let actorType = Game.board[y][x].type + 's';
+        console.log( "Game.board[y][x]", Game.board[y][x], y, x );
         for(let i = 0; i < Game[actorType].length; i++) {
             if(Game[actorType][i].id === Game.board[y][x].id) {
                 Game[actorType][i].location.x = target.x;
@@ -342,43 +355,47 @@ export default function(engineService, userService, socket, $stateParams, $http,
         socket.emit("end turn", GV.gameId);
     }
 
-    GV.nextMonster = () => {
-        console.log("NEXT MONSTER");
-        if(Game.monsterExplore >= Game.monsters.length)
-            return;
-        else
-            Game.monsterExplore++;
+    // GV.nextMonster = () => {
+    //     console.log("NEXT MONSTER");
+    //     if(Game.monsterExplore >= Game.monsters.length)
+    //         return;
+    //     else
+    //         Game.monsterExplore++;
+    //
+    //
+    //     // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
+    // }
 
-
-        // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
+    GV.startCombat = () => {
+        const combatOrder = getCombatOrder();
+        socket.emit("start combat", {room: GV.gameId, order: combatOrder});
     }
 
     function checkTurn(){
-        if(Game.players[Game.exploreTurn].id === Game.user.id) {
-            // + + + PIXI YOUR TURN BITCH + + + \\
-            console.log("IT'S YOUR TURN!");
-            Game.moves = Game.user.actor.speed;
-            Game.isTurn = true;
-            Game.actionOptions();
+      console.log( Game.dmTurn, Game.dmMode );
+      if ( Game.dmTurn ) {
+        if ( Game.dmMode ) {
+          Game.isTurn = true;
+          console.log("IT'S THE DM'S TURN");
         }
-        if(Game.dmTurn && Game.dmMode) {
-            // Game.isTurn = true;
-            // Game.monsterExplore = 0;
-            // Game.monsters[Game.monsterExplore].speed
+      } else {
+        if ( Game.players[ Game.exploreTurn ].id === Game.user.id ) {
+          console.log("IT'S YOUR TURN!");
+          Game.moves = Game.user.actor.speed;
+          Game.isTurn = true;
+          Game.actionOptions();
         }
-        console.log(`${Game.players[Game.exploreTurn].actor.name} turn`)
-
+      }
     }
-
 
     window.addEventListener ( "keydown", downHandler, false );
     window.addEventListener ( "keyup", upHandler, false );
 
     function downHandler() {
+      console.log( GV.keyup, Game.isTurn, Game.moves );
         if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
             GV.keyUp = false;
-            let character = (!Game.dmMode) ? Game.user : Game.getMonster();
-            console.log(event.keyCode);
+            //let character = (!Game.dmMode) ? Game.user : Game.getMonster();
             if(!Game.dmMode){
                 switch( event.keyCode ) {
                     case 37:
@@ -386,16 +403,19 @@ export default function(engineService, userService, socket, $stateParams, $http,
                             Game.actionOptions();
                         }
                         break;
+
                     case 38:
                         if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y - 1 }, Game.user ) ) {
                             Game.actionOptions();
                         }
                         break;
+
                     case 39:
                         if ( Game.move( Game.user.location, { x: Game.user.location.x + 1, y: Game.user.location.y }, Game.user ) ) {
                             Game.actionOptions();
                         }
                         break;
+
                     case 40:
                         if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y + 1 }, Game.user ) ) {
                             Game.actionOptions();
@@ -403,24 +423,28 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         break;
                 }
             } else {
+                console.log( "It's DM's turn!", Game.monsterExplore, Game.monsters );
                 switch( event.keyCode ) {
                     case 37:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x - 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x - 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
+
                     case 38:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y - 1 }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y - 1 }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
+
                     case 39:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x + 1, y: Game.monsters[monsterExplore].location.y }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x + 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
+
                     case 40:
-                        if ( Game.move( Game.monsters[monsterExplore].location, { x: Game.monsters[monsterExplore].location.x, y: Game.monsters[monsterExplore].location.y + 1 }, Game.monsters[monsterExplore] ) ) {
+                        if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y + 1 }, Game.monsters[Game.monsterExplore] ) ) {
                             Game.actionOptions();
                         }
                         break;
@@ -432,5 +456,42 @@ export default function(engineService, userService, socket, $stateParams, $http,
     function upHandler() {
         GV.keyUp = true;
     }
+
+
+    function getCombatOrder() {
+        let order = []
+        Game.players.forEach( player => {
+            let roll = rollInit(player.actor.baseStats.dex);
+            order.push({actor: player.id, initiative: roll});
+        } );
+        Game.monsters.forEach( monster => {
+            let roll = rollMonsterInit(monster.initiative);
+            order.push({actor: monster.id, initiative: roll});
+        } );
+        return order.sort( (a, b) => {
+            return a.initiative - b.initiative;
+        } );
+    }
+
+    function rollInit(dex) {
+        const dexMod = Math.floor((dex - 10) / 2);
+        return Math.ceil(Math.random() * 20) + dexMod;
+    }
+
+    function rollMonsterInit(initMod) {
+        return Math.ciel(Math.random() * 20) + initMod;
+    }
+
+    $scope.$on('monster clicked', (event, data) => {
+      for(var i = 0; i < Game.monsters.length; i++) {
+        if(data.id === Game.monsters[i].id) {
+            Game.monsterExplore = i;
+            Game.moves = Game.monsters[Game.monsterExplore].settings.speed;
+            console.log(Game.moves, Game.monsterExplore, Game.monsters[Game.monsterExplore] );
+            return;
+        }
+      }
+    })
+
 
 }

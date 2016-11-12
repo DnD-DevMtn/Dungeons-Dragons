@@ -69,9 +69,14 @@ export default function engineService(socket){
     // explore options
     Game.actionOptions = () => {
         if(Game.dmMode && Game.gameState === "combat") {
+          let source = {
+            x: Game.monsters[ Game.monsterExplore ].location.x,
+            y: Game.monsters[ Game.monsterExplore ].location.y
+          }
 
-
-            return;
+          return;
+        } else if ( Game.dmMode && Game.gameState === "explore" ){
+          return;
         }
         let source = {
           x: Game.user.location.x
@@ -154,7 +159,7 @@ export default function engineService(socket){
                 Game.actions.push("castSpell");
             }
         }
-        console.log(Game.actions);
+        console.log("Game.actions: ", Game.actions);
     }
     // end Game.actionOptions()
 
@@ -478,6 +483,8 @@ export default function engineService(socket){
 
     // checks if target square is available and returns a boolean
     Game.move = (source, target, character) => {
+        console.log('character inside of move', character);
+
         if(!Game.board[target.y][target.x].free){
             return false;
         }
@@ -489,10 +496,6 @@ export default function engineService(socket){
 
     Game.dmMoves = () => {
 
-    }
-
-    Game.getMonster = () => {
-        return Game.monsters[Game.monsterExplore];
     }
 
     // GAME FUNCTIONS * * *
@@ -589,10 +592,10 @@ export default function engineService(socket){
         for(let i = 0; i < dungeon.traps.length; i++){
             let x = dungeon.traps[i].location.x;
             let y = dungeon.traps[i].location.y;
-            Game.board[y][x].trap.findDC          = dungeon.traps[i].settings.findDC;
-            Game.board[y][x].trap.disarmDC        = dungeon.traps[i].settings.disarmDC;
-            Game.board[y][x].trap.found           = dungeon.traps[i].settings.found;
-            Game.board[y][x].trap.triggered       = dungeon.traps[i].settings.triggered;
+            Game.board[y][x].trap.findDC    = dungeon.traps[i].settings.findDC;
+            Game.board[y][x].trap.disarmDC  = dungeon.traps[i].settings.disarmDC;
+            Game.board[y][x].trap.found     = dungeon.traps[i].settings.found;
+            Game.board[y][x].trap.triggered = dungeon.traps[i].settings.triggered;
             Game.board[y][x].trap.damage = {
               diceType: dungeon.traps[i].settings.damage.diceType
               , diceNum: dungeon.traps[i].settings.damage.diceNum
@@ -656,6 +659,9 @@ export default function engineService(socket){
             Game.board[y][x].door.locked = dungeon.doors[i].settings.locked;
             Game.board[y][x].door.pickDC = dungeon.doors[i].settings.pickDC;
             Game.board[y][x].door.open   = dungeon.doors[i].settings.open;
+            if(!Game.board[y][x].door.open) {
+              Game.board[y][x].free = false;
+            }
         }
     }
 

@@ -281,7 +281,7 @@ class DungeonBuilder {
     else
       this.dungeon[ property.type ].push( dungeonProp );
 
-    // console.log( this.dungeon );
+    console.log( this.dungeon );
   }
 
   deleteDungeonProp( sprite ) {

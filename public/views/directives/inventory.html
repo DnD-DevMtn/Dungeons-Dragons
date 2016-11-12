@@ -1,7 +1,7 @@
 <section id="inventory">
   <header>
     <h4>Inventory</h4>
-    <h5>Gold : {{GV.user.character.money.gold}}</h5>
+    <h5>Gold : {{GV.userChar.money.gold}}</h5>
     <h5 ng-if="UT.page === 1">Weapons</h5>
     <h5 ng-if="UT.page === 2">Armor</h5>
     <h5 ng-if="UT.page === 3">Gear</h5>
@@ -10,7 +10,7 @@
       <ul class="weapons flex-wrapper">
         <li
           class="flex-content"
-          ng-repeat="weapon in GV.user.character.weapons"
+          ng-repeat="weapon in GV.userChar.weapons"
         >
           {{weapon.name}}
         </li>
@@ -20,7 +20,7 @@
       <ul class="armor flex-wrapper">
         <li
           class="flex-content"
-          ng-repeat="armor in GV.user.character.armor"
+          ng-repeat="armor in GV.userChar.armor"
         >
           {{armor.name}}
         </li>
@@ -30,7 +30,7 @@
       <ul class="gear flex-wrapper">
         <li
           class="flex-content"
-          ng-repeat="gear in GV.user.character.gear"
+          ng-repeat="gear in GV.userChar.gear"
         >
           {{gear.name}}
         </li>
