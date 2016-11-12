@@ -83,9 +83,11 @@ export default function engineService(socket){
           , y: Game.user.location.y
         }
 
+        Game.doorLocation = {};
+
         // Drop item is a universal action for all states
         Game.actions = ["dropItem"];
-        if(Game.board[source.x][source.y].item.items.length > 0 && Game.board[source.x][source.y].item.found){
+        if(Game.board[source.y][source.x].item.items.length > 0 && Game.board[source.y][source.x].item.found){
             Game.actions.push("pickUpItem");
         }
 
@@ -100,28 +102,34 @@ export default function engineService(socket){
 
         // checks the immediate squares around the player and returns available options.
         let adjacent = findAdjacent(source);
+        console.log('source', source)
+        console.log('adjacent', adjacent);
         let doorSqr = [                     // doors cannot be opened on the diagonal
-              [source.x, source.y - 1]
-            , [source.x, source.y + 1]
-            , [source.x - 1, source.y]
-            , [source.x + 1, source.y]
+              [source.y, source.x - 1]
+            , [source.y, source.x + 1]
+            , [source.y - 1, source.x]
+            , [source.y + 1, source.x]
         ];
 
+        console.log('doorSqr', doorSqr);
+        console.log('Game.gameState', Game.gameState);
         if(Game.gameState === "explore") {
             Game.actions.push("perception");
             for(let i = 0; i < doorSqr.length; i++) {
-                let x = doorSqr[i][0], y = doorSqr[i][1];
-                if(Game.board[y][x].door.id) {
-                    if(Game.board[y][x].door.open === false) {
+                let y = doorSqr[i][0], x = doorSqr[i][1];
+                console.log('gameBoard', Game.board[y][x]);
+                if(Game.board[y][x].door.hp) {
+                    if(!Game.board[y][x].door.open) {
+                        Game.doorLocation = {x: x, y: y}
                         Game.actions.push("openDoor");
                         if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                             Game.actions.push("bash");
                         }
-                        if(Game.user.actor.classType.name === "Rogue" && Game.board[y][x].door.locked === true) {
+                        if(Game.user.actor.classType.name === "Rogue" && Game.board[y][x].door.locked) {
                             Game.actions.push("lockpick");
                         }
                     }
-                    if(Game.board[y][x].door.open === true) {
+                    if(Game.board[y][x].door.open) {
                         Game.actions.push("closeDoor");
                     }
                 }
@@ -226,6 +234,7 @@ export default function engineService(socket){
     // available if a door is next to the user, ie. directly above, beneath, left or right
     // door opens if not locked
     Game.openDoor = (source, target) => {
+        console.log('open door fired');
         if(Game.board[target.y][target.x].door.locked){
             socket.emit("openDoor", {source: source, target: target, success: false, room: room});   // TODO openDoor: back and front(controller)
             return false;
@@ -713,7 +722,7 @@ export default function engineService(socket){
         let count = 0;
         let adjacent = findAdjacent(target);
         for(let i = 0; i < adjacent.length; i++){
-            let x = adjacent[i][0], y = adjacent[i][1];
+            let y = adjacent[i][0], x = adjacent[i][1];
             if(Game.board[y][x].type === "player"){
                 count++;
             }
@@ -726,7 +735,7 @@ export default function engineService(socket){
         let count = 0;
         let adjacent = findAdjacent(source);
         for(let i = 0; i < adjacent.length; i++){
-            let x = adjacent[i][0], y = adjacent[i][1];
+            let y = adjacent[i][0], x = adjacent[i][1];
             if(Game.board[y][x].type === "monster"){
                 count++;
             }

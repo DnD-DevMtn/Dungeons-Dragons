@@ -27,8 +27,11 @@ export default function(engineService, userService, socket, $stateParams, $http,
         checkTurn();
     }
 
+    GV.openDoor = () => {
+      Game.openDoor(Game.user.location, Game.doorLocation);
+    }
+
     socket.on("return move", data => {
-        console.log("SOCKET RETURN MOVE", data);
         let source = data.source, target = data.target;
         if(Game.board[source.y][source.x].id === Game.user.id) {      // TODO in ctrl
 
@@ -38,6 +41,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         $scope.$broadcast("send move", {character: data.character, target: data.target});
 
         updateActorPosition(source, target);
+
 
         let type = Game.board[source.y][source.x].type;       // save the reference variables
         let id   = Game.board[source.y][source.x].id;
@@ -49,6 +53,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
         Game.board[target.y][target.x].type = type;           // set target square props to actor
         Game.board[target.y][target.x].id   = id;
         Game.board[target.y][target.x].free = false;
+
+        if(Game.isTurn) {
+          Game.actionOptions();
+        }
 
         // + + + PIXI MOVE + + + \\
         printBoard();
@@ -75,6 +83,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return openDoor", data => {
+        console.log('door open returned');
         let x = data.target.x, y = data.target.y;
         Game.board[y][x].door.open = false;
         Game.board[y][x].free = true;
@@ -293,7 +302,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return end turn", () => {
       if ( Game.dmTurn ) {
-        console.log( "dmTurn is true!" );
         Game.exploreTurn = 0;
         Game.dmTurn = false;
       } else {
@@ -318,7 +326,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         console.log("FROM UPDATE ACTOR", source, target);
         let x = source.x, y = source.y;
         let actorType = Game.board[y][x].type + 's';
-        console.log( "Game.board[y][x]", Game.board[y][x], y, x );
         for(let i = 0; i < Game[actorType].length; i++) {
             if(Game[actorType][i].id === Game.board[y][x].id) {
                 Game[actorType][i].location.x = target.x;
@@ -327,16 +334,18 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
     }
 
-    function printBoard() {
-        for(let y = 0;  y < Game.height; y++) {
+    function printBoard(){
+        for(let y = 0; y < Game.height; y++){
             let line = "";
-            for(let x = 0; x < Game.width; x++) {
-                if(Game.board[y][x].item.items.length > 0) {
+            for(let x = 0; x < Game.width; x++){
+                if(Game.board[y][x].item.items.length > 0){
                     line += " I";
-                } else if(Game.board[y][x].trap.name) {
+                } else if(Game.board[y][x].trap.findDC) {
                     line += " T";
+                } else if(Game.board[y][x].door.bashDC) {
+                    line += `door${y}${x}`;
                 } else if(Game.board[y][x].type === "player") {
-                    line += " P";
+                    line += `player${y}${x}`;
                 } else if(Game.board[y][x].type === "monster") {
                     line += " M";
                 } else if(Game.board[y][x].type === "environmental") {
@@ -347,8 +356,11 @@ export default function(engineService, userService, socket, $stateParams, $http,
             }
             console.log(line);
         }
-      console.log('moves left', Game.moves);
+        console.log('Game.actions', Game.actions);
+        console.log('Game.moves', Game.moves);
+        console.log('Game', Game);
     }
+
 
     GV.endTurn = () => {
         console.log("END TURN");
@@ -372,7 +384,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     function checkTurn(){
-      console.log( Game.dmTurn, Game.dmMode );
       if ( Game.dmTurn ) {
         if ( Game.dmMode ) {
           Game.isTurn = true;
@@ -392,7 +403,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
     window.addEventListener ( "keyup", upHandler, false );
 
     function downHandler() {
-      console.log( GV.keyup, Game.isTurn, Game.moves );
         if ( GV.keyUp  && Game.isTurn && (Game.moves > 0)) {
             GV.keyUp = false;
             //let character = (!Game.dmMode) ? Game.user : Game.getMonster();
@@ -400,29 +410,29 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 switch( event.keyCode ) {
                     case 37:
                         if ( Game.move( Game.user.location, { x: Game.user.location.x - 1, y: Game.user.location.y }, Game.user ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
                         }
                         break;
 
                     case 38:
                         if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y - 1 }, Game.user ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
                         }
                         break;
 
                     case 39:
                         if ( Game.move( Game.user.location, { x: Game.user.location.x + 1, y: Game.user.location.y }, Game.user ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
                         }
                         break;
 
                     case 40:
                         if ( Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y + 1 }, Game.user ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
                         }
                         break;
                 }
-            } else {
+            } else if(Game.dmTurn && Game.dmMode) {
                 console.log( "It's DM's turn!", Game.monsterExplore, Game.monsters );
                 switch( event.keyCode ) {
                     case 37:
@@ -487,7 +497,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
         if(data.id === Game.monsters[i].id) {
             Game.monsterExplore = i;
             Game.moves = Game.monsters[Game.monsterExplore].settings.speed;
-            console.log(Game.moves, Game.monsterExplore, Game.monsters[Game.monsterExplore] );
             return;
         }
       }
