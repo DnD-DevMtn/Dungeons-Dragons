@@ -34,6 +34,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
       Game.closeDoor(Game.user.location, Game.doorLocation);
     }
 
+    GV.openInventory = () => {
+      $scope.$broadcast('open inventory')
+    }
+
     socket.on("return move", data => {
         let source = data.source, target = data.target;
         if(Game.board[source.y][source.x].id === Game.user.id) {      // TODO in ctrl
@@ -59,10 +63,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         if(Game.isTurn) {
           Game.actionOptions();
-          if(Game.actions.includes("openDoor") {
+          if(Game.actions.includes("openDoor")) {
             GV.openDoor = true;
             GV.closeDoor = false;
-          } else if(Game.actions.includes("closeDoor") {
+          } else if(Game.actions.includes("closeDoor")) {
             GV.closeDoor = true;
             GV.openDoor = false;
           } else {

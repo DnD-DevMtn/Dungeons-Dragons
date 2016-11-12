@@ -22,6 +22,13 @@ export default function($scope) {
     const combatPanel = angular.element(document.querySelector('.combat-panel'));
     const monstersPanel = angular.element(document.querySelector('.monsters-panel'));
 
+    $scope.$on('open inventory', (event, data) => {
+        //resetPanel();
+        angular.element(document.querySelectorAll('.active')).removeClass('active');
+        inventoryPanel.addClass('active');
+        inventoryIcon.addClass('active');
+    });
+
     //Initialize all panels to page one
     UT.page = 1;
     UT.rightAvailable = true;

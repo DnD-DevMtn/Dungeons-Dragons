@@ -176,43 +176,33 @@ export default function engineService(socket){
 
     // available if the player does not have a weapon equipped.
     // player chooses a weapon that they have in their inventory and it is set to equipped
-    Game.drawWeapon = (source, weapon) => {
-
-        if(checkUser(source)){
-            Game.user.equipped = {
-                name: weapon.name
-                , weaponType: weapon.weaponType
-                , prof: weapon.proficiency
-                , range: weapon.range
-                , crit: {
-                    critRange: weapon.crit.critRange
-                    , critDamage: weapon.crit.damageMultiplier
-                }
-            }
-            if(Game.user.size === "medium"){
-                Game.user.equipped.damage = {
-                    diceType: weapon.damage.medium.diceType
-                    , numDice: weapon.damage.medium.numOfDice
-                }
-            }
-            if(Game.user.size === "small"){
-                Game.user.equipped.damage = {
-                    diceType: weapon.damage.small.diceType
-                    , numDice: weapon.damage.small.numOfDice
-                }
-            }
-            Game.actionTaken = true;
-            Game.moves = 0;
-            socket.emit("drawWeapon", {source: source, weapon: weapon, room: room});        // TODO
-
-        } else {
-            for(let i = 0; i < Game.players.length; i++){
-                if(Game.board[source.x][source.y].id === Game.players[i].id){
-                    Game.players[i].equipped.name = weapon.name;
-                }
-            }
-        }
-
+    Game.drawWeapon = (weapon) => {
+          console.log(weapon);
+          Game.user.equipped = {
+              name: weapon.name
+              , weaponType: weapon.weaponType
+              , prof: weapon.proficiency
+              , range: weapon.range
+              , crit: {
+                  critRange: weapon.crit.critRange
+                  , critDamage: weapon.crit.damageMultiplier
+              }
+          }
+          if(Game.user.size === "medium"){
+              Game.user.equipped.damage = {
+                  diceType: weapon.damage.medium.diceType
+                  , numDice: weapon.damage.medium.numOfDice
+              }
+          }
+          if(Game.user.size === "small"){
+              Game.user.equipped.damage = {
+                  diceType: weapon.damage.small.diceType
+                  , numDice: weapon.damage.small.numOfDice
+              }
+          }
+          Game.actionTaken = true;
+          Game.moves = 0;
+          socket.emit("drawWeapon", {source: Game.user.location, weapon: weapon, room: room});        // TODO
     }
 
     // available if the player already has a weapon equipped
