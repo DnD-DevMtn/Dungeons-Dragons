@@ -120,7 +120,7 @@ export default function engineService(socket){
                 console.log('gameBoard', Game.board[y][x]);
                 if(Game.board[y][x].door.hp) {
                     if(!Game.board[y][x].door.open) {
-                        Game.doorLocation = {x: x, y: y}
+                        Game.doorLocation = {x: x, y: y};
                         Game.actions.push("openDoor");
                         if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                             Game.actions.push("bash");
@@ -130,6 +130,7 @@ export default function engineService(socket){
                         }
                     }
                     if(Game.board[y][x].door.open) {
+                        Game.doorLocation = {x: x, y: y};
                         Game.actions.push("closeDoor");
                     }
                 }

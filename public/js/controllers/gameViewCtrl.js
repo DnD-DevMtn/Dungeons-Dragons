@@ -30,6 +30,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
     GV.openDoor = () => {
       Game.openDoor(Game.user.location, Game.doorLocation);
     }
+    GV.closeDoor = () => {
+      Game.closeDoor(Game.user.location, Game.doorLocation);
+    }
 
     socket.on("return move", data => {
         let source = data.source, target = data.target;
@@ -56,7 +59,18 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         if(Game.isTurn) {
           Game.actionOptions();
+          if(Game.actions.includes("openDoor") {
+            GV.openDoor = true;
+            GV.closeDoor = false;
+          } else if(Game.actions.includes("closeDoor") {
+            GV.closeDoor = true;
+            GV.openDoor = false;
+          } else {
+            GV.openDoor = false;
+            GV.closeDoor = false;
+          }
         }
+
 
         // + + + PIXI MOVE + + + \\
         printBoard();
@@ -85,7 +99,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return openDoor", data => {
         console.log('door open returned');
         let x = data.target.x, y = data.target.y;
-        Game.board[y][x].door.open = false;
+        Game.board[y][x].door.open = true;
         Game.board[y][x].free = true;
 
         // + + + PIXI OPEN DOOR + + + \\
