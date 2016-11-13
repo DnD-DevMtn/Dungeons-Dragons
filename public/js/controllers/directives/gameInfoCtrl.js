@@ -4,6 +4,10 @@ export default function($scope) {
     UT.combatMode = true;
     UT.exploreMode = true;
 
+    console.log($scope);
+
+    UT.drawWeapon = $scope.GV.drawWeapon;
+
     //Icons
     const charIcon = angular.element(document.querySelector('.char-icon svg'));
     const inventoryIcon = angular.element(document.querySelector('.inventory-icon svg'));
@@ -21,6 +25,13 @@ export default function($scope) {
     const explorePanel = angular.element(document.querySelector('.explore-panel'));
     const combatPanel = angular.element(document.querySelector('.combat-panel'));
     const monstersPanel = angular.element(document.querySelector('.monsters-panel'));
+
+    $scope.$on('open inventory', (event, data) => {
+        //resetPanel();
+        angular.element(document.querySelectorAll('.active')).removeClass('active');
+        inventoryPanel.addClass('active');
+        inventoryIcon.addClass('active');
+    });
 
     //Initialize all panels to page one
     UT.page = 1;

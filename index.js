@@ -117,12 +117,20 @@ io.on("connection", socket => {
         io.sockets.to(data.room).emit("return move", data);
     });
 
+    socket.on("draw weapon", data => {
+        io.sockets.to(data.room).emit("return draw weapon", data);
+    });
+
+    socket.on("sheath weapon", data => {
+        io.sockets.to(data.room).emit("return sheath weapon", data);
+    });
+
     socket.on("bash", data => {
         io.sockets.to(data.room).emit("return bash", data);
     });
 
     socket.on("openDoor", data => {
-        io.sockets.to(data.room).emit("return openDoor", data);
+        io.sockets.to(data.room).emit("return open door", data);
     });
 
     socket.on("closeDoor", data => {
@@ -184,6 +192,10 @@ io.on("connection", socket => {
     socket.on("start combat", data => {
         io.sockets.to(data.room).emit("return start combat", data.order);
     });
+
+    socket.on("end combat", data => {
+        io.sockets.to(data.room).emit("return end combat");
+    })
 
 
 });

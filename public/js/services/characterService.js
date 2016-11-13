@@ -16,6 +16,12 @@ function characterService($http, $state, userService) {
   this.finalRace = (gender, race) => {
     currentCharacter.descprition.sex = gender;
     currentCharacter.race = race;
+    console.log(race);
+    if(race === 'Halfling' || race === 'Gnome') {
+      currentCharacter.size = 'small';
+    } else {
+      currentCharacter.size = 'medium';
+    }
   }
 
   this.finalClass = (name, characterClass, alignment, level) => {

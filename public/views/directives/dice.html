@@ -1,5 +1,5 @@
 <section id="dice">
-  <div class="dice-content">
+  <div class="">
     <div class="dice-result">
         <div ng-if="dice.die === 'd3'">
           <h5>D3</h5>
@@ -74,8 +74,23 @@
     <!-- changed from dice roll to end turn. Need to change css and stuff. -->
     <span
       class="btn roll ready"
-      ng-click="dice.endTurn()">
+      ng-click="GV.endTurn()">
       end turn
+    </span>
+    <span
+      class="btn roll ready"
+      ng-click="GV.initCombat()">
+      init combat
+    </span>
+    <span
+      class="btn roll ready"
+      ng-click="GV.startCombat()">
+      start combat
+    </span>
+    <span
+      class="btn roll ready"
+      ng-click="GV.endCombat()">
+      end combat
     </span>
   </div>
 </section>

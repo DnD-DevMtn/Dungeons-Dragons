@@ -40,6 +40,7 @@ export default function engineService(socket){
         , user: {}
         , players: []
         , monsters: []
+        , activeMonsters: []
         , items: []
         , traps: []
         , environment: []
@@ -69,10 +70,10 @@ export default function engineService(socket){
     // explore options
     Game.actionOptions = () => {
         if(Game.dmMode && Game.gameState === "combat") {
-          let source = {
-            x: Game.monsters[ Game.monsterExplore ].location.x,
-            y: Game.monsters[ Game.monsterExplore ].location.y
-          }
+        //   let source = {
+        //     x: Game.combatOrder[ Game.combatTurn ].location.x,
+        //     y: Game.combatOrder[ Game.combatTurn ].location.y
+        //   }
 
           return;
         } else if ( Game.dmMode && Game.gameState === "explore" ){
@@ -83,9 +84,11 @@ export default function engineService(socket){
           , y: Game.user.location.y
         }
 
+        Game.doorLocation = {};
+
         // Drop item is a universal action for all states
         Game.actions = ["dropItem"];
-        if(Game.board[source.x][source.y].item.items.length > 0 && Game.board[source.x][source.y].item.found){
+        if(Game.board[source.y][source.x].item.items.length > 0 && Game.board[source.y][source.x].item.found){
             Game.actions.push("pickUpItem");
         }
 
@@ -100,28 +103,35 @@ export default function engineService(socket){
 
         // checks the immediate squares around the player and returns available options.
         let adjacent = findAdjacent(source);
+        console.log('source', source)
+        console.log('adjacent', adjacent);
         let doorSqr = [                     // doors cannot be opened on the diagonal
-              [source.x, source.y - 1]
-            , [source.x, source.y + 1]
-            , [source.x - 1, source.y]
-            , [source.x + 1, source.y]
+              [source.y, source.x - 1]
+            , [source.y, source.x + 1]
+            , [source.y - 1, source.x]
+            , [source.y + 1, source.x]
         ];
 
+        console.log('doorSqr', doorSqr);
+        console.log('Game.gameState', Game.gameState);
         if(Game.gameState === "explore") {
             Game.actions.push("perception");
             for(let i = 0; i < doorSqr.length; i++) {
-                let x = doorSqr[i][0], y = doorSqr[i][1];
-                if(Game.board[y][x].door.id) {
-                    if(Game.board[y][x].door.open === false) {
+                let y = doorSqr[i][0], x = doorSqr[i][1];
+                console.log('gameBoard', Game.board[y][x]);
+                if(Game.board[y][x].door.hp) {
+                    if(!Game.board[y][x].door.open) {
+                        Game.doorLocation = {x: x, y: y};
                         Game.actions.push("openDoor");
                         if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                             Game.actions.push("bash");
                         }
-                        if(Game.user.actor.classType.name === "Rogue" && Game.board[y][x].door.locked === true) {
+                        if(Game.user.actor.classType.name === "Rogue" && Game.board[y][x].door.locked) {
                             Game.actions.push("lockpick");
                         }
                     }
-                    if(Game.board[y][x].door.open === true) {
+                    if(Game.board[y][x].door.open) {
+                        Game.doorLocation = {x: x, y: y};
                         Game.actions.push("closeDoor");
                     }
                 }
@@ -167,43 +177,34 @@ export default function engineService(socket){
 
     // available if the player does not have a weapon equipped.
     // player chooses a weapon that they have in their inventory and it is set to equipped
-    Game.drawWeapon = (source, weapon) => {
-
-        if(checkUser(source)){
-            Game.user.equipped = {
-                name: weapon.name
-                , weaponType: weapon.weaponType
-                , prof: weapon.proficiency
-                , range: weapon.range
-                , crit: {
-                    critRange: weapon.crit.critRange
-                    , critDamage: weapon.crit.damageMultiplier
-                }
-            }
-            if(Game.user.size === "medium"){
-                Game.user.equipped.damage = {
-                    diceType: weapon.damage.medium.diceType
-                    , numDice: weapon.damage.medium.numOfDice
-                }
-            }
-            if(Game.user.size === "small"){
-                Game.user.equipped.damage = {
-                    diceType: weapon.damage.small.diceType
-                    , numDice: weapon.damage.small.numOfDice
-                }
-            }
-            Game.actionTaken = true;
-            Game.moves = 0;
-            socket.emit("drawWeapon", {source: source, weapon: weapon, room: room});        // TODO
-
-        } else {
-            for(let i = 0; i < Game.players.length; i++){
-                if(Game.board[source.x][source.y].id === Game.players[i].id){
-                    Game.players[i].equipped.name = weapon.name;
-                }
-            }
-        }
-
+    Game.drawWeapon = (weapon) => {
+          console.log(weapon);
+          Game.user.equipped = {
+              name: weapon.name
+              , weaponType: weapon.weaponType
+              , prof: weapon.proficiency
+              , range: weapon.range
+              , crit: {
+                  critRange: weapon.crit.critRange
+                  , critDamage: weapon.crit.damageMultiplier
+              }
+          }
+          if(Game.user.actor.size === "medium"){
+              Game.user.equipped.damage = {
+                  diceType: weapon.damage.medium.diceType
+                  , numDice: weapon.damage.medium.numOfDice
+              }
+          }
+          if(Game.user.actor.size === "small"){
+              Game.user.equipped.damage = {
+                  diceType: weapon.damage.small.diceType
+                  , numDice: weapon.damage.small.numOfDice
+              }
+          }
+          console.log(Game.user.equipped);
+          Game.actionTaken = true;
+          Game.moves = 0;
+          socket.emit("drawWeapon", {source: Game.user.location, weapon: weapon, room: room});        // TODO
     }
 
     // available if the player already has a weapon equipped
@@ -226,6 +227,7 @@ export default function engineService(socket){
     // available if a door is next to the user, ie. directly above, beneath, left or right
     // door opens if not locked
     Game.openDoor = (source, target) => {
+        console.log('open door fired');
         if(Game.board[target.y][target.x].door.locked){
             socket.emit("openDoor", {source: source, target: target, success: false, room: room});   // TODO openDoor: back and front(controller)
             return false;
@@ -237,43 +239,42 @@ export default function engineService(socket){
 
     // break down a door if locked or stuck
     Game.bash = (source, target) => {
+         console.log('bash fired in Game');
         let x = target.x, y = target.y;
-        if(checkUser(source)){
-            let strMod  = statMod(Game.user.actor.baseStats.str);
-            let roll    = dice.roll20();                                        // TODO DICEROLL
-            let success = (roll + strMod) >= Game.board[y][x].door.bashDC;
-            let crit    = false;
-            if(roll >= Game.user.equippped.crit.critRange){
-                success = true;
-                crit    = true;
-            }
-            let damage  = 0;
-            if(success){
-                let die = Game.user.equipped.damage.diceType;
-                let numDice = Game.user.equipped.damage.numDice;                // TODO DICEROLL
-                for(let i = 0; i < numDice; i++){
-                    damage += (Math.floor(Math.random(Game.user.equipped.damage.diceType))) + 1;
-                }
-                damage += strMod;
-                if(crit){
-                    damage *= 2;
-                }
-                // Game.board[y][x].door.hp -= damage;  // TODO in ctrl
-                // if(Game.board[y][x].door.hp <= 0){
-                //     Game.board[y][x].door.open = true;
-                // }
-            }
-            Game.actionTaken = true;
-            Game.moves = 0;
-            socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
-                                , target: target
-                                , roll: roll
-                                , success: success
-                                , damage: damage
-                                , crit: crit
-                                , room: room
-                            });
+        let strMod  = statMod(Game.user.actor.baseStats.str);
+        let roll    = dice.roll20();                                        // TODO DICEROLL
+        let success = (roll + strMod) >= Game.board[y][x].door.bashDC;
+        let crit    = false;
+        if(roll >= Game.user.equipped.crit.critRange){
+            success = true;
+            crit    = true;
         }
+        let damage  = 0;
+        if(success){
+            let die = Game.user.equipped.damage.diceType;
+            let numDice = Game.user.equipped.damage.numDice;                // TODO DICEROLL
+            for(let i = 0; i < numDice; i++){
+                damage += (Math.floor(Math.random() * die)) + 1;
+            }
+            damage += strMod;
+            if(crit){
+                damage *= Game.user.equipped.crit.critDamage;
+            }
+            // Game.board[y][x].door.hp -= damage;  // TODO in ctrl
+            // if(Game.board[y][x].door.hp <= 0){
+            //     Game.board[y][x].door.open = true;
+            // }
+        }
+        Game.actionTaken = true;
+        Math.floor(Game.moves /= 2);
+        socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
+                            , target: target
+                            , roll: roll
+                            , success: success
+                            , damage: damage
+                            , crit: crit
+                            , room: room
+                        });
     }
 
     // available if a door is next to the user, ie. directly above, beneath, left or right
@@ -659,6 +660,9 @@ export default function engineService(socket){
             Game.board[y][x].door.locked = dungeon.doors[i].settings.locked;
             Game.board[y][x].door.pickDC = dungeon.doors[i].settings.pickDC;
             Game.board[y][x].door.open   = dungeon.doors[i].settings.open;
+            if(!Game.board[y][x].door.open) {
+              Game.board[y][x].free = false;
+            }
         }
     }
 
@@ -710,7 +714,7 @@ export default function engineService(socket){
         let count = 0;
         let adjacent = findAdjacent(target);
         for(let i = 0; i < adjacent.length; i++){
-            let x = adjacent[i][0], y = adjacent[i][1];
+            let y = adjacent[i][0], x = adjacent[i][1];
             if(Game.board[y][x].type === "player"){
                 count++;
             }
@@ -723,7 +727,7 @@ export default function engineService(socket){
         let count = 0;
         let adjacent = findAdjacent(source);
         for(let i = 0; i < adjacent.length; i++){
-            let x = adjacent[i][0], y = adjacent[i][1];
+            let y = adjacent[i][0], x = adjacent[i][1];
             if(Game.board[y][x].type === "monster"){
                 count++;
             }
