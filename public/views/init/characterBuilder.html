@@ -35,7 +35,7 @@
     <div class="options">
       <div class="name">
         <h4>Character Name:</h4>
-        <input ng-model="characterName" type="text" placeholder="Name...">
+        <input class="input" ng-model="characterName" type="text" placeholder="Name...">
       </div>
       <div class="races">
         <h4>Select your class</h4>
@@ -86,6 +86,18 @@
       </div>
   </div>
 </div>
-<button ng-click="goBack()" ng-disabled="prevActive" class="btn cb-prev">Previous</button>
-<button ng-show="showNext" ng-click="next()" class="btn cb-next">Next</button>
-<button ng-show="showFinish" ng-click="finish()" class="btn cb-next">Finish</button>
+<a ng-click="goBack()" ng-disabled="prevActive" class="btn cb-prev">
+    <i
+      class="fa fa-angle-double-left fa-4"
+      ng-class="{'available' : UT.leftAvailable}"
+      aria-hidden="true">
+    </i>
+</a>
+<a ng-show="showNext" ng-click="next()" class="btn cb-next">
+    <i
+      class="fa fa-angle-double-right fa-4"
+      ng-class="{'available' : UT.rightAvailable}"
+      aria-hidden="true">
+    </i>
+</a>
+<a ng-show="showFinish" ng-click="finish()" class="btn cb-next">Finish</a>
