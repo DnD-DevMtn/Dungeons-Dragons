@@ -2,7 +2,7 @@ div.cb-wrapper {
   display: table;
   width: 90vw;
   height: 100vh;
-  margin: 0 auto;
+  margin: 2rem auto;
   overflow: hidden;
   position: relative;
 }
@@ -22,6 +22,7 @@ div.character-builder-race, div.character-builder-class, div.character-builder-s
 div.cb-wrapper div.portrait {
   margin-right: 25px;
   width: 356px;
+  height:507px;
   float: left;
   position: relative;
 }
@@ -54,6 +55,7 @@ div.cb-wrapper div.title {
 div.cb-wrapper h4 {
   font-size: 30px;
   margin-bottom: 10px;
+  margin-top:0px;
 }
 
 div.cb-wrapper div.options div.races {
@@ -69,14 +71,17 @@ div.cb-wrapper div.options div.races ul {
 div.cb-wrapper div.options i.gender {
   font-size: 40px;
   padding: 10px 15px;
-  background-color: $secondary-color-dark;
-  border-radius: 4px;
   margin-top: 20px;
   margin-right: 10px;
+  transition:all .5s ease;
+  &:hover {
+      color:$link-color;
+      transition:all .5s ease;
+  }
 }
 
 div.cb-wrapper div.options i.active {
-  background-color: $link-color;
+  color:$link-color;
 }
 
 div.cb-wrapper div.races ul li {
@@ -87,6 +92,11 @@ div.cb-wrapper div.races ul li > img {
   width: 112px;
   margin: 5px;
   border: $accent-color 5px solid;
+  transition:all .5s ease;
+  &:hover {
+      border:5px solid $link-color;
+      transition: all .5s ease;
+  }
 }
 
 div.cb-wrapper div.races ul li > img.active {
@@ -104,18 +114,33 @@ div.cb-wrapper div.portrait h3 {
   padding: 7px 0;
 }
 
-button.cb-next {
-  position: absolute;
-  bottom: 0;
+.cb-next {
   right: 0;
-  font-size: 18px;
 }
 
-button.cb-prev {
-  position: absolute;
-  bottom: 0;
+.cb-prev {
   left: 0;
-  font-size: 18px;
+}
+
+.btn.cb-prev, .btn.cb-next {
+    position:absolute;
+    border:none;
+    background-color:transparent;
+    transition:all .5s ease;
+    bottom: 0;
+    top:0;
+    margin:auto;
+    height:40px;
+    font-size: 18px;
+    &:hover {
+        color:$secondary-color-bright;
+        border:none;
+        background-color:none;
+        transition:all .5s ease;
+    }
+    i {
+        font-size:3em;
+    }
 }
 
 div.cb-wrapper div.panel-show {
@@ -129,8 +154,6 @@ div.cb-wrapper div.panel-hide {
 div.cb-wrapper div.name input {
   width: 100%;
   padding: 10px;
-  border: none;
-  border-radius: 4px;
   margin-bottom: 10px;
 }
 
@@ -152,6 +175,7 @@ div.cb-wrapper div.races select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  border-radius:0;
   padding: 5px 5px;
   width: 150px;
 }
