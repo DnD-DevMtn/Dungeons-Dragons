@@ -68,20 +68,38 @@ export default function engineService(socket){
     // all source and target params are objects containing x and y coordinates ie. source = {x: 5, y: 7}
 
     // explore options
-    Game.actionOptions = () => {
+    Game.actionOptions = (monsterSource) => {
         if(Game.dmMode && Game.gameState === "combat") {
         //   let source = {
         //     x: Game.combatOrder[ Game.combatTurn ].location.x,
         //     y: Game.combatOrder[ Game.combatTurn ].location.y
         //   }
+        let monsterAdjacent = findAdjacent(monsterSource);
+        for(let i = 0; i < adjacent.length; i++) {
+            let x = adjacent[i][0], y = adjacent[i][1];
+            if(Game.board[y][x].type === "monster") {
+                Game.actions.push("melee");
+                if(Game.user.actor.classType.name === "Fighter") {
+                    Game.actions.push("fighterPowerAttack");
+                    if(checkCleave(source)) {
+                        Game.actions.push("cleave");
+                    }
+                }
+                if(Game.user.actor.classType.name === "Rogue" && checkSneak(x, y)) {
+                    // TODO
+                    // Game.actions should actually store objects with names and targets
+                    Game.actions.push("sneakAttack");
+                }
+            }
+        }
 
-          return;
+            return;
         } else if ( Game.dmMode && Game.gameState === "explore" ){
-          return;
+            return;
         }
         let source = {
-          x: Game.user.location.x
-          , y: Game.user.location.y
+            x: Game.user.location.x
+            , y: Game.user.location.y
         }
 
         Game.doorLocation = {};

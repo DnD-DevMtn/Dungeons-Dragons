@@ -94,17 +94,22 @@ export default function(engineService, userService, socket, $stateParams, $http,
         Game.board[target.y][target.x].free = false;
 
         if(Game.isTurn) {
-          Game.actionOptions();
-          if(Game.actions.includes("openDoor")) {
-            GV.openDoor = true;
-            GV.closeDoor = false;
-          } else if(Game.actions.includes("closeDoor")) {
-            GV.closeDoor = true;
-            GV.openDoor = false;
-          } else {
-            GV.openDoor = false;
-            GV.closeDoor = false;
-          }
+            if(!Game.dmMode) {
+                Game.actionOptions();
+            } else if(Game.dmMode) {
+                Game.actionOptions(target);
+            }
+            if(Game.actions.includes("openDoor")) {
+                GV.openDoor = true;
+                GV.closeDoor = false;
+            } else if(Game.actions.includes("closeDoor")) {
+                GV.closeDoor = true;
+                GV.openDoor = false;
+            } else {
+                GV.openDoor = false;
+                GV.closeDoor = false;
+            }
+            console.log("ACTION OPTIONS", Game.actions);
         }
 
 
@@ -452,6 +457,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
             if(Game[actorType][i].id === Game.board[y][x].id) {
                 Game[actorType][i].location.x = target.x;
                 Game[actorType][i].location.y = target.y;
+                console.log("FOUND AND UPDATED", Game[actorType][i]);
+                break;
             }
         }
     }
