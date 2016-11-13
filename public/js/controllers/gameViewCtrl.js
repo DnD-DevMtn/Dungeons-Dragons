@@ -537,11 +537,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         console.log(Game.monsters[i]);
                         Game.moves = Game.monsters[i].settings.speed;
                         Game.isTurn = true;
-                        Game.actionOptions();
+                        Game.actionOptions(Game.monsters[i].location);
                     }
                 }
             }
         }
+        console.log("Check Turn Game.actions", Game.actions);
     }
 
     window.addEventListener ( "keydown", downHandler, false );

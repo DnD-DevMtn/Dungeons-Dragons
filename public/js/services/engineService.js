@@ -45,6 +45,8 @@ export default function engineService(socket){
         , traps: []
         , environment: []
         , combatOrder: []
+        , meleeTargets: []
+        , rangedTargets: []
         , exploreTurn: 0
         , monsterExplore: 0
         , combatTurn: 0
@@ -69,29 +71,32 @@ export default function engineService(socket){
 
     // explore options
     Game.actionOptions = (monsterSource) => {
-        if(Game.dmMode && Game.gameState === "combat") {
-        //   let source = {
-        //     x: Game.combatOrder[ Game.combatTurn ].location.x,
-        //     y: Game.combatOrder[ Game.combatTurn ].location.y
-        //   }
-        let monsterAdjacent = findAdjacent(monsterSource);
-        for(let i = 0; i < adjacent.length; i++) {
-            let x = adjacent[i][0], y = adjacent[i][1];
-            if(Game.board[y][x].type === "monster") {
-                Game.actions.push("melee");
-                if(Game.user.actor.classType.name === "Fighter") {
-                    Game.actions.push("fighterPowerAttack");
-                    if(checkCleave(source)) {
-                        Game.actions.push("cleave");
+        // resets available combat targets after every move
+        Game.meleeTargets  = [];
+        Game.rangedTargets = [];
+        if(Game.dmMode && Game.gameState === "combat" && !Game.actionTaken) {
+
+            // CHECKS MONSTER ADJACENT SQUARES FOR MELEE OPPURTUNITES
+            let monsterAdjacent = findAdjacent(monsterSource);
+            let monsterRanged   = rangedRadius(5);
+            for(let i = 0; i < adjacent.length; i++) {
+                let y = monsterAdjacent[i][0], x = monsterAdjacent[i][1];
+                if(Game.board[y][x].type === "player") {
+                    if(Game.actions.indexOf("melee") === -1){
+                        Game.actions.push("melee");
                     }
-                }
-                if(Game.user.actor.classType.name === "Rogue" && checkSneak(x, y)) {
-                    // TODO
-                    // Game.actions should actually store objects with names and targets
-                    Game.actions.push("sneakAttack");
+                    Game.meleeTargets.push( { x: x, y: y } );
                 }
             }
-        }
+            for(let i = 0; i < monsterRanged.length; i++) {
+                let y = monsterRanged[i][0], x = monsterRanged[i][1];
+                if(Game.board[y][x].type === "player") {
+                    if(Game.actions.indexOf("ranged") === -1) {
+                        Game.actions.push("ranged");
+                    }
+                    Game.rangedTargets.push( { x: x, y: y } );
+                }
+            }
 
             return;
         } else if ( Game.dmMode && Game.gameState === "explore" ){
@@ -139,7 +144,7 @@ export default function engineService(socket){
                 console.log('gameBoard', Game.board[y][x]);
                 if(Game.board[y][x].door.hp) {
                     if(!Game.board[y][x].door.open) {
-                        Game.doorLocation = {x: x, y: y};
+                        Game.doorLocation = { x: x, y: y };
                         Game.actions.push("openDoor");
                         if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                             Game.actions.push("bash");
@@ -149,7 +154,7 @@ export default function engineService(socket){
                         }
                     }
                     if(Game.board[y][x].door.open) {
-                        Game.doorLocation = {x: x, y: y};
+                        Game.doorLocation = { x: x, y: y };
                         Game.actions.push("closeDoor");
                     }
                 }
@@ -159,9 +164,15 @@ export default function engineService(socket){
         if(Game.gameState === "combat") {
             if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                 for(let i = 0; i < adjacent.length; i++) {
-                    let x = adjacent[i][0], y = adjacent[i][1];
+                    let y = adjacent[i][0], x = adjacent[i][1];
                     if(Game.board[y][x].type === "monster") {
-                        Game.actions.push("melee");
+                        // If there are multiple targets, this stops melle from being push multiple times
+                        if(Game.actions.indexOf("melee") === -1){
+                            Game.actions.push("melee");
+                        }
+                        // maintains a list of valid targets
+                        Game.meleeTargets.push( { x: x, y: y } );
+
                         if(Game.user.actor.classType.name === "Fighter") {
                             Game.actions.push("fighterPowerAttack");
                             if(checkCleave(source)) {
@@ -178,7 +189,14 @@ export default function engineService(socket){
             }
             if(Game.user.equipped.name && Game.user.equipped.weaponType === "Ranged") {
                 let radius = rangedRadius(Math.floor(Game.user.equipped.range / 10));
-                // TODO finish this function
+                for(let i = 0; i < radius.length; i++){
+                    if(Game.board[y][x].type === "monster"){
+                        if(Game.actions.indexOf("ranged") === -1){
+                            Game.actions.push("ranged");
+                        }
+                        Game.rangedTargets.push( { x: x, y: y } );
+                    }
+                }
             }
             if(Game.user.actor.classType.name === "Sorcerer") {
                 Game.actions.push("castSpell");
