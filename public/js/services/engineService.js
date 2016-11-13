@@ -40,6 +40,7 @@ export default function engineService(socket){
         , user: {}
         , players: []
         , monsters: []
+        , activeMonsters: []
         , items: []
         , traps: []
         , environment: []
@@ -69,10 +70,10 @@ export default function engineService(socket){
     // explore options
     Game.actionOptions = () => {
         if(Game.dmMode && Game.gameState === "combat") {
-          let source = {
-            x: Game.monsters[ Game.monsterExplore ].location.x,
-            y: Game.monsters[ Game.monsterExplore ].location.y
-          }
+        //   let source = {
+        //     x: Game.combatOrder[ Game.combatTurn ].location.x,
+        //     y: Game.combatOrder[ Game.combatTurn ].location.y
+        //   }
 
           return;
         } else if ( Game.dmMode && Game.gameState === "explore" ){

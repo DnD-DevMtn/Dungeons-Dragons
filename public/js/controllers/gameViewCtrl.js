@@ -27,6 +27,23 @@ export default function(engineService, userService, socket, $stateParams, $http,
         checkTurn();
     }
 
+    GV.initCombat = () => {
+        Game.activeMonsters = [];
+        console.log('Game state fired, init combat begins')
+        Game.gameState = 'initCombat';
+    }
+
+    GV.startCombat = () => {
+        const combatOrder = getCombatOrder();
+        socket.emit("start combat", {room: GV.gameId, order: combatOrder});
+    }
+
+    GV.endCombat = () => {
+        if(Game.dmMode) {
+           socket.emit("end combat", {room: GV.gameId});
+        }
+    }
+
     GV.openDoor = () => {
       Game.openDoor(Game.user.location, Game.doorLocation);
     }
@@ -143,13 +160,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
             break;
           }
         }
-        console.log('Game.user.equipped', Game.user.equipped);
     });
 
     socket.on("return bash", data => {
         let x = data.target.x, y = data.target.y;
-
-        console.log('bash returned data', data);
 
         if(data.success) {
             Game.board[y][x].door.hp -= data.damage;
@@ -388,24 +402,45 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return end turn", () => {
-      if ( Game.dmTurn ) {
-        Game.exploreTurn = 0;
-        Game.dmTurn = false;
-      } else {
-        Game.exploreTurn++;
+        if(Game.gameState === 'explore') {
+            if ( Game.dmTurn ) {
+                Game.exploreTurn = 0;
+                Game.dmTurn = false;
+            } else {
+                Game.exploreTurn++;
 
-        if ( Game.players.length <= Game.exploreTurn ) {
-          Game.dmTurn = true;
+                if ( Game.players.length <= Game.exploreTurn ) {
+                  Game.dmTurn = true;
+                }
+            }
+        } else if(Game.gameState === 'combat') {
+            if(Game.combatTurn === Game.combatOrder.length - 1) {
+                Game.combatTurn = 0;
+            } else {
+                Game.combatTurn++;
+            }
         }
-      }
         checkTurn();
     });
 
     socket.on("return start combat", order => {
-        Game.gameStatus = "combat";
+        Game.gameState = "combat";
+        Game.dmTurn = false;
         order.forEach( combatant => {
             Game.combatOrder.push(combatant.actor);
         } );
+
+        console.log(Game.combatOrder);
+
+        checkTurn();
+    });
+
+    socket.on("return end combat", () => {
+        console.log('combat ended');
+        Game.gameState = "explore";
+        Game.exploreTurn = 0;
+        Game.dmTurn = false;
+        checkTurn();
     });
 
 
@@ -430,9 +465,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 } else if(Game.board[y][x].trap.findDC) {
                     line += " T";
                 } else if(Game.board[y][x].door.bashDC) {
-                    line += `door${y}${x}`;
+                    line += " D";
                 } else if(Game.board[y][x].type === "player") {
-                    line += `player${y}${x}`;
+                    line += " P";
                 } else if(Game.board[y][x].type === "monster") {
                     line += " M";
                 } else if(Game.board[y][x].type === "environmental") {
@@ -446,12 +481,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
         console.log('Game.actions', Game.actions);
         console.log('Game.moves', Game.moves);
         console.log('Game', Game);
+
     }
 
 
     GV.endTurn = () => {
-        console.log("END TURN");
+        console.log("ending game");
         socket.emit("end turn", GV.gameId);
+
     }
 
     // GV.nextMonster = () => {
@@ -465,25 +502,39 @@ export default function(engineService, userService, socket, $stateParams, $http,
     //     // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
     // }
 
-    GV.startCombat = () => {
-        const combatOrder = getCombatOrder();
-        socket.emit("start combat", {room: GV.gameId, order: combatOrder});
-    }
-
     function checkTurn(){
-      if ( Game.dmTurn ) {
-        if ( Game.dmMode ) {
-          Game.isTurn = true;
-          console.log("IT'S THE DM'S TURN");
+        if(Game.gameState === 'explore') {
+            if ( Game.dmTurn ) {
+                if ( Game.dmMode ) {
+                  Game.isTurn = true;
+                  console.log("IT'S THE DM'S TURN");
+                }
+            } else {
+                if ( Game.players[ Game.exploreTurn ].id === Game.user.id ) {
+                    console.log("IT'S YOUR TURN!");
+                    Game.moves = Game.user.actor.speed;
+                    Game.isTurn = true;
+                    Game.actionOptions();
+                }
+            }
+        } else if(Game.gameState === 'combat') {
+            if( Game.combatOrder[Game.combatTurn] === Game.user.id ) {
+                console.log("it's your turn!");
+                Game.moves = Game.user.actor.speed;
+                Game.isTurn = true;
+                Game.actionOptions();
+            } else if (Game.dmMode) {
+                for(let i = 0; i < Game.monsters.length; i++) {
+                    if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
+                        console.log("it's a monsters turn");
+                        console.log(Game.monsters[i]);
+                        Game.moves = Game.monsters[i].settings.speed;
+                        Game.isTurn = true;
+                        Game.actionOptions();
+                    }
+                }
+            }
         }
-      } else {
-        if ( Game.players[ Game.exploreTurn ].id === Game.user.id ) {
-          console.log("IT'S YOUR TURN!");
-          Game.moves = Game.user.actor.speed;
-          Game.isTurn = true;
-          Game.actionOptions();
-        }
-      }
     }
 
     window.addEventListener ( "keydown", downHandler, false );
@@ -519,30 +570,86 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         }
                         break;
                 }
-            } else if(Game.dmTurn && Game.dmMode) {
+            } else if(Game.dmTurn && Game.dmMode && Game.gameState !== 'initCombat') {
                 console.log( "It's DM's turn!", Game.monsterExplore, Game.monsters );
                 switch( event.keyCode ) {
                     case 37:
                         if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x - 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
                         }
                         break;
 
                     case 38:
                         if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y - 1 }, Game.monsters[Game.monsterExplore] ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
                         }
                         break;
 
                     case 39:
                         if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x + 1, y: Game.monsters[Game.monsterExplore].location.y }, Game.monsters[Game.monsterExplore] ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
                         }
                         break;
 
                     case 40:
                         if ( Game.move( Game.monsters[Game.monsterExplore].location, { x: Game.monsters[Game.monsterExplore].location.x, y: Game.monsters[Game.monsterExplore].location.y + 1 }, Game.monsters[Game.monsterExplore] ) ) {
-                            Game.actionOptions();
+                            //Game.actionOptions();
+                        }
+                        break;
+                }
+            } else if(Game.gameState === 'combat') {
+                console.log("Hey this is the right case! Waaahooooo");
+                switch( event.keyCode ) {
+                    case 37:
+                        if( Game.combatOrder[Game.combatTurn] === Game.user.id) {
+                            Game.move( Game.user.location, { x: Game.user.location.x - 1, y: Game.user.location.y }, Game.user );
+                            return;
+                        }
+                        if(Game.dmMode) {
+                            for(let i = 0; i < Game.monsters.length; i++) {
+                                if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
+                                    Game.move( Game.monsters[i].location, { x: Game.monsters[i].location.x - 1, y: Game.monsters[i].location.y }, Game.monsters[i] );
+                                }
+                            }
+                        }
+                        break;
+
+                    case 38:
+                        if ( Game.combatOrder[Game.combatTurn] === Game.user.id ) {
+                            Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y - 1 }, Game.user );
+                        }
+                        if(Game.dmMode) {
+                            for(let i = 0; i < Game.monsters.length; i++) {
+                                if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
+                                    Game.move( Game.monsters[i].location, { x: Game.monsters[i].location.x, y: Game.monsters[i].location.y - 1 }, Game.monsters[i] );
+                                }
+                            }
+                        }
+                        break;
+
+                    case 39:
+                        if ( Game.combatOrder[Game.combatTurn] === Game.user.id ) {
+                            Game.move( Game.user.location, { x: Game.user.location.x + 1, y: Game.user.location.y }, Game.user );
+                        }
+                        if(Game.dmMode) {
+                            for(let i = 0; i < Game.monsters.length; i++) {
+                                if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
+                                    Game.move( Game.monsters[i].location, { x: Game.monsters[i].location.x + 1, y: Game.monsters[i].location.y }, Game.monsters[i] );
+                                }
+                            }
+                        }
+                        break;
+
+                    case 40:
+                        if ( Game.combatOrder[Game.combatTurn] === Game.user.id ) {
+                            Game.move( Game.user.location, { x: Game.user.location.x, y: Game.user.location.y + 1 }, Game.user )
+                        }
+                        if(Game.dmMode) {
+                            for(let i = 0; i < Game.monsters.length; i++) {
+                                if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
+                                    Game.move( Game.monsters[i].location, { x: Game.monsters[i].location.x, y: Game.monsters[i].location.y + 1 }, Game.monsters[i] );
+                                }
+                            }
                         }
                         break;
                 }
@@ -556,17 +663,18 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
 
     function getCombatOrder() {
-        let order = []
+        let order = [];
         Game.players.forEach( player => {
             let roll = rollInit(player.actor.baseStats.dex);
+            player.initiative = roll;
             order.push({actor: player.id, initiative: roll});
         } );
-        Game.monsters.forEach( monster => {
+        Game.activeMonsters.forEach( monster => {
             let roll = rollMonsterInit(monster.initiative);
             order.push({actor: monster.id, initiative: roll});
         } );
         return order.sort( (a, b) => {
-            return a.initiative - b.initiative;
+            return b.initiative - a.initiative;
         } );
     }
 
@@ -576,17 +684,24 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     function rollMonsterInit(initMod) {
-        return Math.ciel(Math.random() * 20) + initMod;
+        return Math.ceil(Math.random() * 20) + initMod;
     }
 
-    $scope.$on('monster clicked', (event, data) => {
-      for(var i = 0; i < Game.monsters.length; i++) {
-        if(data.id === Game.monsters[i].id) {
-            Game.monsterExplore = i;
-            Game.moves = Game.monsters[Game.monsterExplore].settings.speed;
-            return;
+    $scope.$on('monster clicked', (event, monster) => {
+        for(var i = 0; i < Game.monsters.length; i++) {
+            if(monster.id === Game.monsters[i].id) {
+                if(Game.gameState === 'initCombat') {
+                    monster.initiative = Game.monsters[i].settings.initiative;
+                    Game.activeMonsters.push(monster);
+                } else if(Game.gameState === 'combat') {
+                    // TODO
+                } else {
+                    Game.monsterExplore = i;
+                    Game.moves = Game.monsters[Game.monsterExplore].settings.speed;
+                }
+            }
         }
-      }
+        console.log('Game.activeMonsters', Game.activeMonsters);
     })
 
 
