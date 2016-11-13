@@ -3,11 +3,16 @@ a.btn, .btn {
   width:auto;
   padding:.5rem 1rem;
   margin:1rem;
-  border-radius:$button-radius;
-  background:$button-background;
+  //border-radius:$button-radius;
   color:$button-color;
-  border:3px solid $secondary-color-dark;
+  border:3px solid $accent-color;
   text-decoration:none;
   text-transform:uppercase;
   cursor:pointer;
+  transition:all .5s ease;
+  background-color:rgba($secondary-color-bright, .1);
+  &:hover {
+      border:3px solid $secondary-color-bright;
+      transition: all .5s ease;
+  }
 }
