@@ -72,6 +72,7 @@ export default function engineService(socket){
     // explore options
     Game.actionOptions = (monsterSource) => {
         // resets available combat targets after every move
+        Game.actions = [];
         Game.meleeTargets  = [];
         Game.rangedTargets = [];
         if(Game.dmMode && Game.gameState === "combat" && !Game.actionTaken) {
@@ -79,7 +80,7 @@ export default function engineService(socket){
             // CHECKS MONSTER ADJACENT SQUARES FOR MELEE OPPURTUNITES
             let monsterAdjacent = findAdjacent(monsterSource);
             let monsterRanged   = rangedRadius(5);
-            for(let i = 0; i < adjacent.length; i++) {
+            for(let i = 0; i < monsterAdjacent.length; i++) {
                 let y = monsterAdjacent[i][0], x = monsterAdjacent[i][1];
                 if(Game.board[y][x].type === "player") {
                     if(Game.actions.indexOf("melee") === -1){

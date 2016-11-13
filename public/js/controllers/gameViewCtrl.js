@@ -435,7 +435,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
             Game.combatOrder.push(combatant.actor);
         } );
 
-        console.log(Game.combatOrder);
+        console.log('combat order', Game.combatOrder);
 
         checkTurn();
     });
@@ -453,6 +453,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
         console.log("FROM UPDATE ACTOR", source, target);
         let x = source.x, y = source.y;
         let actorType = Game.board[y][x].type + 's';
+        console.log('board square', Game.board[y][x]);
+        console.log('square type', Game.board[y][x].type);
+        console.log('actorType', actorType);
         for(let i = 0; i < Game[actorType].length; i++) {
             if(Game[actorType][i].id === Game.board[y][x].id) {
                 Game[actorType][i].location.x = target.x;
@@ -485,7 +488,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
             }
             console.log(line);
         }
-        console.log('Game.actions', Game.actions);
         console.log('Game.moves', Game.moves);
         console.log('Game', Game);
 
@@ -493,9 +495,11 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
 
     GV.endTurn = () => {
-        console.log("ending game");
-        socket.emit("end turn", GV.gameId);
-
+        if(Game.isTurn) {
+            console.log("ending turn");
+            Game.isTurn = false;
+            socket.emit("end turn", GV.gameId);
+        }
     }
 
     // GV.nextMonster = () => {
@@ -606,7 +610,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         break;
                 }
             } else if(Game.gameState === 'combat') {
-                console.log("Hey this is the right case! Waaahooooo");
                 switch( event.keyCode ) {
                     case 37:
                         if( Game.combatOrder[Game.combatTurn] === Game.user.id) {
@@ -709,7 +712,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 }
             }
         }
-        console.log('Game.activeMonsters', Game.activeMonsters);
     })
 
 
