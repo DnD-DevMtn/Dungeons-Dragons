@@ -215,7 +215,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
 
         for(let i = 0; i < data.found.length; i++) {
-            let x = data.found[i][0], y = data.found[i][1];
+            let x = data.found[i].x, y = data.found[i].y;
             Game.board[y][x].item.found = true;
             break;
         }
@@ -233,7 +233,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
 
         for(let i = 0; i < data.found.length; i++) {
-            let x = data.found[i][0], y = data.found[i][1];
+            let x = data.found[i].x, y = data.found[i].y;
             Game.board[y][x].trap.found = true;
             break;
         }
@@ -243,7 +243,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return rogueDisarmTrap", data => {
         let x = data.target.x, y = data.target.y;
-        let xx = data.source.x, yy = data.target.y;
+        let xx = data.source.x, yy = data.source.y;
 
         // + + + PIXI DATA.ROLL + + + \\
 
@@ -431,6 +431,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return start combat", order => {
         Game.gameState = "combat";
         Game.dmTurn = false;
+        Game.combatOrder = [];
         order.forEach( combatant => {
             Game.combatOrder.push(combatant.actor);
         } );

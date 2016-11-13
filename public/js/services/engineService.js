@@ -79,7 +79,8 @@ export default function engineService(socket){
 
             // CHECKS MONSTER ADJACENT SQUARES FOR MELEE OPPURTUNITES
             let monsterAdjacent = findAdjacent(monsterSource);
-            let monsterRanged   = rangedRadius(5);
+            let monsterRanged   = rangedRadius(monsterSource, 5);
+            console.log('monsterRanged', monsterRanged);
             for(let i = 0; i < monsterAdjacent.length; i++) {
                 let y = monsterAdjacent[i][0], x = monsterAdjacent[i][1];
                 if(Game.board[y][x].type === "player") {
@@ -90,7 +91,7 @@ export default function engineService(socket){
                 }
             }
             for(let i = 0; i < monsterRanged.length; i++) {
-                let y = monsterRanged[i][0], x = monsterRanged[i][1];
+                let y = monsterRanged[i].y, x = monsterRanged[i].x;
                 if(Game.board[y][x].type === "player") {
                     if(Game.actions.indexOf("ranged") === -1) {
                         Game.actions.push("ranged");
@@ -189,7 +190,7 @@ export default function engineService(socket){
                 }
             }
             if(Game.user.equipped.name && Game.user.equipped.weaponType === "Ranged") {
-                let radius = rangedRadius(Math.floor(Game.user.equipped.range / 10));
+                let radius = rangedRadius(Game.user.location, Math.floor(Game.user.equipped.range / 10));
                 for(let i = 0; i < radius.length; i++){
                     if(Game.board[y][x].type === "monster"){
                         if(Game.actions.indexOf("ranged") === -1){
@@ -333,7 +334,7 @@ export default function engineService(socket){
             let x = ranged[i][0], y = ranged[i][1];
             if(Game.board[y][x].item.items.length > 0){
                 if(rand === 20 || ((rand + wis) >= Game.board[y][x].item.findDC)){
-                    found.push([x, y]);              // pushes the coordinates on found items to be emitted by socket
+                    found.push({x: x, y: y});              // pushes the coordinates on found items to be emitted by socket
                     // Game.board[y][x].item.found = true;      // TODO ctrl on listener
                 }
             }
@@ -361,7 +362,7 @@ export default function engineService(socket){
 
     // available if player is a rogue and the gameState is explore
     Game.rogueTrapfind = (source) => {
-        let ranged = rangedRadius(Game.user.location);
+        let ranged = rangedRadius(Game.user.location, 3);
         let wis    = statMod(Game.user.actor.baseStats.wis);
         let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
         let lvl    = Game.user.actor.level;
@@ -370,7 +371,7 @@ export default function engineService(socket){
             let x = ranged[i][0], y = ranged[i][1];
             if(Game.board[y][x].trap.name){
                 if(roll === 20 || ((rand + wis + lvl) >= Game.board[y][x].trap.findDC)){
-                    found.push([x, y]);
+                    found.push({x: x, y: y});
                     // Game.board[y][x].trap.found = true; // TODO put on the on listener in the ctrl
                 }
             }
@@ -788,11 +789,12 @@ export default function engineService(socket){
 
 
     function rangedRadius(source, range){
+        console.log('ranged radius fired');
         let x = source.x, y = source.y;
         let ranged = [];
-        for(let i = (x - range); i < (x + range); i++){
-            for(let j = (y - range); j < (y + range); j++){
-                ranged.push([i, j]);
+        for(let i = (y - range); i < (y + range); i++){
+            for(let j = (x - range); j < (x + range); j++){
+                ranged.push({y: i, x: j});
             }
         }
         return ranged;
