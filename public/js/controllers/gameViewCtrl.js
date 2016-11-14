@@ -344,6 +344,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         Game.monsters[i].settings.hp -= data.damage;
                         if(Game.monsters[i].settings.hp <= 0) {
                             // + + + PIXI DEAD + + + \\
+                            Game.board[y][x].free = true;
+                            Game.board[y][x].id = "";
+                            Game.board[y][x].type = "";
+                            // $scope.$broadcast('remove actor', Game.monsters[i]);
+                            if(Game.combatTurn > Game.combatOrder.indexOf(Game.monsters[i].id)) {
+                                Game.combatTurn--;
+                            }
+                            Game.combatOrder.splice(Game.combatOrder.indexOf(Game.monsters[i].id), 1);
                         }
                     } else {
                         console.log('miss');
@@ -734,7 +742,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 if(actor.id === Game.monsters[i].id) {
                     if(Game.gameState === 'initCombat') {
                         actor.initiative = Game.monsters[i].settings.initiative;
-                        Game.activeMonsters.push(actor);
+                        if(Game.monsters[i].settings.hp > 0) {
+                            Game.activeMonsters.push(actor);
+                        }
                     } else if(Game.gameState === 'combat') {
                         if(Game.combatAction) {
                             for(let i = 0; i < Game.players.length; i++) {
