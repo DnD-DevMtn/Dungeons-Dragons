@@ -45,9 +45,12 @@ export default function engineService(socket){
         , traps: []
         , environment: []
         , combatOrder: []
+        , meleeTargets: []
+        , rangedTargets: []
         , exploreTurn: 0
         , monsterExplore: 0
         , combatTurn: 0
+        , combatAction: ""
         , ids: []
         , actions: []
         , gameState: "explore"
@@ -68,20 +71,42 @@ export default function engineService(socket){
     // all source and target params are objects containing x and y coordinates ie. source = {x: 5, y: 7}
 
     // explore options
-    Game.actionOptions = () => {
-        if(Game.dmMode && Game.gameState === "combat") {
-        //   let source = {
-        //     x: Game.combatOrder[ Game.combatTurn ].location.x,
-        //     y: Game.combatOrder[ Game.combatTurn ].location.y
-        //   }
+    Game.actionOptions = (monsterSource) => {
+        // resets available combat targets after every move
+        Game.actions = [];
+        Game.meleeTargets  = [];
+        Game.rangedTargets = [];
+        if(Game.dmMode && Game.gameState === "combat" && !Game.actionTaken) {
 
-          return;
+            // CHECKS MONSTER ADJACENT SQUARES FOR MELEE OPPURTUNITES
+            let monsterAdjacent = findAdjacent(monsterSource);
+            let monsterRanged   = rangedRadius(monsterSource, 5);
+            console.log('monsterRanged', monsterRanged);
+            for(let i = 0; i < monsterAdjacent.length; i++) {
+                let y = monsterAdjacent[i][0], x = monsterAdjacent[i][1];
+                if(Game.board[y][x].type === "player") {
+                    if(Game.actions.indexOf("melee") === -1){
+                        Game.actions.push("melee");
+                    }
+                    Game.meleeTargets.push( Game.board[y][x].id );
+                }
+            }
+            for(let i = 0; i < monsterRanged.length; i++) {
+                let y = monsterRanged[i].y, x = monsterRanged[i].x;
+                if(Game.board[y][x].type === "player") {
+                    if(Game.actions.indexOf("ranged") === -1) {
+                        Game.actions.push("ranged");
+                    }
+                    Game.rangedTargets.push( Game.board[y][x].id );
+                }
+            }
+            return Game.actions;
         } else if ( Game.dmMode && Game.gameState === "explore" ){
-          return;
+            return Game.actions;
         }
         let source = {
-          x: Game.user.location.x
-          , y: Game.user.location.y
+            x: Game.user.location.x
+            , y: Game.user.location.y
         }
 
         Game.doorLocation = {};
@@ -121,7 +146,7 @@ export default function engineService(socket){
                 console.log('gameBoard', Game.board[y][x]);
                 if(Game.board[y][x].door.hp) {
                     if(!Game.board[y][x].door.open) {
-                        Game.doorLocation = {x: x, y: y};
+                        Game.doorLocation = { x: x, y: y };
                         Game.actions.push("openDoor");
                         if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                             Game.actions.push("bash");
@@ -131,7 +156,7 @@ export default function engineService(socket){
                         }
                     }
                     if(Game.board[y][x].door.open) {
-                        Game.doorLocation = {x: x, y: y};
+                        Game.doorLocation = { x: x, y: y };
                         Game.actions.push("closeDoor");
                     }
                 }
@@ -141,9 +166,15 @@ export default function engineService(socket){
         if(Game.gameState === "combat") {
             if(Game.user.equipped.name && Game.user.equipped.weaponType !== "Ranged") {
                 for(let i = 0; i < adjacent.length; i++) {
-                    let x = adjacent[i][0], y = adjacent[i][1];
+                    let y = adjacent[i][0], x = adjacent[i][1];
                     if(Game.board[y][x].type === "monster") {
-                        Game.actions.push("melee");
+                        // If there are multiple targets, this stops melle from being push multiple times
+                        if(Game.actions.indexOf("melee") === -1){
+                            Game.actions.push("melee");
+                        }
+                        // maintains a list of valid targets
+                        Game.meleeTargets.push( Game.board[y][x].id );
+
                         if(Game.user.actor.classType.name === "Fighter") {
                             Game.actions.push("fighterPowerAttack");
                             if(checkCleave(source)) {
@@ -159,8 +190,15 @@ export default function engineService(socket){
                 }
             }
             if(Game.user.equipped.name && Game.user.equipped.weaponType === "Ranged") {
-                let radius = rangedRadius(Math.floor(Game.user.equipped.range / 10));
-                // TODO finish this function
+                let radius = rangedRadius(Game.user.location, Math.floor(Game.user.equipped.range / 10));
+                for(let i = 0; i < radius.length; i++){
+                    if(Game.board[y][x].type === "monster"){
+                        if(Game.actions.indexOf("ranged") === -1){
+                            Game.actions.push("ranged");
+                        }
+                        Game.rangedTargets.push( { x: x, y: y } );
+                    }
+                }
             }
             if(Game.user.actor.classType.name === "Sorcerer") {
                 Game.actions.push("castSpell");
@@ -169,7 +207,7 @@ export default function engineService(socket){
                 Game.actions.push("castSpell");
             }
         }
-        console.log("Game.actions: ", Game.actions);
+        return Game.actions;
     }
     // end Game.actionOptions()
 
@@ -296,7 +334,7 @@ export default function engineService(socket){
             let x = ranged[i][0], y = ranged[i][1];
             if(Game.board[y][x].item.items.length > 0){
                 if(rand === 20 || ((rand + wis) >= Game.board[y][x].item.findDC)){
-                    found.push([x, y]);              // pushes the coordinates on found items to be emitted by socket
+                    found.push({x: x, y: y});              // pushes the coordinates on found items to be emitted by socket
                     // Game.board[y][x].item.found = true;      // TODO ctrl on listener
                 }
             }
@@ -324,7 +362,7 @@ export default function engineService(socket){
 
     // available if player is a rogue and the gameState is explore
     Game.rogueTrapfind = (source) => {
-        let ranged = rangedRadius(Game.user.location);
+        let ranged = rangedRadius(Game.user.location, 3);
         let wis    = statMod(Game.user.actor.baseStats.wis);
         let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
         let lvl    = Game.user.actor.level;
@@ -333,7 +371,7 @@ export default function engineService(socket){
             let x = ranged[i][0], y = ranged[i][1];
             if(Game.board[y][x].trap.name){
                 if(roll === 20 || ((rand + wis + lvl) >= Game.board[y][x].trap.findDC)){
-                    found.push([x, y]);
+                    found.push({x: x, y: y});
                     // Game.board[y][x].trap.found = true; // TODO put on the on listener in the ctrl
                 }
             }
@@ -384,31 +422,35 @@ export default function engineService(socket){
     // available if an enemy is next to the player
     // Game.melee is a function available to the user and monsters
     Game.melee = (source, target) => {
+        console.log('melee fired');
         let x = source.x, y = source.y;
         let rand   = Math.floor(Math.random() * 20) + 1;
         let damage = 0;
         let crit = (rand === 20) ? true : false;
         let critMod = 2;
+        let attackMod = 0;
         if(Game.board[y][x].id === Game.user.id){
+            attackMod = Game.user.actor.baseAttack[0] + statMod(Game.user.actor.baseStats.str);
             if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
-            let critMod = Game.user.equipped.crit.critDamage;
+            critMod = Game.user.equipped.crit.critDamage;
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
             }
         }
         if(Game.board[y][x].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
-                if(Game.monsters[i].id === Game.board[x][y].id){
-                    for(let j = 0; j < Game.monsters[i].monster.melee.damage.numDice; j++){
-                        damage += (Math.floor(Math.random() * Game.monsters[i].monster.melee.damage.diceType) + 1);
+                if(Game.monsters[i].id === Game.board[y][x].id){
+                    attackMod = Game.monsters[i].settings.melee.toHit;
+                    for(let j = 0; j < Game.monsters[i].settings.melee.damage.numDice; j++){
+                        damage += (Math.floor(Math.random() * Game.monsters[i].settings.melee.damage.diceType) + 1);
                     }
-                    damage += Game.monsters[i].monster.melee.damage.mod;
+                    damage += Game.monsters[i].settings.melee.damage.mod;
                 }
             }
         }
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("melee", {source: source, target: target, roll: rand, damage: damage, crit: crit, critMod: critMod, room: room});
+        socket.emit("melee", {source: source, target: target, roll: rand, damage: damage, crit: crit, critMod: critMod, attackMod: attackMod, room: room});
     }
 
     // available if enemies are within an unblocked radius
@@ -425,13 +467,13 @@ export default function engineService(socket){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
             }
         }
-        if(Game.board[x][y].type === "monster"){
+        if(Game.board[y][x].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
-                if(Game.monsters[i].id === Game.board[x][y].id){
-                    for(let j = 0; j < Game.monsters[i].monster.ranged.damage.numDice; j++){
-                        damage += (Math.floor(Math.random() * Game.monsters[i].monster.ranged.damage.diceType) + 1);
+                if(Game.monsters[i].id === Game.board[y][x].id){
+                    for(let j = 0; j < Game.monsters[i].settings.ranged.damage.numDice; j++){
+                        damage += (Math.floor(Math.random() * Game.monsters[i].settings.ranged.damage.diceType) + 1);
                     }
-                    damage += Game.monsters[i].monster.ranged.damage.mod;
+                    damage += Game.monsters[i].settings.ranged.damage.mod;
                 }
             }
         }
@@ -447,7 +489,7 @@ export default function engineService(socket){
         let damage = 0;
         let crit = (rand === 20) ? true : false;
         let critMod = 2;
-        if(Game.board[x][y].id === Game.user.id){
+        if(Game.board[y][x].id === Game.user.id){
             if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
             let critMod = Game.user.equipped.crit.critDamage;
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
@@ -751,11 +793,12 @@ export default function engineService(socket){
 
 
     function rangedRadius(source, range){
+        console.log('ranged radius fired');
         let x = source.x, y = source.y;
         let ranged = [];
-        for(let i = (x - range); i < (x + range); i++){
-            for(let j = (y - range); j < (y + range); j++){
-                ranged.push([i, j]);
+        for(let i = (y - range); i < (y + range); i++){
+            for(let j = (x - range); j < (x + range); j++){
+                ranged.push({y: i, x: j});
             }
         }
         return ranged;

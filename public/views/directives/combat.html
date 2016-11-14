@@ -4,42 +4,11 @@
   </header>
   <ul class="combat-actions flex-wrapper">
     <!-- melee attack -->
-    <li class="combat-action flex-content">
-      <img src="" />
-    </li>
-    <!-- ranged attack -->
-    <li class="combat-action flex-content">
-      <img src="" />
-    </li>
-    <!-- draw/sheath weapon -->
-    <li class="flex-content explore-action">
-      <!-- ng if weapon -->
-      <img src="" />
-      <!-- <img src="" /> -->
-      <span>Draw weapon</span>
-      <!-- <span>Sheath weapon</span> -->
-    </li>
-    <!-- rouge -->
-    <!-- sneak attack -->
-    <li ng-if="GV.userChar.classType === 'Rogue'" class="combat-action flex-content">
-      <img src="" />
-      <span>Sneak Attack</span>
-    </li>
-    <!-- fighter -->
-    <!-- power attack -->
-    <li ng-if="GV.userChar.classType === 'Fighter'" class="combat-action flex-content">
-      <img src="" />
-      <span>Power Attack</span>
-    </li>
-    <!-- cleve -->
-    <li ng-if="GV.userChar.classType === 'Fighter'" class="combat-action flex-content">
-      <img src="" />
-      <span>Cleve</span>
-    </li>
-    <!-- sorcerer and cleric -->
-    <!-- spells -->
-    <li ng-if="GV.userChar.classType === 'Sorcerer'" class="combat-action flex-content">
-      <img src="" />
+    <li
+        ng-repeat="action in GV.actions"
+        ng-click="GV.takeAction(action)"
+        class="combat-action flex-content">
+        {{action}}
     </li>
   </ul>
 </section>

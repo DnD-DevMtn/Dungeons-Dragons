@@ -179,7 +179,6 @@ class Game {
   }
 
   placeActors( characters, $scope ) {
-    console.log(characters);
 
     var actor;
 
@@ -201,7 +200,7 @@ class Game {
       this.gameUtil.orderProps( this.gameScene.children );
 
       actor.mousedown = function( data ) {
-        $scope.$emit('monster clicked', {id: this.id, location:this.coordinate});
+        $scope.$emit('actor clicked', {id: this.id, location:this.coordinate});
       }
     }
   }
