@@ -340,10 +340,18 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         console.log('hit', data.damage);
                         console.log('monster.settings.hp', Game.monsters[i].settings.hp)
                         console.log('monster.settings.hp - damage', Game.monsters[i].settings.hp - data.damage);
-                        // + + + PIXI HIT + + + \\
+                        $scope.$broadcast("attack", {source: Game.board[data.source.y][data.source.x], target: Game.monsters[i], damage: data.damage});
                         Game.monsters[i].settings.hp -= data.damage;
                         if(Game.monsters[i].settings.hp <= 0) {
-                            // + + + PIXI DEAD + + + \\
+                            $scope.$broadcast("dead", {target: Game.monsters[i]});
+                            Game.board[y][x].free = true;
+                            Game.board[y][x].id = "";
+                            Game.board[y][x].type = "";
+                            // $scope.$broadcast('remove actor', Game.monsters[i]);
+                            if(Game.combatTurn > Game.combatOrder.indexOf(Game.monsters[i].id)) {
+                                Game.combatTurn--;
+                            }
+                            Game.combatOrder.splice(Game.combatOrder.indexOf(Game.monsters[i].id), 1);
                         }
                     } else {
                         console.log('miss');
@@ -372,10 +380,11 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         console.log('hit', data.damage);
                         console.log('players[i].hp', Game.players[i].hp)
                         console.log('players[i].hp - damage', Game.players[i].hp - data.damage);
-                        // + + + PIXI HIT + + + \\
+                        Game.players[i].settings = {hp: Game.players[i].hp};
+                        $scope.$broadcast("attack", {source: Game.board[data.source.y][data.source.x], target: Game.players[i], damage: data.damage});
                         Game.players[i].hp -= data.damage;
                         if(Game.players[i].hp <= 0) {
-                            // + + + PIXI DEAD + + + \\
+                            $scope.$broadcast("dead", {target: Game.players[i]});
                         }
                     } else {
                         console.log('miss');
@@ -734,7 +743,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 if(actor.id === Game.monsters[i].id) {
                     if(Game.gameState === 'initCombat') {
                         actor.initiative = Game.monsters[i].settings.initiative;
-                        Game.activeMonsters.push(actor);
+                        if(Game.monsters[i].settings.hp > 0) {
+                            Game.activeMonsters.push(actor);
+                        }
                     } else if(Game.gameState === 'combat') {
                         if(Game.combatAction) {
                             for(let i = 0; i < Game.players.length; i++) {
