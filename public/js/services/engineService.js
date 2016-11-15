@@ -436,6 +436,7 @@ export default function engineService(socket){
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
             }
+            damage += statMod(Game.user.actor.baseStats.str);
         }
         if(Game.board[y][x].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
