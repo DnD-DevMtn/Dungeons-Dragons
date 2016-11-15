@@ -10,6 +10,10 @@ export default function( $scope ) {
   $scope.$on( "attack", ( event, data ) => {
     p.attack( data.source, data.target, data.damage );
   } );
+
+  $scope.$on( "dead", ( event, data ) => {
+    p.death( data.target );
+  } );
 };
 
 function dataStructureBuffer( scope ) {
@@ -44,7 +48,7 @@ class Game {
     this.obstacles = [];
 
     this.animationCounter = 0;
-    this.effectCounter = 0;
+    this.attackAnimationCounter = 0;
     this.scope = scope;
     this.mainPlayerId = scope.Dungeon.mainPlayer.id;
     this.floor.gridWidth = scope.Dungeon.width;
@@ -213,7 +217,7 @@ class Game {
     } );
 
     this.gameUtil.removeObstacle( actor, this.obstacles );
-    actor.direction = this.gameUtil.getObjectDirection( actor, targetLocation );
+    actor.direction = this.gameUtil.getObjectDirection( actor.coordinate, targetLocation );
 
     if ( this.gameUtil.validateTargetLocation( targetOccupation, this.obstacles, this.floor ) ) {
       actor.coordinate = targetLocation;
@@ -234,34 +238,55 @@ class Game {
     var victim = this.actors[ target.id ];
     attacker.direction = this.gameUtil.getObjectDirection( attacker, victim );
 
-    this.attackAnimation( victim );
-
     var hpRatioRemaining = ( target.settings.hp - damage ) / target.settings.hp;
 
     if ( hpRatioRemaining <= 0 )
       victim.healthBar.children[ 1 ].width = 0;
     else
       victim.healthBar.children[ 1 ].width *= hpRatioRemaining;
+
+    var effect = new PIXI.Sprite( this.id[ `ATTACK0.png` ] );
+    this.gameScene.addChild( effect );
+    effect.coordinate = { x: victim.coordinate.x, y: victim.coordinate.y };
+
+    this.gameUtil.setGridWidthHeight( effect, this.tileGridWidth, this.tileGridHeight );
+    this.gameUtil.setPositionFromGrid( effect, this.tileGridWidth, this.tileGridHeight );
+
+    this.attackAnimation( victim, effect );
   }
 
-  attackAnimation( victim ) {
-    var effect;
+  attackAnimation( victim, effect ) {
+    if ( this.attackAnimationCounter < 20 ) {
+      effect.texture = this.id[ `ATTACK${ Math.floor( this.attackAnimationCounter / 4 ) }.png` ];
 
-    if ( this.effectCounter === 0 ) {
-      effect = new PIXI.Sprite( this.id[ `ATTACK0.png` ] );
-      effect.coordinate = { x: victim.coordinate.x, y: victim.coordinate.y };
-      this.gameUtil.setPositionFromGrid( effect, this.tileGridWidth, this.tileGridHeight );
-      this.gameScene.addChild( effect );
-    } else if ( this.effectCounter < 100 ) {
-      effect.texture = this.id[ `ATTACK${ this.effectCounter % 20 }.png` ];
+      this.attackAnimationCounter++;
+
+      requestAnimationFrame( this.attackAnimation.bind( this, victim, effect ) );
     } else {
       this.gameScene.removeChild( effect );
-      this.effectCounter = 0;
+      this.attackAnimationCounter = 0;
+
+      return;
     }
+  }
 
-    this.effectCounter++;
+  death( target ) {
+    var actor = this.actors[ target.id ];
+    delete this.actors[ target.id ];
+    this.gameUtil.removeObstacle( actor, this.obstacles );
 
-    requestAnimationFrame( this.attackAnimation.bind( this, victim ) );
+    this.deathAnimation( actor );
+  }
+
+  deathAnimation( actor ) {
+    if ( actor.alpha > 0 ) {
+      actor.healthBar.alpha -= 0.1;
+      actor.alpha -= 0.1;
+      requestAnimationFrame( this.deathAnimation.bind( this, actor ) );
+    } else {
+      this.gameScene.removeChild( actor );
+      return;
+    }
   }
 };
 
@@ -331,7 +356,7 @@ class Game_Util {
     } )
   }
 
-  getObjectDirection( source, target ) {console.log( "getting direction: ", target, source );
+  getObjectDirection( source, target ) {
     if ( target.x - source.x > 0 )
       return 2;
 
