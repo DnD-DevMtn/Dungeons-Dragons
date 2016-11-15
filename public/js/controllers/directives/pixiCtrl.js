@@ -1,76 +1,38 @@
 import "pixi.js";
 
 export default function( $scope ) {
-  $scope.Dungeon = $scope.GV.pixiDungeon;
+  var p = new Game( dataStructureBuffer( $scope ) );
 
-  // Actual class declaration
+  $scope.$on( "send move", ( event, data ) => {
+    p.move( data.character, data.target );
+  } );
 
-    var character = dataStructureBuffer( $scope.Dungeon );
-    var p = new Game( $scope.Dungeon, $scope );
+  $scope.$on( "attack", ( event, data ) => {
+    p.attack( data.source, data.target, data.damage );
+  } );
 
-
-  $scope.$on("send move", (event, data) => {
-    p.move(data.character, data.target);
-  })
-
-
-
-  // Delete below up to stop point....
-  // window.addEventListener ( "keydown", downHandler, false );
-  // window.addEventListener ( "keyup", upHandler, false );
-  //
-  // function downHandler() {
-  //   if ( $scope.keyUp ) {
-  //     $scope.keyUp = false;
-  //     switch( event.keyCode ) {
-  //       case 37:
-  //         if ( p.move( character, { x: character.location.x - 1, y: character.location.y } ) ) {
-  //           character.location.x--;
-  //         }
-  //         break;
-  //
-  //       case 38:
-  //         if ( p.move( character, { x: character.location.x, y: character.location.y - 1 } ) ) {
-  //           character.location.y--;
-  //         }
-  //         break;
-  //
-  //       case 39:
-  //         if ( p.move( character, { x: character.location.x + 1, y: character.location.y } ) ) {
-  //           character.location.x++;
-  //         }
-  //         break;
-  //
-  //       case 40:
-  //         if ( p.move( character, { x: character.location.x, y: character.location.y + 1 } ) ) {
-  //           character.location.y++;
-  //         }
-  //         break;
-  //     }
-  //   }
-  // }
-  //
-  // function upHandler() {
-  //   $scope.keyUp = true;
-  // }
-    // Stop point...
+  $scope.$on( "dead", ( event, data ) => {
+    p.death( data.target );
+  } );
 };
 
-function dataStructureBuffer( dungeon ) {
-  for ( let i = 0; i < dungeon.players.length; i++ )
-    dungeon.players[ i ].image = dungeon.players[ i ].actor.sprite;
+function dataStructureBuffer( scope ) {
+  scope.Dungeon = scope.GV.pixiDungeon;
 
-  dungeon.mainPlayer = {
-    id: dungeon.players[ 0 ].id,
+  for ( let i = 0; i < scope.Dungeon.players.length; i++ )
+    scope.Dungeon.players[ i ].image = scope.Dungeon.players[ i ].actor.sprite;
+
+  scope.Dungeon.mainPlayer = {
+    id: scope.Dungeon.players[ 0 ].id,
     cameraGridWidth: 15,
     cameraGridHeight: 15
   };
 
-  return dungeon.players[ 0 ];
+  return scope;
 }
 
 class Game {
-  constructor( Dungeon, $scope ) {
+  constructor( scope ) {
     this.gameUtil = new Game_Util();
 
     this.stage = new PIXI.Container();
@@ -86,14 +48,17 @@ class Game {
     this.obstacles = [];
 
     this.animationCounter = 0;
-    this.mainPlayerId = Dungeon.mainPlayer.id;
-    this.floor.gridWidth = Dungeon.width;
-    this.floor.gridHeight = Dungeon.height;
-    this.floor.tileImage = Dungeon.backgroundImage;
-    this.players = Dungeon.players;
-    this.monsters = Dungeon.monsters;
-    this.doors = Dungeon.doors;
-    this.environment = Dungeon.environment;
+    this.attackAnimationCounter = 0;
+    this.scope = scope;
+    this.mainPlayerId = scope.Dungeon.mainPlayer.id;
+    this.floor.gridWidth = scope.Dungeon.width;
+    this.floor.gridHeight = scope.Dungeon.height;
+    this.floor.tileImage = scope.Dungeon.backgroundImage;
+    this.floor.gridOccupation = [ { x: -1, y: -1 } ];
+    this.players = scope.Dungeon.players;
+    this.monsters = scope.Dungeon.monsters;
+    this.doors = scope.Dungeon.doors;
+    this.environment = scope.Dungeon.environment;
 
     // this.renderer = PIXI.autoDetectRenderer( Dungeon.mainPlayer.cameraGridWidth * this.tileGridWidth,
     //   Dungeon.mainPlayer.cameraGridHeight * this.tileGridHeight );
@@ -102,15 +67,15 @@ class Game {
 
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
-    PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this, $scope ) );
+    PIXI.loader.add( "./assets/GameImages/sprite.json" ).load( this.initView.bind( this ) );
   }
 
-  initView($scope) {
+  initView() {
     this.id = PIXI.loader.resources[ "./assets/GameImages/sprite.json" ].textures;
 
     this.createFloor();
-    this.placeActors( this.players, $scope );
-    this.placeActors( this.monsters, $scope );
+    this.placeActors( this.players );
+    this.placeActors( this.monsters );
     this.placeProps( this.doors );
     this.placeProps( this.environment );
     this.play();
@@ -178,30 +143,26 @@ class Game {
     }
   }
 
-  placeActors( characters, $scope ) {
-
+  placeActors( characters ) {
     var actor;
 
     for ( let i = 0; i < characters.length; i++ ) {
       actor = new PIXI.Sprite( this.id[ `${ characters[ i ].image }30.png` ] );
-      actor.interactive = true;
-      actor.image = characters[ i ].image;
       actor.direction = 3; // left: 0, top: 1, right: 2, bottom: 3
-      actor.id = characters[i].id;
-      // actor.coordinate = { x: characters[ i ].location.x, y: characters[ i ].location.y };
-      this.gameUtil.setGridWidthHeight( actor, this.tileGridWidth, this.tileGridHeight );
-      actor.coordinate = this.gameUtil.gridCoordinate( actor, characters[ i ] );
-      actor.gridOccupation = this.gameUtil.gridOccupation( actor );
-      this.gameUtil.addObstacle( actor, this.obstacles );
-      this.gameUtil.setPositionFromGrid( actor, this.tileGridWidth, this.tileGridHeight );
+      actor.id = characters[ i ].id;
+
+      this.initProperty( actor, characters[ i ] );
 
       this.actors[ characters[ i ].id ] = actor;
-      this.gameScene.addChild( actor );
-      this.gameUtil.orderProps( this.gameScene.children );
 
+      this.gameUtil.addHealthBar( actor );
+      this.gameScene.addChild( actor.healthBar );
+
+      actor.interactive = true;
+      actor.scope = this.scope;
       actor.mousedown = function( data ) {
-        $scope.$emit('actor clicked', {id: this.id, location:this.coordinate});
-      }
+        this.scope.$emit( 'actor clicked', { id: this.id, location: this.coordinate } );
+      };
     }
   }
 
@@ -210,16 +171,21 @@ class Game {
 
     for ( let i = 0; i < properties.length; i++ ) {
       prop = new PIXI.Sprite( this.id[ `${ properties[ i ].image }.png` ] );
-      prop.image = properties[ i ].image;
-      this.gameUtil.setGridWidthHeight( prop, this.tileGridWidth, this.tileGridHeight );
-      prop.coordinate = this.gameUtil.gridCoordinate( prop, properties[ i ] );
-      prop.gridOccupation = this.gameUtil.gridOccupation( prop );
-      this.gameUtil.addObstacle( prop, this.obstacles );
-      this.gameUtil.setPositionFromGrid( prop, this.tileGridWidth, this.tileGridHeight );
 
-      this.gameScene.addChild( prop );
-      this.gameUtil.orderProps( this.gameScene.children );
+      this.initProperty( prop, properties[ i ] );
     }
+  }
+
+  initProperty( role, script ) {
+    role.image = script.image;
+    this.gameUtil.setGridWidthHeight( role, this.tileGridWidth, this.tileGridHeight );
+    role.coordinate = this.gameUtil.gridCoordinate( role, script );
+    role.gridOccupation = this.gameUtil.gridOccupation( role );
+    this.gameUtil.addObstacle( role, this.obstacles );
+    this.gameUtil.setPositionFromGrid( role, this.tileGridWidth, this.tileGridHeight );
+
+    this.gameScene.addChild( role );
+    this.gameUtil.orderProps( this.gameScene.children );
   }
 
   animation() {
@@ -229,6 +195,8 @@ class Game {
       this.actors[ i ].texture = this.id[
         `${ this.actors[ i ].image }${ this.actors[ i ].direction }${ Math.floor( this.animationCounter / 25 ) }.png`
       ];
+
+      this.actors[ i ].healthBar.position.set( this.actors[ i ].x, this.actors[ i ].y - 2 * this.actors[ i ].healthBar.barHeight );
     }
 
     this.animationCounter++;
@@ -263,6 +231,62 @@ class Game {
     this.gameUtil.orderProps( this.gameScene.children );
 
     return result;
+  }
+
+  attack( source, target, damage ) {
+    var attacker = this.actors[ source.id ];
+    var victim = this.actors[ target.id ];
+    attacker.direction = this.gameUtil.getObjectDirection( attacker, victim );
+
+    var hpRatioRemaining = ( target.settings.hp - damage ) / target.settings.hp;
+
+    if ( hpRatioRemaining <= 0 )
+      victim.healthBar.children[ 1 ].width = 0;
+    else
+      victim.healthBar.children[ 1 ].width *= hpRatioRemaining;
+
+    var effect = new PIXI.Sprite( this.id[ `ATTACK0.png` ] );
+    this.gameScene.addChild( effect );
+    effect.coordinate = { x: victim.coordinate.x, y: victim.coordinate.y };
+
+    this.gameUtil.setGridWidthHeight( effect, this.tileGridWidth, this.tileGridHeight );
+    this.gameUtil.setPositionFromGrid( effect, this.tileGridWidth, this.tileGridHeight );
+
+    this.attackAnimation( victim, effect );
+  }
+
+  attackAnimation( victim, effect ) {
+    if ( this.attackAnimationCounter < 20 ) {
+      effect.texture = this.id[ `ATTACK${ Math.floor( this.attackAnimationCounter / 4 ) }.png` ];
+
+      this.attackAnimationCounter++;
+
+      requestAnimationFrame( this.attackAnimation.bind( this, victim, effect ) );
+    } else {
+      this.gameScene.removeChild( effect );
+      this.attackAnimationCounter = 0;
+
+      return;
+    }
+  }
+
+  death( target ) {
+    var actor = this.actors[ target.id ];
+    delete this.actors[ target.id ];
+    this.gameUtil.removeObstacle( actor, this.obstacles );
+
+    this.deathAnimation( actor );
+  }
+
+  deathAnimation( actor ) {
+    if ( actor.alpha > 0 ) {
+      actor.healthBar.alpha -= 0.1;
+      actor.alpha -= 0.1;
+      requestAnimationFrame( this.deathAnimation.bind( this, actor ) );
+    } else {
+      this.gameScene.removeChild( actor );
+      return;
+    }
   }
 };
 
@@ -324,9 +348,9 @@ class Game_Util {
   orderProps( props ) {
     props.sort( ( prop1, prop2 ) => {
       if ( !prop1.gridOccupation )
-        return -1;
-      else if ( !prop2.gridOccupation )
         return 1;
+      else if ( !prop2.gridOccupation )
+        return -1;
       else
         return prop1.gridOccupation[ 0 ].y - prop2.gridOccupation[ 0 ].y ;
     } )
@@ -365,5 +389,24 @@ class Game_Util {
     }
 
     return true;
+  }
+
+  addHealthBar( object ) {
+    object.healthBar = new PIXI.Container();
+    object.healthBar.barWidth = object.width;
+    object.healthBar.barHeight = 4;
+    object.healthBar.position.set( object.x, object.y - 2 * object.healthBar.barHeight );
+
+    var innerBar = new PIXI.Graphics();
+    innerBar.beginFill( 0xFF3300 );
+    innerBar.drawRect( 0, 0, object.healthBar.barWidth, object.healthBar.barHeight );
+    innerBar.endFill();
+    object.healthBar.addChild( innerBar );
+
+    var outerBar = new PIXI.Graphics();
+    outerBar.beginFill( 0x27E11E );
+    outerBar.drawRect( 0, 0, object.healthBar.barWidth, object.healthBar.barHeight );
+    outerBar.endFill();
+    object.healthBar.addChild( outerBar );
   }
 }
