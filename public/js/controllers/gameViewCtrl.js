@@ -340,7 +340,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         console.log('hit', data.damage);
                         console.log('monster.settings.hp', Game.monsters[i].settings.hp)
                         console.log('monster.settings.hp - damage', Game.monsters[i].settings.hp - data.damage);
-                        // + + + PIXI HIT + + + \\
+                        $scope.$broadcast("attack", {source: Game.board[data.source.y][data.source.x], target: Game.monsters[i], damage: data.damage});
                         Game.monsters[i].settings.hp -= data.damage;
                         if(Game.monsters[i].settings.hp <= 0) {
                             // + + + PIXI DEAD + + + \\
@@ -380,7 +380,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         console.log('hit', data.damage);
                         console.log('players[i].hp', Game.players[i].hp)
                         console.log('players[i].hp - damage', Game.players[i].hp - data.damage);
-                        // + + + PIXI HIT + + + \\
+                        $scope.$broadcast("attack", {source: Game.board[data.source.y][data.source.x], target: Game.players[i], damage: data.damage});
                         Game.players[i].hp -= data.damage;
                         if(Game.players[i].hp <= 0) {
                             // + + + PIXI DEAD + + + \\
