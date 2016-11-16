@@ -24,7 +24,6 @@
     left:3rem;
     height:auto;
     width:auto;
-    border:1px solid $font-color;
     align-items:center;
     img {
       height:5rem;
@@ -34,6 +33,7 @@
     h1 {
       font-size:1.5rem;
       margin:0 1rem;
+      color:$primary-color;
     }
   }
   .hero-content {

@@ -16,16 +16,20 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
 
+    GV.gameState = "explore";
+
+    GV.activeMonsters;
+
     GV.actions;
+
+    GV.turn;
 
     let Game;
 
-    let currentMonsterClicked = {};
-
     if($stateParams.dungeon) {
         Game = engineService.initGame(GV.dungeon, GV.party, GV.userChar, GV.gameId);
-        GV.pixiDungeon.players = Game.players;
-        GV.pixiDungeon.user = Game.user;
+        GV.pixiDungeon.players = GV.party = Game.players;
+        GV.pixiDungeon.user = GV.userChar = Game.user;
         checkTurn();
     }
 
@@ -466,6 +470,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return start combat", order => {
         Game.gameState = "combat";
+        GV.gameState = "combat";
         Game.dmTurn = false;
         Game.combatOrder = [];
         order.forEach( combatant => {
@@ -480,6 +485,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return end combat", () => {
         console.log('combat ended');
         Game.gameState = "explore";
+        GV.gameState = "explore";
         Game.exploreTurn = 0;
         Game.dmTurn = false;
         checkTurn();
@@ -551,35 +557,49 @@ export default function(engineService, userService, socket, $stateParams, $http,
     //     // + + + PIXI CENTER ON OR HIGHLIGHT CURRENT MONSTER + + + \\
     // }
 
-    function checkTurn(){
+    function checkTurn() {
         if(Game.gameState === 'explore') {
             if ( Game.dmTurn ) {
+                GV.turn = "the DM's";
                 if ( Game.dmMode ) {
                   Game.isTurn = true;
+                  GV.turn = "your";
                   console.log("IT'S THE DM'S TURN");
                 }
             } else {
                 if ( Game.players[ Game.exploreTurn ].id === Game.user.id ) {
                     console.log("IT'S YOUR TURN!");
                     Game.moves = Game.user.actor.speed;
+                    GV.turn = "your"
                     Game.isTurn = true;
                     GV.actions = Game.actionOptions();
+                } else {
+                    GV.turn = `${Game.players[Game.exploreTurn].actor.name}'s`;
                 }
             }
         } else if(Game.gameState === 'combat') {
             if( Game.combatOrder[Game.combatTurn] === Game.user.id ) {
-                console.log("it's your turn!");
                 Game.moves = Game.user.actor.speed;
                 Game.isTurn = true;
+                GV.turn = "your";
                 GV.actions = Game.actionOptions();
-            } else if (Game.dmMode) {
-                for(let i = 0; i < Game.monsters.length; i++) {
-                    if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
-                        console.log("it's a monsters turn");
-                        console.log(Game.monsters[i]);
-                        Game.moves = Game.monsters[i].settings.speed;
-                        Game.isTurn = true;
-                        GV.actions = Game.actionOptions(Game.monsters[i].location);
+            } else {
+                if(Game.combatOrder[Game.combatTurn].length < 6) {
+                    for(let i = 0; i < Game.monsters.length; i++) {
+                        if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
+                            GV.turn = "a monster's turn";
+                            if(Game.dmMode) {
+                                Game.moves = Game.monsters[i].settings.speed;
+                                Game.isTurn = true;
+                                GV.actions = Game.actionOptions(Game.monsters[i].location);
+                            }
+                        }
+                    }
+                } else {
+                    for(let i = 0; i < Game.players.length; i++) {
+                        if(Game.combatOrder[Game.combatTurn] === Game.players[i].id) {
+                            GV.turn = `${Game.players[i].actor.name}'s`;
+                        }
                     }
                 }
             }
@@ -743,9 +763,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 if(actor.id === Game.monsters[i].id) {
                     if(Game.gameState === 'initCombat') {
                         actor.initiative = Game.monsters[i].settings.initiative;
+                        actor.name = Game.monsters[i].settings.name;
                         if(Game.monsters[i].settings.hp > 0) {
                             Game.activeMonsters.push(actor);
                         }
+                        GV.activeMonsters = Game.activeMonsters;
+                        $scope.$apply();
                     } else if(Game.gameState === 'combat') {
                         if(Game.combatAction) {
                             for(let i = 0; i < Game.players.length; i++) {
