@@ -7,22 +7,19 @@ export default function(engineService, userService, socket, $stateParams, $http,
     const GV = this;
 
     GV.user = userService.user;
-
     GV.party = $stateParams.party;
-
     GV.userChar = $stateParams.userChar;
-
     GV.gameId = $stateParams.gameId;
-
     GV.dungeon = GV.pixiDungeon = $stateParams.dungeon;
-
     GV.gameState = "explore";
 
     GV.activeMonsters;
-
     GV.actions;
-
     GV.turn;
+    GV.successfulHit;
+    GV.damage;
+    GV.rollToHit;
+    GV.isCritical;
 
     let Game;
 
@@ -33,6 +30,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
         checkTurn();
     }
 
+
+    // + + + + START OF GAME ACTION OPTIONS
     GV.initCombat = () => {
         Game.activeMonsters = [];
         console.log('Game state fired, init combat begins')
@@ -51,15 +50,15 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     GV.openDoor = () => {
-      Game.openDoor(Game.user.location, Game.doorLocation);
+        Game.openDoor(Game.user.location, Game.doorLocation);
     }
 
     GV.closeDoor = () => {
-      Game.closeDoor(Game.user.location, Game.doorLocation);
+        Game.closeDoor(Game.user.location, Game.doorLocation);
     }
 
     GV.openInventory = () => {
-      $scope.$broadcast('open inventory')
+        $scope.$broadcast('open inventory')
     }
 
     GV.takeAction = action => {
@@ -67,19 +66,29 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
     GV.bash = () => {
-      console.log('bash fired');
-      Game.bash(Game.user.location, Game.doorLocation);
+        Game.bash(Game.user.location, Game.doorLocation);
     }
 
     GV.drawWeapon = (weapon) => {
-      //Game.drawWeapon(weapon);
-      socket.emit('draw weapon', {source: Game.user.location, weapon: weapon, room: GV.gameId});
+        socket.emit('draw weapon', {source: Game.user.location, weapon: weapon, room: GV.gameId});
     }
 
     GV.sheathWeapon = () => {
-      socket.emit('sheath weapon', {source: Game.user.location, room: GV.gameId});
+        socket.emit('sheath weapon', {source: Game.user.location, room: GV.gameId});
     }
 
+    GV.endTurn = () => {
+        if(Game.isTurn) {
+            console.log("ending turn");
+            Game.isTurn = false;
+            Game.actionTaken = false;
+            socket.emit("end turn", GV.gameId);
+        }
+    }
+    // END OF GAME ACTION OPTIONS + + + +
+
+
+    // + + + + START OF SOCKET ON LISTENERS
     socket.on("return move", data => {
         let source = data.source, target = data.target;
         if(Game.board[source.y][source.x].id === Game.user.id) {      // TODO in ctrl
@@ -128,17 +137,17 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return draw weapon", data => {
-      let x = data.source.x, y = data.source.y;
-      if(Game.board[y][x].id === Game.user.id) {
-        Game.user.equipped = {
-            name: data.weapon.name
-            , weaponType: data.weapon.weaponType
-            , prof: data.weapon.proficiency
-            , range: data.weapon.range
-            , crit: {
-                critRange: data.weapon.crit.critRange
-                , critDamage: data.weapon.crit.damageMultiplier
-            }
+        let x = data.source.x, y = data.source.y;
+        if(Game.board[y][x].id === Game.user.id) {
+            Game.user.equipped = {
+                name: data.weapon.name
+                , weaponType: data.weapon.weaponType
+                , prof: data.weapon.proficiency
+                , range: data.weapon.range
+                , crit: {
+                    critRange: data.weapon.crit.critRange
+                    , critDamage: data.weapon.crit.damageMultiplier
+                }
         }
         if(Game.user.actor.size === "medium"){
             Game.user.equipped.damage = {
@@ -154,14 +163,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
         Game.actionTaken = true;
         Math.floor(Game.moves /= 2);
-      }
-      for(let i = 0; i < Game.players.length; i++) {
-        if(Game.board[y][x].id === Game.players[i].id) {
-          Game.players[i].equipped.name = data.weapon.name;
-          break;
         }
-      }
-      console.log('Game.user.equipped', Game.user.equipped);
+        for(let i = 0; i < Game.players.length; i++) {
+            if(Game.board[y][x].id === Game.players[i].id) {
+                Game.players[i].equipped.name = data.weapon.name;
+                break;
+            }
+        }
+        console.log('Game.user.equipped', Game.user.equipped);
     });
 
     socket.on("return sheath weapon", data => {
@@ -326,8 +335,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     socket.on("return melee", data => {
         let x = data.target.x, y = data.target.y;
+        GV.rollToHit = data.roll + data.attackMod;
 
         // + + + PIXI DATA.ROLL (crit?) + + + \\
+
+        if(data.crit){
+            // change the color of the attack
+        }
 
         // + + + PIXI ANIMATE SOURCE ATTACK + + + \\
 
@@ -344,20 +358,22 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         console.log('hit', data.damage);
                         console.log('monster.settings.hp', Game.monsters[i].settings.hp)
                         console.log('monster.settings.hp - damage', Game.monsters[i].settings.hp - data.damage);
+                        GV.successfulHit = "HIT";
+                        GV.damage        = data.damage;
                         $scope.$broadcast("attack", {source: Game.board[data.source.y][data.source.x], target: Game.monsters[i], damage: data.damage});
                         Game.monsters[i].settings.hp -= data.damage;
                         if(Game.monsters[i].settings.hp <= 0) {
                             $scope.$broadcast("dead", {target: Game.monsters[i]});
                             Game.board[y][x].free = true;
-                            Game.board[y][x].id = "";
+                            Game.board[y][x].id   = "";
                             Game.board[y][x].type = "";
-                            // $scope.$broadcast('remove actor', Game.monsters[i]);
                             if(Game.combatTurn > Game.combatOrder.indexOf(Game.monsters[i].id)) {
                                 Game.combatTurn--;
                             }
                             Game.combatOrder.splice(Game.combatOrder.indexOf(Game.monsters[i].id), 1);
                         }
                     } else {
+                        GV.successfulHit = "MISS";
                         console.log('miss');
                         // + + + PIXI MISS + + + \\
                     }
@@ -366,7 +382,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
             }
         }
 
-        if(type === "player"){
+        if(type === "player") {
             if(Game.board[y][x].id === Game.user.id) {
                 console.log('user before', Game.user);
                 if(Game.user.ac <= (data.roll + data.attackMod) || data.crit) {
@@ -387,10 +403,12 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         Game.players[i].settings = {hp: Game.players[i].hp};
                         $scope.$broadcast("attack", {source: Game.board[data.source.y][data.source.x], target: Game.players[i], damage: data.damage});
                         Game.players[i].hp -= data.damage;
+                        GV.successfulHit = "HIT";
                         if(Game.players[i].hp <= 0) {
                             $scope.$broadcast("dead", {target: Game.players[i]});
                         }
                     } else {
+                        GV.successfulHit = "MISS";
                         console.log('miss');
                         // + + + PIXI MISS + + + \\
                     }
@@ -490,6 +508,9 @@ export default function(engineService, userService, socket, $stateParams, $http,
         Game.dmTurn = false;
         checkTurn();
     });
+    // END OF SOCKET ON LISTENERS + + + +
+
+
 
 
     function updateActorPosition(source, target) {
@@ -537,14 +558,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     }
 
 
-    GV.endTurn = () => {
-        if(Game.isTurn) {
-            console.log("ending turn");
-            Game.isTurn = false;
-            Game.actionTaken = false;
-            socket.emit("end turn", GV.gameId);
-        }
-    }
+
 
     // GV.nextMonster = () => {
     //     console.log("NEXT MONSTER");
