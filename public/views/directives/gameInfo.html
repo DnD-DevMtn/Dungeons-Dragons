@@ -1,7 +1,7 @@
 <div id="game-info">
   <ul class="utility-bar">
     <ul class="utility-icons">
-      <li class="char-icon">
+      <li ng-show="GV.userChar.actor.name" class="char-icon ng-hide">
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 462.169 462.169" style="enable-background:new 0 0 462.169 462.169;" xml:space="preserve">
         <g>
         	<path d="M316.127,307.657c-11.304,0-21.638-6.643-26.329-16.926l-2.222-4.864l45.566-7.177c1.445-0.228,2.74-1.022,3.599-2.207
@@ -44,7 +44,7 @@
         </g>
         </svg>
       </li>
-      <li class="inventory-icon">
+      <li ng-show="GV.userChar.actor.name" class="inventory-icon">
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 362.086 362.086" style="enable-background:new 0 0 362.086 362.086;" xml:space="preserve">
         <g>
         	<path d="M163.343,186.845l-12.529,12.529c-2.148,2.148-2.148,5.63,0,7.778c1.074,1.074,2.481,1.611,3.889,1.611
@@ -117,7 +117,7 @@
         </g>
         </svg>
       </li>
-      <li class="monsters-icon" >
+      <!-- <li class="monsters-icon" >
           <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
              viewBox="0 0 59.2 59.2" style="enable-background:new 0 0 59.2 59.2;" xml:space="preserve">
           <g>
@@ -130,7 +130,7 @@
               c-6.065,0-11-4.935-11-11s4.935-11,11-11s11,4.935,11,11S35.638,40.57,29.572,40.57z"/>
           </g>
           </svg>
-      </li>
+      </li> -->
       <li class="party-icon">
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 487.8 487.8" style="enable-background:new 0 0 487.8 487.8;" xml:space="preserve">
         <g>
@@ -174,7 +174,7 @@
         </g>
         </svg>
       </li>
-      <li class="spells-icon">
+      <!-- <li class="spells-icon">
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 436.77 436.77" style="enable-background:new 0 0 436.77 436.77;" xml:space="preserve">
         <g>
         	<g>
@@ -261,8 +261,8 @@
         <g>
         </g>
         </svg>
-      </li>
-      <li ng-click="UT.exploreMode ? UT.showExplore() : null" ng-class="{'available': UT.exploreMode}" class="explore-icon">
+      </li> -->
+      <li ng-click="GV.gameState === 'explore' ? UT.showExplore() : null" ng-class="{'available': GV.gameState === 'explore'}" class="explore-icon">
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         	 viewBox="0 0 58 58" style="enable-background:new 0 0 58 58;" xml:space="preserve">
         <g>
@@ -290,7 +290,7 @@
         </g>
         </svg>
       </li>
-      <li ng-click="UT.exploreMode ? UT.showCombat() : null" ng-class="{'available': UT.combatMode}" class="combat-icon">
+      <li ng-click="GV.gameState === 'combat' ? UT.showCombat() : null" ng-class="{'available': GV.gameState === 'combat'}" class="combat-icon">
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         	 viewBox="0 0 463.084 463.084" style="enable-background:new 0 0 463.084 463.084;" xml:space="preserve">
         <path d="M438.663,427.806l-16.83-34.897l-9.958-71.797c-0.165-1.186-0.712-2.287-1.56-3.134L225.417,133.079l17.323-17.323

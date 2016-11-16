@@ -1,0 +1,16 @@
+<section id="turn-info">
+    <h2>{{GV.gameState}}</h2>
+    <h3>It's {{GV.turn}} turn</h3>
+    <div ng-if="GV.initActive">
+        <h3>Select Monsters</h3>
+        <div ng-repeat="monster in GV.activeMonsters">
+            {{monster.name}}
+        </div>
+    </div>
+    <div ng-if="GV.gameState === 'explore' && GV.attack">
+        {{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.
+    </div>
+    <div ng-if="GV.gameState === 'combat' && GV.attack">
+        {{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.
+    </div>
+</section>
