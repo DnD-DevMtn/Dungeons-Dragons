@@ -16,16 +16,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
     GV.activeMonsters;
     GV.actions;
     GV.turn;
-    GV.successfulHit;
-    GV.damage;
-    GV.rollToHit;
-    GV.isCritical;
-    GV.drawnWeapon;
-    GV.attacker;
-    GV.attacked;
-    GV.attackedResult;
-    GV.openDoor;
-    GV.closeDoor;
 
     let Game;
 
@@ -90,13 +80,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
             Game.isTurn = false;
             Game.actionTaken = false;
             socket.emit("end turn", GV.gameId);
-            GV.damage         = ;
-            GV.rollToHit      = ;
-            GV.isCritical     = ;
-            GV.drawnWeapon    = ;
-            GV.attacker       = ;
-            GV.attacked       = ;
-            GV.attackedResult = ;
         }
     }
     // END OF GAME ACTION OPTIONS + + + +
@@ -147,6 +130,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
 
         // + + + PIXI MOVE + + + \\
+        GV.showDamageHitDisplay = true;
         printBoard();
     });
 
@@ -162,7 +146,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
                     critRange: data.weapon.crit.critRange
                     , critDamage: data.weapon.crit.damageMultiplier
                 }
-                GV.drawnWeapon = data.weapon.name;
+            }
+            GV.drawnWeapon = data.weapon.name;
         }
         if(Game.user.actor.size === "medium"){
             Game.user.equipped.damage = {
@@ -178,7 +163,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         }
         Game.actionTaken = true;
         Math.floor(Game.moves /= 2);
-        }
+
         for(let i = 0; i < Game.players.length; i++) {
             if(Game.board[y][x].id === Game.players[i].id) {
                 Game.players[i].equipped.name = data.weapon.name;
@@ -433,7 +418,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 }
             }
         }
-
     });
 
     socket.on("return ranged", data => {
@@ -519,8 +503,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 }
             }
         }
-
-    });
     });
 
     socket.on("return fighterPowerAttack", data => {
@@ -549,7 +531,6 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 }
             }
         }
-
     });
 
     socket.on("return fighterCleave", data => {
@@ -871,8 +852,16 @@ export default function(engineService, userService, socket, $stateParams, $http,
                     if(Game.gameState === 'initCombat' && Game.dmMode) {
                         actor.initiative = Game.monsters[i].settings.initiative;
                         actor.name = Game.monsters[i].settings.name;
-                        if( ( Game.monsters[i].settings.hp > 0 ) && ( Game.activeMonsters.indexOf(Game.monsters[i].id) === -1 ) ) {
-                            Game.activeMonsters.push(actor);
+                        if( ( Game.monsters[i].settings.hp > 0 ) ) {
+                            let flag = true;
+                            for(let i = 0; i < Game.activeMonsters.length; i++) {
+                                if(Game.activeMonsters[i].id === actor.id) {
+                                    flag = false;
+                                }
+                            }
+                            if(flag) {
+                                Game.activeMonsters.push(actor);
+                            }
                         }
                         GV.activeMonsters = Game.activeMonsters;
                         $scope.$apply();
@@ -882,7 +871,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                                 if(Game.combatOrder[Game.combatTurn] === Game.players[i].id) {
                                     for(let j = 0; j < Game.monsters.length; j++) {
                                         if(actor.id === Game.monsters[j].id && Game.meleeTargets.indexOf(Game.monsters[j].id !== -1)) {
-                                            Game.[Game.combatAction](Game.players[i].location, Game.monsters[j].location);
+                                            Game[Game.combatAction](Game.players[i].location, Game.monsters[j].location);
                                             Game.combatAction = "";
                                         }
                                     }
@@ -901,7 +890,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                     if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
                         for(let j = 0; j < Game.players.length; j++) {
                             if(actor.id === Game.players[j].id && Game.meleeTargets.indexOf(Game.players[j].id !== -1)) {
-                                Game.[Game.combatAction](Game.monsters[i].location, Game.players[j].location);
+                                Game[Game.combatAction](Game.monsters[i].location, Game.players[j].location);
                                 Game.combatAction = "";
                             }
                         }
