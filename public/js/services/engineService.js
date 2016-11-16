@@ -422,19 +422,20 @@ export default function engineService(socket){
     // combat options
     // available if an enemy is next to the player
     // Game.melee is a function available to the user and monsters
+    // TODO GAME.RANGED AND GAME.MELEE CAN BE COMBINED INTO ONE FUNCTION AT SOME POINT
     Game.melee = (source, target) => {
         console.log('melee fired');
         let x = source.x, y = source.y;
-        let rand   = Math.floor(Math.random() * 20) + 1;
-        let damage = 0;
-        let crit = (rand === 20) ? true : false;
-        let critMod = 2;
+        let roll      = Math.floor(Math.random() * 20) + 1;
+        let damage    = 0;
+        let crit      = (roll === 20) ? true : false;
+        let critMod   = 2;
+        let attacker  = "";
         let attackMod = 0;
-        let attacker = "";
         if(Game.board[y][x].id === Game.user.id){
-            attacker = Game.user.actor.name;
+            attacker  = Game.user.actor.name;
             attackMod = Game.user.actor.baseAttack[0] + statMod(Game.user.actor.baseStats.str);
-            if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
+            if(roll >= Game.user.equipped.crit.critRange) { crit = true; }
             critMod = Game.user.equipped.crit.critDamage;
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
@@ -444,7 +445,7 @@ export default function engineService(socket){
         if(Game.board[y][x].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
                 if(Game.monsters[i].id === Game.board[y][x].id){
-                    attacker = Game.monsters[i].settings.name;
+                    attacker  = Game.monsters[i].settings.name;
                     attackMod = Game.monsters[i].settings.melee.toHit;
                     for(let j = 0; j < Game.monsters[i].settings.melee.damage.numDice; j++){
                         damage += (Math.floor(Math.random() * Game.monsters[i].settings.melee.damage.diceType) + 1);
@@ -455,19 +456,23 @@ export default function engineService(socket){
         }
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("melee", {source: source, target: target, roll: rand, damage: damage, crit: crit, critMod: critMod, attackMod: attackMod, attacker: attacker, room: room});
+        socket.emit("melee", {source, target, roll, damage, crit, critMod, attackMod, attacker, room});
     }
 
     // available if enemies are within an unblocked radius
     Game.ranged = (source, target) => {
         let x = source.x, y = source.y;
-        let rand   = Math.floor(Math.random() * 20) + 1;
-        let damage = 0
-        let crit = (rand === 20) ? true : false;
-        let critMod = 2;
+        let roll      = Math.floor(Math.random() * 20) + 1;
+        let damage    = 0
+        let crit      = (roll === 20) ? true : false;
+        let critMod   = 2;
+        let attacker  = "";
+        let attackMod = 0;
         if(Game.board[y][x].id === Game.user.id){
-            if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
-            let critMod = Game.user.equipped.crit.critDamage;
+            if(roll >= Game.user.equipped.crit.critRange) { crit = true; }
+            critMod   = Game.user.equipped.crit.critDamage;
+            attacker  = Game.user.actor.name;
+            attackMod = Game.user.actor.baseAttack[0] + statMod(Game.user.actor.baseStats.dex);
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
             }
@@ -475,6 +480,8 @@ export default function engineService(socket){
         if(Game.board[y][x].type === "monster"){
             for(let i = 0; i < Game.monsters.length; i++){
                 if(Game.monsters[i].id === Game.board[y][x].id){
+                    attacker  = Game.monsters[i].settings.name;
+                    attackMod = Game.monsters[i].settings.ranged.toHit;
                     for(let j = 0; j < Game.monsters[i].settings.ranged.damage.numDice; j++){
                         damage += (Math.floor(Math.random() * Game.monsters[i].settings.ranged.damage.diceType) + 1);
                     }
@@ -484,15 +491,15 @@ export default function engineService(socket){
         }
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("melee", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
+        socket.emit("ranged", {source, target, roll, damage, crit, critMod, attackMod, attacker, room});
     }
 
     // sacrifice accuracy for damage
     Game.fighterPowerAttack = (source, target1, target2) => {
         let x = source.x, y = source.y;
-        let rand   = Math.floor(Math.random() * 20) + 1;
-        let damage = 0;
-        let crit = (rand === 20) ? true : false;
+        let rand    = Math.floor(Math.random() * 20) + 1;
+        let damage  = 0;
+        let crit    = (rand === 20) ? true : false;
         let critMod = 2;
         if(Game.board[y][x].id === Game.user.id){
             if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
@@ -796,7 +803,7 @@ export default function engineService(socket){
     }
 
 
-
+    // Returns all the board squares within
     function rangedRadius(source, range){
         console.log('ranged radius fired');
         let x = source.x, y = source.y;
