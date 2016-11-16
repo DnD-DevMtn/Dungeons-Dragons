@@ -150,8 +150,8 @@
       		<path d="M121.242,476.195h11.118V161.202c-7.127,15.106-11.118,31.983-11.118,49.794V476.195z"/>
       	</g>
       </g>
-      <span ng-if="!UT.doorOpen">Open Door</span>
-      <span ng-if="UT.doorOpen">Close Door</span>
+      <span ng-if="GV.canOpenDoor">Open Door</span>
+      <span ng-if="GV.canCloseDoor">Close Door</span>
     </li>
     <!-- drop item -->
     <li class="flex-content explore-action">

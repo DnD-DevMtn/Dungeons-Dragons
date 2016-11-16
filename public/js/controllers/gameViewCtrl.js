@@ -35,6 +35,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     GV.initCombat = () => {
         Game.activeMonsters = [];
+        GV.activeMonsters = [];
         GV.initActive = true;
         console.log('Game state fired, init combat begins');
         Game.gameState = 'initCombat';
@@ -111,14 +112,14 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 GV.actions = Game.actionOptions(target);
             }
             if(Game.actions.includes("openDoor")) {
-                GV.openDoor = true;
-                GV.closeDoor = false;
+                GV.canOpenDoor = true;
+                GV.canCloseDoor = false;
             } else if(Game.actions.includes("closeDoor")) {
-                GV.closeDoor = true;
-                GV.openDoor = false;
+                GV.canCloseDoor = true;
+                GV.canOpenDoor = false;
             } else {
-                GV.openDoor = false;
-                GV.closeDoor = false;
+                GV.canOpenDoor = false;
+                GV.canCloseDoor = false;
             }
             console.log("ACTION OPTIONS", Game.actions);
         }
@@ -183,11 +184,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
         GV.attacker = data.basher;
         GV.attack = true;
+        GV.damage = data.damage;
+        GV.attacked = "door";
 
         if(data.success) {
-            GV.attackResult = "bashed";
             Game.board[y][x].door.hp -= data.damage;
             if(Game.board[y][x].door.hp <= 0) {
+                GV.attackResult = "bashed";
                 Game.board[y][x].door.open = true;
                 Game.board[y][x].free = true;
             }
@@ -608,6 +611,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                                 Game.moves = Game.monsters[i].settings.speed;
                                 Game.isTurn = true;
                                 GV.actions = Game.actionOptions(Game.monsters[i].location);
+                                console.log(GV.actions);
                             }
                         }
                     }
