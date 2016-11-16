@@ -21,6 +21,11 @@ export default function(engineService, userService, socket, $stateParams, $http,
     GV.rollToHit;
     GV.isCritical;
     GV.drawnWeapon;
+    GV.attacker;
+    GV.attacked;
+    GV.attackedResult;
+    GV.openDoor;
+    GV.closeDoor;
 
     let Game;
 
@@ -85,6 +90,13 @@ export default function(engineService, userService, socket, $stateParams, $http,
             Game.isTurn = false;
             Game.actionTaken = false;
             socket.emit("end turn", GV.gameId);
+            GV.damage         = ;
+            GV.rollToHit      = ;
+            GV.isCritical     = ;
+            GV.drawnWeapon    = ;
+            GV.attacker       = ;
+            GV.attacked       = ;
+            GV.attackedResult = ;
         }
     }
     // END OF GAME ACTION OPTIONS + + + +
@@ -856,10 +868,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
         if(actor.id.length <= 5) {
             for(let i = 0; i < Game.monsters.length; i++) {
                 if(actor.id === Game.monsters[i].id) {
-                    if(Game.gameState === 'initCombat') {
+                    if(Game.gameState === 'initCombat' && Game.dmMode) {
                         actor.initiative = Game.monsters[i].settings.initiative;
                         actor.name = Game.monsters[i].settings.name;
-                        if(Game.monsters[i].settings.hp > 0) {
+                        if( ( Game.monsters[i].settings.hp > 0 ) && ( Game.activeMonsters.indexOf(Game.monsters[i].id) === -1 ) ) {
                             Game.activeMonsters.push(actor);
                         }
                         GV.activeMonsters = Game.activeMonsters;

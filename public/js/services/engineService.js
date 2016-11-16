@@ -439,12 +439,12 @@ export default function engineService(socket){
     // sacrifice accuracy for damage
     Game.fighterPowerAttack = (source, target1, target2) => {
         let x = source.x, y = source.y;
-        let rand    = Math.floor(Math.random() * 20) + 1;
+        let roll    = Math.floor(Math.random() * 20) + 1;
         let damage  = 0;
-        let crit    = (rand === 20) ? true : false;
+        let crit    = (roll === 20) ? true : false;
         let critMod = 2;
         if(Game.board[y][x].id === Game.user.id){
-            if(rand >= Game.user.equipped.crit.critRange) { crit = true; }
+            if(roll >= Game.user.equipped.crit.critRange) { crit = true; }
             let critMod = Game.user.equipped.crit.critDamage;
             for(let i = 0; i < Game.user.equipped.damage.numDice; i++){
                 damage += (Math.floor(Math.random() * Game.user.equipped.damage.diceType) + 1);
@@ -453,29 +453,30 @@ export default function engineService(socket){
         }
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("fighterPowerAttack", {source: Game.user.location, target: target, roll: rand, damage: damage, crit: crit, room: room});
+        socket.emit("fighterPowerAttack", {source: Game.user.location, target, roll, damage, crit, room});
     }
 
     // can hit an additional enemy if the first is killed
-    Game.fighterCleave = (source, target) => {
+    Game.fighterCleave = target => {
 
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("fighterCleave", {source: Game.user.location, target1: target1, target2: target2, roll: rand, damage: damage, crit: crit, room: room});
+        socket.emit("fighterCleave", {source: Game.user.location, target1, target2, roll, damage, crit, room});
     }
 
-    Game.castSpell = (source, target) => {
+    // Sorcerers and Clerics can cast spells
+    Game.castSpell = target => {
 
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("castSpell", {source: Game.user.location, target: target, spell: spell, roll: rand, room: room});
+        socket.emit("castSpell", {source: Game.user.location, target, spell, roll, room});
     }
 
-    Game.rogueSneakAttack = (source, target) => {
+    Game.rogueSneakAttack = target => {
 
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("rogueSneakAttack", {source: Game.user.location, roll: rand, damage: damage, crit: crit, room: room})
+        socket.emit("rogueSneakAttack", {source: Game.user.location, target, roll, damage, crit, room});
     }
 
     // checks if target square is available and returns a boolean
