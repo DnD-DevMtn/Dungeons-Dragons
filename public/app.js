@@ -44,6 +44,7 @@ import party from                 "./js/directives/party";
 import spells from                "./js/directives/spells";
 import dice from                  "./js/directives/dice";
 import explore from               "./js/directives/explore";
+import turnInfo from              "./js/directives/turnInfo";
 import combat from                "./js/directives/combat";
 import monsters from              "./js/directives/monsters";
 
@@ -129,6 +130,7 @@ angular.module("DnD", [uiRouter])
   .directive("spells", spells)
   .directive("dice", dice)
   .directive("explore", explore)
+  .directive("turnInfo", turnInfo)
   .directive("combat", combat)
   .directive("monsters", monsters)
   .service("mainService", mainService)

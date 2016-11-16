@@ -1,7 +1,7 @@
 <section id="character-info">
   <header class="base-info">
-    <h4><span class="uppercase">{{GV.userChar.name}}</span> the {{GV.userChar.classType}} {{GV.userChar.race}}</h4>
-    <h5>Level: {{GV.userChar.level}}</h5>
+    <h4><span class="uppercase">{{GV.userChar.actor.name}}</span> the {{GV.userChar.actor.classType}} {{GV.userChar.actor.race}}</h4>
+    <h5>Level: {{GV.userChar.actor.level}}</h5>
   </header>
   <div class="page-wrapper">
     <div ng-if="UT.page === 1" class="page1">
@@ -9,12 +9,12 @@
         <div class="left">
           <div class="stats">
             <!-- angular variables go here -->
-            <span>Str : {{GV.userChar.baseStats.str}}</span>
-            <span>Dex : {{GV.userChar.baseStats.dex}}</span>
-            <span>Con : {{GV.userChar.baseStats.con}}</span>
-            <span>Int : {{GV.userChar.baseStats.int}}</span>
-            <span>Wis : {{GV.userChar.baseStats.wis}}</span>
-            <span>Cha : {{GV.userChar.baseStats.cha}}</span>
+            <span>Str : {{GV.userChar.actor.baseStats.str}}</span>
+            <span>Dex : {{GV.userChar.actor.baseStats.dex}}</span>
+            <span>Con : {{GV.userChar.actor.baseStats.con}}</span>
+            <span>Int : {{GV.userChar.actor.baseStats.int}}</span>
+            <span>Wis : {{GV.userChar.actor.baseStats.wis}}</span>
+            <span>Cha : {{GV.userChar.actor.baseStats.cha}}</span>
           </div>
         </div>
         <div class="right">
@@ -35,7 +35,7 @@
         <!-- ng repeat goes here -->
         <li
           class="language flex-content"
-          ng-repeat="language in GV.userChar.languages">
+          ng-repeat="language in GV.userChar.actor.languages">
           {{language}}
         </li>
       </ul>
