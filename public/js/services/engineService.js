@@ -211,67 +211,16 @@ export default function engineService(socket){
     }
     // end Game.actionOptions()
 
-
-
-    // available if the player does not have a weapon equipped.
-    // player chooses a weapon that they have in their inventory and it is set to equipped
-    Game.drawWeapon = (weapon) => {
-          console.log(weapon);
-          Game.user.equipped = {
-              name: weapon.name
-              , weaponType: weapon.weaponType
-              , prof: weapon.proficiency
-              , range: weapon.range
-              , crit: {
-                  critRange: weapon.crit.critRange
-                  , critDamage: weapon.crit.damageMultiplier
-              }
-          }
-          if(Game.user.actor.size === "medium"){
-              Game.user.equipped.damage = {
-                  diceType: weapon.damage.medium.diceType
-                  , numDice: weapon.damage.medium.numOfDice
-              }
-          }
-          if(Game.user.actor.size === "small"){
-              Game.user.equipped.damage = {
-                  diceType: weapon.damage.small.diceType
-                  , numDice: weapon.damage.small.numOfDice
-              }
-          }
-          console.log(Game.user.equipped);
-          Game.actionTaken = true;
-          Game.moves = 0;
-          socket.emit("drawWeapon", {source: Game.user.location, weapon: weapon, room: room});        // TODO
-    }
-
-    // available if the player already has a weapon equipped
-    // player.equipped = {}
-    Game.sheathWeapon = (source) => {
-        if(checkUser(source)){
-            Game.user.equipped = {};
-            Game.turnOver = true;
-            socket.emit("sheathWeapon", {source: source, room: room});          // TODO
-        } else {
-            for(let i = 0; i < Game.players.length; i++){
-                if(Game.board[source.x][source.y].id === Game.players[i].id){
-                    Game.players[i].equipped = {};
-                }
-            }
-        }
-
-    }
-
     // available if a door is next to the user, ie. directly above, beneath, left or right
     // door opens if not locked
     Game.openDoor = (source, target) => {
         console.log('open door fired');
         if(Game.board[target.y][target.x].door.locked){
-            socket.emit("openDoor", {source: source, target: target, success: false, room: room});   // TODO openDoor: back and front(controller)
+            socket.emit("openDoor", {source, target, success: false, room});
             return false;
         }
         Game.board[target.y][target.x].door.open = true;
-        socket.emit("openDoor", {source: source, target: target, success: true, room: room});       // TODO openDoor: back and front(controller)
+        socket.emit("openDoor", {source, target, success: true, room});
         return true;
     }
 
@@ -281,7 +230,7 @@ export default function engineService(socket){
         const basher = Game.user.actor.name;
         let x = target.x, y = target.y;
         let strMod  = statMod(Game.user.actor.baseStats.str);
-        let roll    = dice.roll20();                                        // TODO DICEROLL
+        let roll    = dice.roll20();
         let success = (roll + strMod) >= Game.board[y][x].door.bashDC;
         let crit    = false;
         if(roll >= Game.user.equipped.crit.critRange){
@@ -291,7 +240,7 @@ export default function engineService(socket){
         let damage  = 0;
         if(success){
             let die = Game.user.equipped.damage.diceType;
-            let numDice = Game.user.equipped.damage.numDice;                // TODO DICEROLL
+            let numDice = Game.user.equipped.damage.numDice;
             for(let i = 0; i < numDice; i++){
                 damage += (Math.floor(Math.random() * die)) + 1;
             }
@@ -299,14 +248,10 @@ export default function engineService(socket){
             if(crit){
                 damage *= Game.user.equipped.crit.critDamage;
             }
-            // Game.board[y][x].door.hp -= damage;  // TODO in ctrl
-            // if(Game.board[y][x].door.hp <= 0){
-            //     Game.board[y][x].door.open = true;
-            // }
         }
         Game.actionTaken = true;
         Math.floor(Game.moves /= 2);
-        socket.emit("bash", {source: source                                 // TODO socket.on("bash") controller side
+        socket.emit("bash", {source: source
                             , target: target
                             , roll: roll
                             , success: success
@@ -329,33 +274,31 @@ export default function engineService(socket){
         // modifier is based on wis scores
         let ranged = rangedRadius(Game.user.location, 2);
         let found  = [];
-        let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
+        let rand   = Math.floor(Math.random() * 20) + 1;
         let wis    = statMod(Game.user.actor.bastStats.wis);
         for(let i = 0; i < ranged.length; i++){
             let x = ranged[i][0], y = ranged[i][1];
             if(Game.board[y][x].item.items.length > 0){
                 if(rand === 20 || ((rand + wis) >= Game.board[y][x].item.findDC)){
                     found.push({x: x, y: y});              // pushes the coordinates on found items to be emitted by socket
-                    // Game.board[y][x].item.found = true;      // TODO ctrl on listener
                 }
             }
         }
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("perception", {source: source, roll: rand, found: found, room: room});      // TODO socket.on perception comtroller side
+        socket.emit("perception", {source: source, roll: rand, found: found, room: room});
     }
 
     // available if player is a rogue and next to a door that is locked
     Game.rogueLockpick = (source, target) => {
         let x       = target.x, y = target.y;
         let dc      = Game.board[y][x].door.pickDC;
-        let rand    = Math.floor(Math.random() * 20) + 1;                       // TODO DICEROLL
+        let rand    = Math.floor(Math.random() * 20) + 1;
         let int     = statMod(Game.user.actor.baseStats.int);
         let lvl     = Game.user.actor.totalLvl;
         let success = false;
         if(rand === 20 || ((rand + int + lvl) >= dc)){
             success = true;
-            // Game.board[y][x].door.locked = false;        // TODO put on the on listener the on ctrl
         }
         Game.actionTaken = true;
         socket.emit("rogueLockpick", {source: source, target: target, roll: rand, success: success, room: room});
@@ -365,46 +308,45 @@ export default function engineService(socket){
     Game.rogueTrapfind = (source) => {
         let ranged = rangedRadius(Game.user.location, 3);
         let wis    = statMod(Game.user.actor.baseStats.wis);
-        let rand   = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
+        let roll   = Math.floor(Math.random() * 20) + 1;
         let lvl    = Game.user.actor.level;
         let found = [];
         for(let i = 0; i < ranged.length; i++){
             let x = ranged[i][0], y = ranged[i][1];
             if(Game.board[y][x].trap.name){
-                if(roll === 20 || ((rand + wis + lvl) >= Game.board[y][x].trap.findDC)){
+                if(roll === 20 || ((roll + wis + lvl) >= Game.board[y][x].trap.findDC)){
                     found.push({x: x, y: y});
-                    // Game.board[y][x].trap.found = true; // TODO put on the on listener in the ctrl
                 }
             }
         }
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("rogueTrapfind", {source: source, roll: rand, found: found, room: room});   // TODO socket.on rogueTrapFind controller side
+        socket.emit("rogueTrapfind", {source, roll, found, room});
     }
 
     // available if the player is a rogue and is next to a trap that has been found
-    Game.rogueDisarmTrap = (source, target) => {
+    Game.rogueDisarmTrap = target => {
         let x       = target.x, y = target.y;
         let int     = statMod(Game.user.actor.baseStats.int);
         let lvl     = Game.user.actor.level;
-        let rand    = Math.floor(Math.random() * 20) + 1;                        // TODO DICEROLL
+        let roll    = Math.floor(Math.random() * 20) + 1;
         let damage  = 0;
         let success = true;
-        if(rand !== 20 || (int + lvl + rand) < Game.board[y][x].trap.disarmDC){
+        if(roll !== 20 || (int + lvl + roll) < Game.board[y][x].trap.disarmDC){
             success = false;
             for(let i = 0; i < Game.board[y][x].trap.damage.numDice; i++){
-                damage += (Math.floor(Math.random() * Game.board[y][x].trap.damage.diceType) + 1); // TODO DICEROLL
+                damage += (Math.floor(Math.random() * Game.board[y][x].trap.damage.diceType) + 1);
                 damage += Game.board[y][x].trap.damage.mod;
                 damage /= 2;
             }
         }
         Game.actionTaken = true;
         Game.moves = 0;
-        socket.emit("rogueDisarmTrap", {source: Game.user.location, roll: rand, damage: damage, success: success, room: room});
+        socket.emit("rogueDisarmTrap", {source: Game.user.location, roll, damage, success, room});
     }
 
     // available if item on square is found through successful perception and character is on the square
-    Game.pickUpItem = (source) => {
+    Game.pickUpItem = source => {
         let x = Game.user.location.x, y = Game.user.location.y;
         for(let i = 0; i < Game.board[y][x].item.items.length; i++){
             Game.user.items.push(Game.board[y][x].item.items[i]);

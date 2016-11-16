@@ -435,7 +435,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let type = Game.board[y][x].type;
 
         // display information
-        GV.rollToHit = data.roll + data.attackMod;
+        GV.rollToHit = data.roll;
         GV.attacker  = data.attacker;
         GV.attack    = true;
         GV.damage    = data.damage;
