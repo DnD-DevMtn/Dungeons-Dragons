@@ -78,16 +78,19 @@
       end turn
     </span>
     <span
+      ng-if="!GV.userChar.actor.name && GV.gameState === 'explore' && !GV.activeMonsters.length"
       class="btn roll ready"
       ng-click="GV.initCombat()">
       init combat
     </span>
     <span
+      ng-if="!GV.gameState !== 'combat' && !GV.userChar.actor.name && GV.activeMonsters.length"
       class="btn roll ready"
       ng-click="GV.startCombat()">
       start combat
     </span>
     <span
+      ng-if="!GV.userChar.actor.name && GV.gameState === 'combat'"
       class="btn roll ready"
       ng-click="GV.endCombat()">
       end combat

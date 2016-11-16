@@ -35,7 +35,8 @@ export default function(engineService, userService, socket, $stateParams, $http,
 
     GV.initCombat = () => {
         Game.activeMonsters = [];
-        console.log('Game state fired, init combat begins')
+        GV.initActive = true;
+        console.log('Game state fired, init combat begins');
         Game.gameState = 'initCombat';
     }
 
@@ -180,12 +181,18 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return bash", data => {
         let x = data.target.x, y = data.target.y;
 
+        GV.attacker = data.basher;
+        GV.attack = true;
+
         if(data.success) {
+            GV.attackResult = "bashed";
             Game.board[y][x].door.hp -= data.damage;
             if(Game.board[y][x].door.hp <= 0) {
                 Game.board[y][x].door.open = true;
                 Game.board[y][x].free = true;
             }
+        } else {
+            GV.attackedResult = "missed";
         }
 
         // + + + PIXI BASH ANIMATION DATA.SOURCE + + + \\
@@ -334,13 +341,17 @@ export default function(engineService, userService, socket, $stateParams, $http,
         let id   = Game.board[y][x].id;
         let type = Game.board[y][x].type;
 
-        console.log(data);
+        GV.attacker = data.attacker;
+        GV.attack = true;
+        GV.damage = data.damage;
 
         if(type === "monster") {
             for(let i = 0; i < Game.monsters.length; i++) {
                 if(id === Game.monsters[i].id) {
+                    GV.attacked = Game.monsters[i].settings.name;
                     console.log('monster before', Game.monsters[i]);
                     if(Game.monsters[i].settings.ac <= (data.roll + data.attackMod) || data.crit) {
+                        GV.attackResult = "hit";
                         console.log('hit', data.damage);
                         console.log('monster.settings.hp', Game.monsters[i].settings.hp)
                         console.log('monster.settings.hp - damage', Game.monsters[i].settings.hp - data.damage);
@@ -358,10 +369,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
                             Game.combatOrder.splice(Game.combatOrder.indexOf(Game.monsters[i].id), 1);
                         }
                     } else {
+                        GV.attackResult = "missed";
                         console.log('miss');
                         // + + + PIXI MISS + + + \\
                     }
-                    console.log('monster after', Game.monsters[i]);
                 }
             }
         }
@@ -370,6 +381,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
             if(Game.board[y][x].id === Game.user.id) {
                 console.log('user before', Game.user);
                 if(Game.user.ac <= (data.roll + data.attackMod) || data.crit) {
+                    GV.attackResult = "hit";
                     console.log('hit', data.damage);
                     console.log('game.user.hp', Game.user.hp)
                     console.log('game.user.hp - damage', Game.user.hp - data.damage);
@@ -381,6 +393,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 if(id === Game.players[i].id) {
                     console.log('player before', Game.players[i]);
                     if(Game.players[i].ac <= (data.roll + data.attackMod) || data.crit) {
+                        GV.attacked = Game.players[i].actor.name;
                         console.log('hit', data.damage);
                         console.log('players[i].hp', Game.players[i].hp)
                         console.log('players[i].hp - damage', Game.players[i].hp - data.damage);
@@ -391,10 +404,10 @@ export default function(engineService, userService, socket, $stateParams, $http,
                             $scope.$broadcast("dead", {target: Game.players[i]});
                         }
                     } else {
+                        GV.attackResult = "missed";
                         console.log('miss');
                         // + + + PIXI MISS + + + \\
                     }
-                    console.log('player after', Game.players[i]);
                 }
             }
         }
@@ -471,6 +484,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return start combat", order => {
         Game.gameState = "combat";
         GV.gameState = "combat";
+        GV.initActive = false;
         Game.dmTurn = false;
         Game.combatOrder = [];
         order.forEach( combatant => {
@@ -485,6 +499,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     socket.on("return end combat", () => {
         console.log('combat ended');
         Game.gameState = "explore";
+        GV.attack = false;
         GV.gameState = "explore";
         Game.exploreTurn = 0;
         Game.dmTurn = false;
@@ -558,6 +573,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     // }
 
     function checkTurn() {
+        GV.attack = false;
         if(Game.gameState === 'explore') {
             if ( Game.dmTurn ) {
                 GV.turn = "the DM's";
@@ -587,7 +603,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                 if(Game.combatOrder[Game.combatTurn].length < 6) {
                     for(let i = 0; i < Game.monsters.length; i++) {
                         if(Game.combatOrder[Game.combatTurn] === Game.monsters[i].id) {
-                            GV.turn = "a monster's turn";
+                            GV.turn = `${Game.monsters[i].settings.name}'s`;
                             if(Game.dmMode) {
                                 Game.moves = Game.monsters[i].settings.speed;
                                 Game.isTurn = true;

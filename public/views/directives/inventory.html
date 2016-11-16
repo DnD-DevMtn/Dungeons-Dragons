@@ -1,7 +1,7 @@
 <section id="inventory">
   <header>
     <h4>Inventory</h4>
-    <h5>Gold : {{GV.userChar.money.gold}}</h5>
+    <h5>Gold : {{GV.userChar.actor.money.gold}}</h5>
     <h5 ng-if="UT.page === 1">Weapons</h5>
     <h5 ng-if="UT.page === 2">Armor</h5>
     <h5 ng-if="UT.page === 3">Gear</h5>
@@ -10,7 +10,7 @@
       <ul class="weapons flex-wrapper">
         <li
           class="flex-content"
-          ng-repeat="weapon in GV.userChar.weapons"
+          ng-repeat="weapon in GV.userChar.actor.weapons"
           ng-click="UT.drawWeapon(weapon)"
         >
           {{weapon.name}}
@@ -21,7 +21,7 @@
       <ul class="armor flex-wrapper">
         <li
           class="flex-content"
-          ng-repeat="armor in GV.userChar.armor"
+          ng-repeat="armor in GV.userChar.actor.armor"
         >
           {{armor.name}}
         </li>
@@ -31,7 +31,7 @@
       <ul class="gear flex-wrapper">
         <li
           class="flex-content"
-          ng-repeat="gear in GV.userChar.gear"
+          ng-repeat="gear in GV.userChar.actor.gear"
         >
           {{gear.name}}
         </li>
