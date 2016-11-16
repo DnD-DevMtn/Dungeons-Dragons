@@ -17,16 +17,16 @@ export default function( $scope ) {
 };
 
 function dataStructureBuffer( scope ) {
+  console.log( scope );
   scope.Dungeon = scope.GV.pixiDungeon;
 
   for ( let i = 0; i < scope.Dungeon.players.length; i++ )
     scope.Dungeon.players[ i ].image = scope.Dungeon.players[ i ].actor.sprite;
 
-  scope.Dungeon.mainPlayer = {
-    id: scope.Dungeon.players[ 0 ].id,
-    cameraGridWidth: 15,
-    cameraGridHeight: 15
-  };
+  if ( scope.Dungeon.user ) {
+    scope.Dungeon.user.cameraGridWidth = 15;
+    scope.Dungeon.user.cameraGridHeight = 10;
+  }
 
   return scope;
 }
@@ -50,7 +50,7 @@ class Game {
     this.animationCounter = 0;
     this.attackAnimationCounter = 0;
     this.scope = scope;
-    this.mainPlayerId = scope.Dungeon.mainPlayer.id;
+    this.userId = scope.Dungeon.user.id;
     this.floor.gridWidth = scope.Dungeon.width;
     this.floor.gridHeight = scope.Dungeon.height;
     this.floor.tileImage = scope.Dungeon.backgroundImage;
@@ -60,10 +60,14 @@ class Game {
     this.doors = scope.Dungeon.doors;
     this.environment = scope.Dungeon.environment;
 
-    // this.renderer = PIXI.autoDetectRenderer( Dungeon.mainPlayer.cameraGridWidth * this.tileGridWidth,
-    //   Dungeon.mainPlayer.cameraGridHeight * this.tileGridHeight );
-    // Full map view
-    this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridHeight  )
+    if ( scope.Dungeon.user.id ) {
+      this.renderer = PIXI.autoDetectRenderer(
+        scope.Dungeon.user.cameraGridWidth * this.tileGridWidth,
+        scope.Dungeon.user.cameraGridHeight * this.tileGridHeight
+      );
+    } else {
+      this.renderer = PIXI.autoDetectRenderer( this.floor.gridWidth * this.tileGridWidth, this.floor.gridHeight * this.tileGridHeight  );
+    }
 
     document.getElementById( "pixi-in-game" ).appendChild( this.renderer.view );
 
@@ -82,7 +86,7 @@ class Game {
   }
 
   play() {
-    // this.cameraFocus();
+    this.cameraFocus();
     this.animation();
 
     this.renderer.render( this.stage );
@@ -203,8 +207,11 @@ class Game {
   }
 
   cameraFocus() {
-    var x = this.actors[ this.mainPlayerId ].x - ( this.renderer.width - this.actors[ this.mainPlayerId ].width ) / 2;
-    var y = this.actors[ this.mainPlayerId ].y - ( this.renderer.height - this.actors[ this.mainPlayerId ].height ) / 2;
+    if ( !this.userId )
+      return;
+
+    var x = this.actors[ this.userId ].x - ( this.renderer.width - this.actors[ this.userId ].width ) / 2;
+    var y = this.actors[ this.userId ].y - ( this.renderer.height - this.actors[ this.userId ].height ) / 2;
     this.gameScene.position.set( -x, -y );
   }
 
