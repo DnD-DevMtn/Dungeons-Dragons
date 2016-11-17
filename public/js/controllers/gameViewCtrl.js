@@ -382,6 +382,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
                         }
                     } else {
                         GV.attackResult = "missed";
+                        GV.damage = 0;
                     }
                 }
             }

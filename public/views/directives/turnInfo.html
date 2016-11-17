@@ -8,8 +8,10 @@
         </div>
     </div>
     <div ng-if="GV.gameState === 'explore' && GV.attack">
-        {{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.
+        <span ng-if="GV.attackResult === 'hit'">{{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.</span>
+        <span ng-if="GV.attackResult === 'missed'">{{GV.attacker}} {{GV.attackResult}} {{GV.attacked}}</span>
     </div>
+
     <div ng-if="GV.gameState === 'combat' && GV.attack">
         {{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.
     </div>
