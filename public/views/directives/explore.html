@@ -20,7 +20,7 @@
       <span>Perceive</span>
     </li>
     <!-- draw/sheath weapon -->
-    <li class="flex-content explore-action">
+    <li ng-click="GV.openInventory()" class="flex-content explore-action">
       <!-- ng if !weapon -->
       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
       	 viewBox="0 0 57 57" style="enable-background:new 0 0 57 57;" xml:space="preserve">
@@ -77,7 +77,7 @@
     </li>
     <!-- bash -->
     <!-- ng if dodor in range -->
-    <li class="flex-content explore-action">
+    <li ng-click="GV.bash()" class="flex-content explore-action">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
       	 viewBox="0 0 510.96 510.96" style="enable-background:new 0 0 510.96 510.96;" xml:space="preserve">
       <g transform="translate(1 1)">
@@ -115,7 +115,7 @@
     </li>
     <!-- open/close door -->
     <!-- ng if door in range -->
-    <li class="flex-content explore-action door">
+    <li ng-click="GV.openDoor()" class="flex-content explore-action door">
       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
       	 width="476.195px" height="476.195px" viewBox="0 0 476.195 476.195" style="enable-background:new 0 0 476.195 476.195;"
       	 xml:space="preserve">
@@ -185,17 +185,17 @@
     </li>
     <!-- rouge -->
     <!-- lockpick -->
-    <li ng-if="GV.user.character.classType === 'Rogue'" class="flex-content explore-action">
+    <li ng-if="GV.userChar.classType === 'Rogue'" class="flex-content explore-action">
       <img src="" />
       <span>Lockpick</span>
     </li>
     <!-- search trap -->
-    <li ng-if="GV.user.character.classType === 'Rogue'" class="flex-content explore-action">
+    <li ng-if="GV.userChar.classType === 'Rogue'" class="flex-content explore-action">
       <img src="" />
       <span>Search trap</span>
     </li>
     <!-- disarm -->
-    <li ng-if="GV.user.character.classType === 'Rogue'" class="flex-content explore-action">
+    <li ng-if="GV.userChar.classType === 'Rogue'" class="flex-content explore-action">
       <img src="" />
       <span>Disarm</span>
     </li>

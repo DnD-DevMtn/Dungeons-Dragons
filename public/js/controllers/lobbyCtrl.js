@@ -9,6 +9,8 @@ export default function(socket, $stateParams, userService, $state, inventoryServ
     lobby.party     = [];
     lobby.start     = false;
 
+    const monsterIds = [];
+
     lobby.filterDm = item => {
         return item.dm === false;
     }
@@ -88,9 +90,21 @@ export default function(socket, $stateParams, userService, $state, inventoryServ
 
     socket.on("return start", party => {
         lobby.party = party;
-        userService.getDungeonById( "5824cfbfd966fd065b624315" ).then( response => {
-          $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.userChar, party: lobby.party.players, dungeon: response.data})
-        } );
+        console.log(lobby.campaign);
+        console.log(lobby.campaign.dungeons[0]);
+        userService.getDungeonById( lobby.campaign.dungeons[0] ).then( response => {
+          const dungeon = response.data;
+          if(lobby.userChar.name === "dm") {
+            dungeon.monsters.forEach(monster => {
+              monster.id = generateId();
+            });
+            socket.emit("monsterid", {room: lobby.party.room, dungeon: dungeon});
+          }
+        });
+    });
+
+    socket.on("return monsterid", data => {
+      $state.go("gameView", {gameId: lobby.party.room, userChar: lobby.userChar, party: lobby.party.players, dungeon: data.dungeon});
     });
 
     function getInventory(weapons, gear, armor) {
@@ -103,6 +117,16 @@ export default function(socket, $stateParams, userService, $state, inventoryServ
             socketChar = lobby.userChar;
             lobby.userEnter();
         })
+    }
+
+    function generateId(){
+        while(true){
+            let rand = Math.floor(Math.random() * 10000);
+            if(monsterIds.indexOf(rand) === -1){
+                monsterIds.push(rand);
+                return rand.toString();
+            }
+        }
     }
 
 

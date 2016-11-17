@@ -1,5 +1,54 @@
 export default function($http, $state, createGameService, userService) {
   const create = this;
+  create.createCustom = false;
+  create.toggleDungeonChoice = (bol) => {
+      create.createCustom = bol;
+  }
+  create.saveCampaignAndDungeon = (campaign) => {
+        PIXI.loader.reset();
+        console.log(create.createCustom);
+        if(create.createCustom === true) {
+            createGameService.postDungeon( create.dungeonBuilder.dungeon ).then( dungeon => {
+            //window.alert( "Dungeon Posted." );
+            // console.log( "Dungeon Posted: ", response );
+                campaign.dungeons = [dungeon.data._id];
+                userService.user.character = {
+                  name:"dm"
+                  , _id: "dm"
+                };
+                campaign.dm = {
+                  name: `${userService.user.firstName } ${userService.user.lastName}`,
+                  facebookId: userService.user.facebookId
+                }
+                campaign.status = "open";
+                const data = {
+                  campaign,
+                  facebookId: userService.user.facebookId
+                }
+                createGameService.postCampaign(data).then(campaign => {
+                  $state.go('lobby', {campaign:campaign.data, gameId:campaign.data._id, userChar: userService.user.character});
+                });
+            });
+        } else {
+            campaign.dungeons = ["58263c4253531307f20f0bb0"];
+            userService.user.character = {
+              name:"dm"
+              , _id: "dm"
+            };
+            campaign.dm = {
+              name: `${userService.user.firstName } ${userService.user.lastName}`,
+              facebookId: userService.user.facebookId
+            }
+            campaign.status = "open";
+            const data = {
+              campaign,
+              facebookId: userService.user.facebookId
+            }
+            createGameService.postCampaign(data).then(campaign => {
+              $state.go('lobby', {campaign:campaign.data, gameId:campaign.data._id, userChar: userService.user.character});
+            });
+        }
+    }
   create.postCampaign = (campaign) => {
     userService.user.character = {
       name:"dm"
@@ -20,6 +69,7 @@ export default function($http, $state, createGameService, userService) {
   }
 
   create.createFloor = function() {
+    create.floorCreated = true;
     var dungeon = {
       name: create.name,
       width: create.width,
@@ -285,7 +335,7 @@ class DungeonBuilder {
     else
       this.dungeon[ property.type ].push( dungeonProp );
 
-    // console.log( this.dungeon );
+    console.log( this.dungeon );
   }
 
   deleteDungeonProp( sprite ) {

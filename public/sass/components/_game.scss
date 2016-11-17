@@ -1,7 +1,12 @@
 #game {
     position:relative;
-    overflow:hidden;
-    #pixi-game-engine {
+    height:100vh;
+    #turn-info {
+        position:absolute;
+        top:0;
+        background-color:red;
+    }
+    #pixi-in-game {
       z-index:-2;
       width:80%;
       display:inline-block;

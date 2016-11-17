@@ -1,3 +1,52 @@
+.choose-dungeon {
+    display:inline-flex;
+    width:calc(100% - 300px);
+    float:left;
+    padding:2em;
+    align-items:center;
+    justify-content:space-between;
+    .default, .custom {
+        height:300px;
+        width:50%;
+        text-align:center;
+        img {
+            width:95%;
+        }
+        &:hover {
+        }
+        &.active {
+            img {
+                border:3px solid $secondary-color-bright;
+            }
+        }
+        .custom-dungeon-icon {
+            height:420px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background-color:#1E091C;
+            width:95%;
+            margin:0 auto;
+            transition:all .5s ease;
+            .active {
+                border:3px solid $secondary-color-bright;
+                color:$secondary-color-bright;
+            }
+            i {
+                font-size:5rem;
+            }
+            &:hover {
+                transition:all .5s ease;
+                color:$secondary-color-bright;
+            }
+        }
+    }
+    .default {
+
+    }
+
+}
+
 div.options-wrapper {
   width: 300px;
   height: 100vh;

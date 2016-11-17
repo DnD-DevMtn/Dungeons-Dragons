@@ -101,16 +101,28 @@ io.on("connection", socket => {
         io.sockets.to(room).emit("return ready", campaigns[room]);
     });
 
+    socket.on("monsterid", data => {
+        io.sockets.to(data.room).emit("return monsterid", data);
+    });
+
     socket.on("send start", room => {
         io.sockets.to(room).emit("return start", campaigns[room]);
     });
 
     socket.on("end turn", room => {
-        io.sockets.to(room).emit("return turn over");
+        io.sockets.to(room).emit("return end turn");
     });
 
     socket.on("move", data => {
         io.sockets.to(data.room).emit("return move", data);
+    });
+
+    socket.on("draw weapon", data => {
+        io.sockets.to(data.room).emit("return draw weapon", data);
+    });
+
+    socket.on("sheath weapon", data => {
+        io.sockets.to(data.room).emit("return sheath weapon", data);
     });
 
     socket.on("bash", data => {
@@ -118,7 +130,7 @@ io.on("connection", socket => {
     });
 
     socket.on("openDoor", data => {
-        io.sockets.to(data.room).emit("return openDoor", data);
+        io.sockets.to(data.room).emit("return open door", data);
     });
 
     socket.on("closeDoor", data => {
@@ -176,6 +188,14 @@ io.on("connection", socket => {
     socket.on("endTurn", data => {
         io.sockets.to(data.room).emit("return endTurn", data);
     });
+
+    socket.on("start combat", data => {
+        io.sockets.to(data.room).emit("return start combat", data.order);
+    });
+
+    socket.on("end combat", data => {
+        io.sockets.to(data.room).emit("return end combat");
+    })
 
 
 });
