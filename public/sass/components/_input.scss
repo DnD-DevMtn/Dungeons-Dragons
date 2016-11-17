@@ -10,11 +10,3 @@ input:focus {
     border-bottom:1px solid $accent-color;
     transition:all .5s ease;
 }
-
-select {
-    background-color:transparent;
-}
-
-option {
-    background-color:$secondary-color-dark;
-}

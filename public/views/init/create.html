@@ -44,7 +44,7 @@
     <button class="btn" ng-click="create.createFloor()">Create</button>
   </div>
 
-  <div ng-if="create.createCustom">
+  <div ng-show="create.dungeonBuilder">
       <div ng-show="create.door">
       <img src="./assets/GameImages/images/environment/WALL0.png" alt="fence" ng-click="create.imageSelected( 'WALL0', 'environment' )">
       <img src="./assets/GameImages/images/environment/WALL1.png" alt="fence" ng-click="create.imageSelected( 'WALL1', 'environment' )">
@@ -142,19 +142,19 @@
 </div>
 
 
-<div ng-if="create.createCustom">
-    <img src="./assets/GameImages/images/monsters/DRAGON/DRAGON.png" alt="dragon" ng-click="create.imageSelected( 'DRAGON', 'monsters' )">
-    <img src="./assets/GameImages/images/monsters/DARKKNIGHT/DARKKNIGHT.png" alt="darkknight" ng-click="create.imageSelected( 'DARKKNIGHT', 'monsters' )">
-    <img src="./assets/GameImages/images/monsters/SHIVA/SHIVA.png" alt="shiva" ng-click="create.imageSelected( 'SHIVA', 'monsters' )">
-    <img src="./assets/GameImages/images/monsters/IFRIT/IFRIT.png" alt="ifrit" ng-click="create.imageSelected( 'IFRIT', 'monsters' )">
-    <img src="./assets/GameImages/images/monsters/BLANCA/BLANCA.png" alt="blanca" ng-click="create.imageSelected( 'BLANCA', 'monsters' )">
-    <img src="./assets/GameImages/images/monsters/JENOVA/JENOVA.png" alt="jenova" ng-click="create.imageSelected( 'JENOVA', 'monsters' )">
-    <img src="./assets/GameImages/images/monsters/DARKMAGE/DARKMAGE.png" alt="darkmage" ng-click="create.imageSelected( 'DARKMAGE', 'monsters' )">
-    <img src="./assets/GameImages/images/monsters/GOLBEZ/GOLBEZ.png" alt="golbez" ng-click="create.imageSelected( 'GOLBEZ', 'monsters' )">
+<div ng-show="create.dungeonBuilder">
+    <img src="./assets/GameImages/images/monsters/DRAGON/DRAGON.png" alt="dragon" ng-click="create.imageSelected( 'DRAGON', 'monsters', '58262d2e46cfb62e9c937bad' )">
+    <img src="./assets/GameImages/images/monsters/DARKKNIGHT/DARKKNIGHT.png" alt="darkknight" ng-click="create.imageSelected( 'DARKKNIGHT', 'monsters', '5826290546cfb62e9c937ba6' )">
+    <img src="./assets/GameImages/images/monsters/SHIVA/SHIVA.png" alt="shiva" ng-click="create.imageSelected( 'SHIVA', 'monsters', '58262cd046cfb62e9c937bac' )">
+    <img src="./assets/GameImages/images/monsters/IFRIT/IFRIT.png" alt="ifrit" ng-click="create.imageSelected( 'IFRIT', 'monsters', '58262c3246cfb62e9c937bab' )">
+    <img src="./assets/GameImages/images/monsters/BLANCA/BLANCA.png" alt="blanca" ng-click="create.imageSelected( 'BLANCA', 'monsters', '58262af346cfb62e9c937ba8' )">
+    <img src="./assets/GameImages/images/monsters/JENOVA/JENOVA.png" alt="jenova" ng-click="create.imageSelected( 'JENOVA', 'monsters', '58262bd046cfb62e9c937baa' )">
+    <img src="./assets/GameImages/images/monsters/DARKMAGE/DARKMAGE.png" alt="darkmage" ng-click="create.imageSelected( 'DARKMAGE', 'monsters', '58262b6246cfb62e9c937ba9' )">
+    <img src="./assets/GameImages/images/monsters/GOLBEZ/GOLBEZ.png" alt="golbez" ng-click="create.imageSelected( 'GOLBEZ', 'monsters', '5826298446cfb62e9c937ba7' )">
 
     <img src="./assets/GameImages/images/players/IRONMAN/IRONMAN.png" alt="player" ng-click="create.imageSelected( 'IRONMAN', 'startingLocation' )">
 </div>
-<div class="">
+<div>
   <button ng-if="create.createCustom" ng-click="create.deleteSelected()" class="btn">DELETE</button>
   <button ng-click="create.saveCampaignAndDungeon(create.campaign)" class="btn">Save</button>
 </div>

@@ -6,7 +6,7 @@ export default function($http, $state, createGameService, userService) {
   }
   create.saveCampaignAndDungeon = (campaign) => {
         PIXI.loader.reset();
-        console.log(create.createCustom);
+        // console.log(create.createCustom);
         if(create.createCustom === true) {
             createGameService.postDungeon( create.dungeonBuilder.dungeon ).then( dungeon => {
             //window.alert( "Dungeon Posted." );

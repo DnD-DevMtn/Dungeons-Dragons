@@ -1,6 +1,7 @@
 #game {
     position:relative;
     height:100vh;
+    overflow: hidden;
     #turn-info {
         position:absolute;
         top:0;
