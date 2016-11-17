@@ -507,7 +507,8 @@ export default function engineService(socket){
                                                                        // so players array will not be tied to the Dungeon object.
         for(let k = 0; k < players.length; k++) {                      // game room needs to be passes with socket.emit functions
             //let rand = generateId();
-
+            console.log(k);
+            console.log(players[k]);
             if(players[k].player === userCharacter._id) {
                 if(players[k].char.name === 'dm') {
                     Game.dmMode = true;
