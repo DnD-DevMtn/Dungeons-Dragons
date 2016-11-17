@@ -85,7 +85,7 @@ angular.module("DnD", [uiRouter])
           }
       })
       .state("init-prompt", {
-          url:"/init-prompt",
+          url:"/home",
           templateUrl: "./views/init/createJoinDash.html",
           controllerAs: 'init',
           controller:initPromptCtrl

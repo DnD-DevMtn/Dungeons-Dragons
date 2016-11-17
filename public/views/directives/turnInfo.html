@@ -1,16 +1,43 @@
 <section id="turn-info">
-    <h2>{{GV.gameState}}</h2>
-    <h3>It's {{GV.turn}} turn</h3>
+    <h4 class="mode"><span class="uppercase">{{GV.gameState}}</span> mode</h4>    |
+    <h5 class="turn">It's <span ng-class="{ 'uppercase': GV.turn !== 'your' }">{{GV.turn}}</span> turn</h5>
     <div ng-if="GV.initActive">
-        <h3>Select Monsters</h3>
-        <div ng-repeat="monster in GV.activeMonsters">
+        <h5>Click to select monsters:</h5>
+        <div class="monster" ng-repeat="monster in GV.activeMonsters">
             {{monster.name}}
         </div>
     </div>
     <div ng-if="GV.gameState === 'explore' && GV.attack">
-        {{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.
+        <span ng-if="GV.attackResult === 'hit'">{{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.</span>
+        <span ng-if="GV.attackResult === 'missed'">{{GV.attacker}} {{GV.attackResult}} {{GV.attacked}}</span>
     </div>
+
     <div ng-if="GV.gameState === 'combat' && GV.attack">
         {{GV.attacker}} {{GV.attackResult}} {{GV.attacked}} and did {{GV.damage}} damage.
+    </div>
+    <div class="button-container">
+        <span
+          class="btn"
+          ng-click="GV.endTurn()">
+          end turn
+        </span>
+        <span
+          ng-if="!GV.userChar.actor.name && GV.gameState === 'explore' && !GV.activeMonsters.length"
+          class="btn"
+          ng-click="GV.initCombat()">
+          init combat
+        </span>
+        <span
+          ng-if="GV.gameState !== 'combat' && !GV.userChar.actor.name && GV.activeMonsters.length"
+          class="btn"
+          ng-click="GV.startCombat()">
+          start combat
+        </span>
+        <span
+          ng-if="!GV.userChar.actor.name && GV.gameState === 'combat'"
+          class="btn"
+          ng-click="GV.endCombat()">
+          end combat
+        </span>
     </div>
 </section>
