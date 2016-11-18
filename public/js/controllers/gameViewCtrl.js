@@ -592,6 +592,7 @@ export default function(engineService, userService, socket, $stateParams, $http,
     });
 
     socket.on("return end combat", () => {
+        GV.activeMonsters = [];
         console.log('combat ended');
         Game.gameState = "explore";
         GV.attack = false;
